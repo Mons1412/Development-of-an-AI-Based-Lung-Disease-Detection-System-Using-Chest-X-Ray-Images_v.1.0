@@ -1,0 +1,14 @@
+Package: Lung X-ray FastAPI Portable
+Target OS: Windows 10/11 x64
+Package version: 1.0.0
+Model version: 1.1.0
+Python version: 3.12.10 64-bit
+TensorFlow version: 2.20.0
+Keras version: 3.13.2
+Build date: 2026-07-23
+Source base commit: 8963e5af597bb87a69b3b104b5edf6b8adb0b916
+Source state: Current working-tree snapshot; includes uncommitted Phase 02 changes present at build time.
+Default host: 127.0.0.1
+Default port: 8000
+Default API key: Disabled
+Network required at runtime: No

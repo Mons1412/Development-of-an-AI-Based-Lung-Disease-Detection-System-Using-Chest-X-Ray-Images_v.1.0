@@ -1,0 +1,60 @@
+<article class="workspace-panel upload-panel" aria-labelledby="upload-title">
+  <header class="panel-heading">
+    <span class="step-badge">01</span>
+    <div>
+      <h1 id="upload-title">Tệp gốc và thông tin ca phân tích</h1>
+      <p>Kiểm tra ảnh, xác nhận thông tin và chọn cách hiển thị trước khi chạy mô hình.</p>
+    </div>
+  </header>
+  <form id="prediction-form" novalidate>
+    <label class="visually-hidden" for="file-input">Chọn ảnh X-quang để phân tích</label>
+    <input id="file-input" class="visually-hidden" type="file" name="file" accept=".jpg,.jpeg,.png,image/jpeg,image/png" aria-describedby="upload-help file-error">
+    <button id="dropzone" class="dropzone" type="button">
+      <span class="dropzone__content">
+        <span class="dropzone__icon" aria-hidden="true">
+          <svg class="ui-icon ui-icon--lg"><use href="{{ frontend_asset_url('assets/ui-icons.svg') }}#icon-upload"></use></svg>
+        </span>
+        <span class="dropzone__copy">
+          <strong>Kéo thả ảnh X-quang hoặc chọn tệp</strong>
+          <small id="upload-help">JPG, JPEG, PNG · tối đa 10 MB</small>
+        </span>
+      </span>
+      <img class="dropzone__art" src="{{ frontend_asset_url('assets/lungs-hero.svg') }}" width="260" height="125" alt="" aria-hidden="true">
+    </button>
+    <div id="file-error" class="inline-alert inline-alert--error" role="alert" hidden></div>
+
+    <section id="preview-card" class="source-card" hidden aria-labelledby="preview-card-title">
+      <figure class="source-card__preview xray-preview">
+        <figcaption class="source-card__topline">
+          <span id="preview-card-title" class="success-chip">
+            <svg class="ui-icon" aria-hidden="true"><use href="{{ frontend_asset_url('assets/ui-icons.svg') }}#icon-image"></use></svg>
+            Ảnh đã chọn
+          </span>
+          <button id="remove-file-button" class="icon-button" type="button" aria-label="Xóa ảnh đã chọn">
+            <svg class="ui-icon" aria-hidden="true"><use href="{{ frontend_asset_url('assets/ui-icons.svg') }}#icon-close"></use></svg>
+          </button>
+        </figcaption>
+        <div class="preview-frame"><img id="image-preview" alt="Ảnh X-quang gốc đã chọn"></div>
+        <dl class="file-metadata">
+          <div><dt>Tệp gốc</dt><dd id="file-name">—</dd></div>
+          <div><dt>Thông tin ảnh</dt><dd id="file-meta">—</dd></div>
+          <div><dt>Nhận diện tên tệp</dt><dd id="filename-parse-status">Chưa kiểm tra</dd></div>
+        </dl>
+      </figure>
+      {% include "partials/patient_form.html" %}
+    </section>
+
+    {% include "partials/result_view_preferences.html" %}
+
+    <div class="primary-actions upload-actions">
+      <button id="submit-button" class="button button--primary button--wide" type="submit" disabled>
+        <svg class="ui-icon" aria-hidden="true"><use href="{{ frontend_asset_url('assets/ui-icons.svg') }}#icon-model"></use></svg>
+        <span>Phân tích ảnh</span>
+      </button>
+      <button id="reset-button" class="button button--ghost" type="button" disabled>
+        <svg class="ui-icon" aria-hidden="true"><use href="{{ frontend_asset_url('assets/ui-icons.svg') }}#icon-reset"></use></svg>
+        <span>Đặt lại</span>
+      </button>
+    </div>
+  </form>
+</article>

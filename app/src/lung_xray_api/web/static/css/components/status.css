@@ -1,0 +1,7 @@
+.status-pill,
+.model-pill { display: inline-flex; min-height: 34px; align-items: center; gap: 7px; border: 1px solid var(--border); border-radius: 999px; padding: 6px 10px; background: var(--surface-soft); font-size: 12px; }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; background: #94a3b8; box-shadow: 0 0 0 3px rgb(148 163 184 / 12%); }
+.status-pill--ready .status-dot { background: var(--success); box-shadow: 0 0 0 3px rgb(17 130 99 / 12%); }
+.status-pill--error .status-dot { background: var(--danger); box-shadow: 0 0 0 3px rgb(197 58 58 / 12%); }
+.academic-notice { margin-top: 18px; border-left: 4px solid var(--brand); border-radius: 0 10px 10px 0; padding: 12px 14px; background: var(--brand-soft); color: #34425a; font-size: 13px; }
+.toast { position: fixed; left: 50%; bottom: 24px; z-index: 100; max-width: min(500px, calc(100vw - 24px)); transform: translateX(-50%); border-radius: 10px; padding: 11px 16px; background: #111b2c; color: white; box-shadow: var(--shadow); }

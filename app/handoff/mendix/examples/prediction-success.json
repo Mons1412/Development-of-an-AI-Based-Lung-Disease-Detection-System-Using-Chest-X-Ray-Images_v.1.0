@@ -1,0 +1,16 @@
+{
+  "status": "success",
+  "prediction": "pneumonia",
+  "model_probability": 0.9936072826385498,
+  "probabilities": {
+    "normal": 0.005327203776687384,
+    "pneumonia": 0.9936072826385498,
+    "tuberculosis": 0.0010655076475813985
+  },
+  "normal_probability": 0.005327203776687384,
+  "pneumonia_probability": 0.9936072826385498,
+  "tuberculosis_probability": 0.0010655076475813985,
+  "model_version": "1.1.0",
+  "processing_time_ms": 401,
+  "disclaimer": "Kết quả chỉ phục vụ mục đích học thuật và không thay thế chẩn đoán của bác sĩ."
+}

@@ -1,0 +1,66 @@
+<fieldset id="result-view-preferences" class="result-view-preferences" aria-describedby="result-view-preferences-help result-view-preferences-status">
+  <legend>Dạng hiển thị kết quả sau phân tích</legend>
+  <div class="preference-heading">
+    <p id="result-view-preferences-help" class="field-help">Có thể chọn một hoặc nhiều dạng. Sau khi có kết quả, mọi dạng đã chọn sẽ hiển thị cùng lúc.</p>
+    <span class="preference-counter"><strong id="selected-view-count">2</strong>/4 đã chọn</span>
+  </div>
+  <div class="visualization-options" role="group" aria-label="Các dạng hiển thị kết quả">
+    <label class="visualization-option is-selected" data-result-view-card="probability-bars">
+      <input id="result-view-probability-bars-input" type="checkbox" name="result-view-preference" value="probability-bars" checked>
+      <span class="visualization-option__icon" aria-hidden="true">
+        <svg class="ui-icon"><use href="{{ frontend_asset_url('assets/ui-icons.svg') }}#icon-bars"></use></svg>
+      </span>
+      <span class="visualization-option__content">
+        <strong>Thanh xác suất</strong>
+        <small>So sánh nhanh đầu ra của ba lớp.</small>
+      </span>
+      <span class="visualization-option__check" aria-hidden="true">
+        <svg class="ui-icon"><use href="{{ frontend_asset_url('assets/ui-icons.svg') }}#icon-check"></use></svg>
+      </span>
+    </label>
+    <label class="visualization-option is-selected" data-result-view-card="column-chart">
+      <input id="result-view-column-chart-input" type="checkbox" name="result-view-preference" value="column-chart" checked>
+      <span class="visualization-option__icon" aria-hidden="true">
+        <svg class="ui-icon"><use href="{{ frontend_asset_url('assets/ui-icons.svg') }}#icon-column"></use></svg>
+      </span>
+      <span class="visualization-option__content">
+        <strong>Biểu đồ cột</strong>
+        <small>Đối chiếu trực quan mức xác suất.</small>
+      </span>
+      <span class="visualization-option__check" aria-hidden="true">
+        <svg class="ui-icon"><use href="{{ frontend_asset_url('assets/ui-icons.svg') }}#icon-check"></use></svg>
+      </span>
+    </label>
+    <label class="visualization-option" data-result-view-card="donut-chart">
+      <input id="result-view-donut-chart-input" type="checkbox" name="result-view-preference" value="donut-chart">
+      <span class="visualization-option__icon" aria-hidden="true">
+        <svg class="ui-icon"><use href="{{ frontend_asset_url('assets/ui-icons.svg') }}#icon-donut"></use></svg>
+      </span>
+      <span class="visualization-option__content">
+        <strong>Biểu đồ tròn</strong>
+        <small>Hiển thị tỷ trọng đầu ra của ba lớp.</small>
+      </span>
+      <span class="visualization-option__check" aria-hidden="true">
+        <svg class="ui-icon"><use href="{{ frontend_asset_url('assets/ui-icons.svg') }}#icon-check"></use></svg>
+      </span>
+    </label>
+    <label class="visualization-option" data-result-view-card="data-table">
+      <input id="result-view-data-table-input" type="checkbox" name="result-view-preference" value="data-table">
+      <span class="visualization-option__icon" aria-hidden="true">
+        <svg class="ui-icon"><use href="{{ frontend_asset_url('assets/ui-icons.svg') }}#icon-table"></use></svg>
+      </span>
+      <span class="visualization-option__content">
+        <strong>Bảng số liệu</strong>
+        <small>Đối chiếu giá trị chính xác theo nhãn.</small>
+      </span>
+      <span class="visualization-option__check" aria-hidden="true">
+        <svg class="ui-icon"><use href="{{ frontend_asset_url('assets/ui-icons.svg') }}#icon-check"></use></svg>
+      </span>
+    </label>
+  </div>
+  <p id="result-view-preferences-status" class="visualization-status" aria-live="polite" role="status"></p>
+  <p class="visualization-note">
+    <svg class="ui-icon" aria-hidden="true"><use href="{{ frontend_asset_url('assets/ui-icons.svg') }}#icon-info"></use></svg>
+    Biểu đồ đường chỉ dùng trong lịch sử của cùng một ca có từ hai lần phân tích theo thời gian.
+  </p>
+</fieldset>

@@ -1,0 +1,120 @@
+<section
+  class="assistant-panel"
+  aria-labelledby="assistant-title"
+>
+  <header class="assistant-panel__header">
+    <div>
+      <p class="assistant-panel__eyebrow">HỖ TRỢ NGOẠI TUYẾN</p>
+
+      <h2 id="assistant-title">Trợ lý thông tin X-quang phổi</h2>
+
+      <p>
+        Hỏi về cách dùng ứng dụng, mô hình hoặc kết quả vừa phân tích.
+      </p>
+    </div>
+
+    <span
+      id="assistant-mode"
+      class="assistant-mode"
+    >
+      <span aria-hidden="true"></span>
+      Ngoại tuyến
+    </span>
+  </header>
+
+  <div
+    id="assistant-messages"
+    class="assistant-messages"
+    role="log"
+    aria-live="polite"
+    aria-relevant="additions text"
+    aria-label="Cuộc trò chuyện với trợ lý thông tin X-quang phổi"
+  >
+    <article class="assistant-message assistant-message--assistant">
+      <p>
+        Xin chào. Tôi là trợ lý thông tin ngoại tuyến của ứng dụng. Tôi có thể hướng dẫn sử dụng,
+        giải thích đầu ra mô hình và các giới hạn của nguyên mẫu học thuật này.
+      </p>
+    </article>
+  </div>
+
+  <div
+    class="assistant-suggestion-group"
+    aria-labelledby="assistant-suggestions-title"
+  >
+    <p id="assistant-suggestions-title">Câu hỏi gợi ý</p>
+
+    <div
+      id="assistant-suggestions"
+      class="assistant-suggestions"
+    ></div>
+  </div>
+
+  <form
+    id="assistant-form"
+    class="assistant-form"
+    novalidate
+  >
+    <label
+      class="visually-hidden"
+      for="assistant-input"
+    >
+      Câu hỏi cho trợ lý thông tin X-quang phổi
+    </label>
+
+    <textarea
+      id="assistant-input"
+      rows="2"
+      maxlength="1500"
+      placeholder="Nhập câu hỏi của bạn..."
+      aria-describedby="assistant-input-help assistant-error"
+    ></textarea>
+
+    <p id="assistant-input-help" class="assistant-input-help">
+      Nhấn Enter để gửi; Shift + Enter để xuống dòng.
+    </p>
+
+    <div class="assistant-actions">
+      <button
+        id="assistant-new-conversation"
+        class="assistant-button assistant-button--secondary"
+        type="button"
+      >
+        Cuộc trò chuyện mới
+      </button>
+
+      <button
+        id="assistant-send-button"
+        class="assistant-button assistant-button--primary"
+        type="submit"
+      >
+        Gửi câu hỏi
+      </button>
+    </div>
+  </form>
+
+  <p
+    id="assistant-loading"
+    class="assistant-loading"
+    role="status"
+    aria-live="polite"
+    hidden
+  >
+    Trợ lý đang tìm trong Knowledge Base ngoại tuyến...
+  </p>
+
+  <p
+    id="assistant-error"
+    class="assistant-error"
+    role="alert"
+    hidden
+  ></p>
+
+  <div class="assistant-meta">
+    <p id="assistant-sources" class="assistant-sources" hidden></p>
+
+    <p id="assistant-disclaimer" class="assistant-disclaimer">
+      Thông tin chỉ phục vụ mục đích học thuật và tham khảo; không thay thế đánh giá chuyên môn của bác sĩ.
+    </p>
+  </div>
+</section>

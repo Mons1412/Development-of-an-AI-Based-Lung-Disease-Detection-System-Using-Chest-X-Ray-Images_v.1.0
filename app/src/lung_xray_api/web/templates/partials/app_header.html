@@ -1,0 +1,30 @@
+<header class="app-header" aria-labelledby="page-title">
+  <a class="brand" href="/demo" aria-label="Mở trang phân tích">
+    <span class="brand__logo-shell">
+      <img src="{{ frontend_asset_url('assets/nttu_logo.png') }}" width="54" height="54" alt="Logo Đại học Nguyễn Tất Thành" fetchpriority="high">
+    </span>
+    <span class="brand__copy">
+      <small>ĐỒ ÁN HỌC THUẬT</small>
+      <strong id="page-title">Lung X-ray AI</strong>
+      <span>Phân loại ảnh X-quang phổi · MobileNetV2</span>
+    </span>
+  </a>
+  <nav class="app-header__actions" aria-label="Điều hướng ứng dụng">
+    <output id="api-status" class="status-pill status-pill--checking" aria-live="polite">
+      <span class="status-dot" aria-hidden="true"></span>
+      <span id="api-status-title">Đang kiểm tra API</span>
+    </output>
+    <span class="model-pill">
+      <svg class="ui-icon" aria-hidden="true"><use href="{{ frontend_asset_url('assets/ui-icons.svg') }}#icon-model"></use></svg>
+      Model <strong id="header-model-version">—</strong>
+    </span>
+    <button id="history-button" class="button button--secondary" type="button" aria-haspopup="dialog" aria-controls="history-dialog">
+      <svg class="ui-icon" aria-hidden="true"><use href="{{ frontend_asset_url('assets/ui-icons.svg') }}#icon-history"></use></svg>
+      <span>Lịch sử phân tích</span>
+    </button>
+    <button id="about-project-button" class="button button--ghost" type="button" aria-haspopup="dialog" aria-controls="about-project-modal">
+      <svg class="ui-icon" aria-hidden="true"><use href="{{ frontend_asset_url('assets/ui-icons.svg') }}#icon-info"></use></svg>
+      <span>Về dự án</span>
+    </button>
+  </nav>
+</header>

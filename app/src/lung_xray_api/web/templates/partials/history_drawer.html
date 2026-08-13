@@ -1,0 +1,32 @@
+<dialog id="history-dialog" class="history-dialog" aria-labelledby="history-title">
+  <div class="dialog-shell">
+    <header class="dialog-header">
+      <div><small>LƯU CỤC BỘ TRÊN MÁY</small><h2 id="history-title">Lịch sử phân tích</h2></div>
+      <button class="icon-button" type="button" data-modal-close="history-dialog" aria-label="Đóng lịch sử"><svg class="ui-icon" aria-hidden="true"><use href="{{ frontend_asset_url('assets/ui-icons.svg') }}#icon-close"></use></svg></button>
+    </header>
+    <form id="history-filter-form" class="history-filters">
+      <label><span>Tìm tên hoặc mã</span><input id="history-search" type="search" maxlength="80" placeholder="Nhập tên hoặc mã ca"></label>
+      <label><span>Kết quả</span><select id="history-label-filter"><option value="">Tất cả</option><option value="normal">Bình thường</option><option value="pneumonia">Viêm phổi</option><option value="tuberculosis">Lao phổi</option></select></label>
+      <label><span>Từ ngày</span><input id="history-date-from" type="date"></label>
+      <label><span>Đến ngày</span><input id="history-date-to" type="date"></label>
+      <label><span>Sắp xếp</span><select id="history-sort"><option value="desc">Mới nhất</option><option value="asc">Cũ nhất</option></select></label>
+    </form>
+    <div id="history-status" class="inline-alert" aria-live="polite">Chưa tải dữ liệu.</div>
+    <div id="history-list" class="history-list"></div>
+    <nav class="pagination" aria-label="Phân trang lịch sử">
+      <button id="history-prev" class="button button--ghost" type="button">Trang trước</button>
+      <span id="history-page-label">Trang 1</span>
+      <button id="history-next" class="button button--ghost" type="button">Trang sau</button>
+    </nav>
+    <section id="history-detail" class="history-detail" hidden aria-labelledby="history-detail-title">
+      <header><h3 id="history-detail-title">Chi tiết lần phân tích</h3><button id="history-detail-close" class="button button--ghost button--small" type="button">Đóng chi tiết</button></header>
+      <div id="history-detail-content"></div>
+      <div id="history-trend-section" class="trend-section" hidden>
+        <h4>Biểu đồ đường theo lịch sử đầu ra mô hình</h4>
+        <label>Lớp cần theo dõi <select id="history-trend-class"><option value="normal">Bình thường</option><option value="pneumonia">Viêm phổi</option><option value="tuberculosis">Lao phổi</option></select></label>
+        <div id="history-trend-chart" class="chart-container"></div>
+        <p class="form-hint">Đây là xu hướng đầu ra của mô hình qua các lần phân tích, không phải diễn tiến bệnh được xác nhận lâm sàng.</p>
+      </div>
+    </section>
+  </div>
+</dialog>

@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ report_title }}</title>
+  <link rel="stylesheet" href="{{ stylesheet_url }}">
+</head>
+<body>
+  <main class="report" aria-labelledby="report-title">
+    <header class="report__header">
+      {% if logo_url %}
+      <img class="report__logo" src="{{ logo_url }}" width="72" height="72" alt="Logo Đại học Nguyễn Tất Thành">
+      {% endif %}
+      <div>
+        <p class="report__eyebrow">BÁO CÁO HỌC THUẬT · KHÔNG DÙNG ĐỂ CHẨN ĐOÁN</p>
+        <h1 id="report-title">{{ report_title }}</h1>
+        <p>{{ project_name }} · {{ university_name }}</p>
+      </div>
+    </header>
+
+    <section class="report__section" aria-labelledby="case-title">
+      <h2 id="case-title">Thông tin ca phân tích</h2>
+      <dl class="report__metadata">
+        <div><dt>Mã lần phân tích</dt><dd>{{ analysis_id }}</dd></div>
+        <div><dt>Thời điểm phân tích</dt><dd>{{ analysis_timestamp_text }}</dd></div>
+        {% if is_anonymous_sample %}
+        <div><dt>Loại ca</dt><dd>Ca ẩn danh / ảnh minh họa</dd></div>
+        <div><dt>Nguồn thông tin</dt><dd>{{ patient_name_source }}</dd></div>
+        {% else %}
+        <div><dt>Tên người bệnh / tên ca</dt><dd>{{ patient_display_name or "Không cung cấp" }}</dd></div>
+        <div><dt>Mã người bệnh / mã ca</dt><dd>{{ patient_code or "Không cung cấp" }}</dd></div>
+        <div><dt>Nguồn thông tin</dt><dd>{{ patient_name_source }}</dd></div>
+        <div><dt>Nhãn ca báo cáo</dt><dd>{{ case_display_label }}</dd></div>
+        {% endif %}
+        <div><dt>Tệp ảnh ban đầu</dt><dd>{{ filename }}</dd></div>
+        <div><dt>Phiên bản mô hình</dt><dd>{{ model_version }}</dd></div>
+        <div><dt>Phiên bản kho tri thức</dt><dd>{{ knowledge_base_version or "Không khả dụng" }}</dd></div>
+        <div><dt>Thời gian xử lý</dt><dd>{{ processing_time_ms }} ms</dd></div>
+      </dl>
+    </section>
+
+    <section class="report__section report__image-section" aria-labelledby="image-title">
+      <h2 id="image-title">Ảnh X-quang đã phân tích</h2>
+      {% if thumbnail_data_uri %}
+      <figure class="report__image-frame">
+        <img src="{{ thumbnail_data_uri }}" alt="Ảnh xem trước dẫn xuất từ ảnh X-quang đã phân tích">
+        <figcaption>Ảnh xem trước đã được tái mã hóa và giảm kích thước; hệ thống không lưu ảnh gốc đầy đủ.</figcaption>
+      </figure>
+      {% else %}
+      <p class="report__image-note">Ảnh xem trước không khả dụng. Báo cáo vẫn sử dụng dữ liệu phân tích đã lưu cục bộ.</p>
+      {% endif %}
+    </section>
+
+    <section class="report__section" aria-labelledby="result-title">
+      <h2 id="result-title">Kết quả phân loại ảnh X-quang phổi</h2>
+      <div class="report__result">
+        <p><span>Kết quả phân loại của mô hình</span><strong>{{ prediction_label }}</strong></p>
+        <p><span>Xác suất đầu ra cao nhất</span><strong>{{ "%.2f"|format(top_probability) }}%</strong></p>
+        <p><span>Nhãn kỹ thuật (API)</span><strong>{{ api_label }}</strong></p>
+      </div>
+
+      <p class="report__visualization-note">Các dạng trực quan bên dưới phản ánh lựa chọn tại thời điểm mở bản xem trước.</p>
+
+      {% if "probability-bars" in selected_views %}
+      <section class="report-visualization" aria-labelledby="report-bars-title">
+        <h3 id="report-bars-title">Thanh xác suất</h3>
+        <div class="report-probability-bars" role="list" aria-label="Xác suất đầu ra của ba lớp">
+          {% for probability in probabilities %}
+          <div class="report-probability-bars__row" role="listitem" data-class="{{ probability.api_label }}">
+            <span>{{ probability.label }}</span>
+            <div class="report-probability-bars__track" aria-hidden="true"><span style="width: {{ "%.6f"|format(probability.percentage) }}%"></span></div>
+            <strong>{{ "%.2f"|format(probability.percentage) }}%</strong>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+      {% endif %}
+
+      {% if "column-chart" in selected_views %}
+      <section class="report-visualization" aria-labelledby="report-column-title">
+        <h3 id="report-column-title">Biểu đồ cột</h3>
+        <div class="report-column-chart" role="img" aria-label="Biểu đồ cột xác suất đầu ra của ba lớp">
+          {% for probability in probabilities %}
+          <div class="report-column-chart__item" data-class="{{ probability.api_label }}">
+            <strong>{{ "%.2f"|format(probability.percentage) }}%</strong>
+            <div class="report-column-chart__bar-area"><span style="height: {{ "%.6f"|format(probability.percentage) }}%"></span></div>
+            <small>{{ probability.label }}</small>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+      {% endif %}
+
+      {% if "donut-chart" in selected_views %}
+      <section class="report-visualization" aria-labelledby="report-donut-title">
+        <h3 id="report-donut-title">Biểu đồ tròn</h3>
+        <div class="report-donut-layout">
+          <div class="report-donut" role="img" aria-label="Biểu đồ tròn tỷ trọng xác suất đầu ra của ba lớp" style="--normal-end: {{ "%.6f"|format(probabilities[0].cumulative_percentage) }}%; --pneumonia-end: {{ "%.6f"|format(probabilities[1].cumulative_percentage) }}%; --tuberculosis-end: {{ "%.6f"|format(probabilities[2].cumulative_percentage) }}%;">
+            <div><span>{{ prediction_label }}</span><strong>{{ "%.2f"|format(top_probability) }}%</strong></div>
+          </div>
+          <ul class="report-donut-legend">
+            {% for probability in probabilities %}
+            <li data-class="{{ probability.api_label }}"><span aria-hidden="true"></span><strong>{{ probability.label }}</strong><b>{{ "%.2f"|format(probability.percentage) }}%</b></li>
+            {% endfor %}
+          </ul>
+        </div>
+      </section>
+      {% endif %}
+
+      {% if "data-table" in selected_views %}
+      <section class="report-visualization" aria-labelledby="report-table-title">
+        <h3 id="report-table-title">Bảng số liệu</h3>
+        <div class="report-table-wrap">
+          <table>
+            <thead><tr><th>Lớp phân loại</th><th>Nhãn kỹ thuật</th><th>Xác suất đầu ra</th></tr></thead>
+            <tbody>
+              {% for probability in probabilities %}
+              <tr>
+                <td>{{ probability.label }}</td>
+                <td>{{ probability.api_label }}</td>
+                <td>{{ "%.2f"|format(probability.percentage) }}%</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+      {% endif %}
+    </section>
+
+    <section class="report__section" aria-labelledby="reference-title">
+      <h2 id="reference-title">Nguồn dữ liệu và thông tin tham chiếu</h2>
+      <p class="report__clinical-gate">{{ reference_notice }}</p>
+      <h3>Nguồn tham chiếu kỹ thuật đã ghi nhận</h3>
+      {% if sources %}
+      <ul>
+        {% for source_id, source_title in sources %}
+        <li><strong>{{ source_id }}</strong> · {{ source_title }}</li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p>Không có mã nguồn tham chiếu được ghi nhận cho lần phân tích này.</p>
+      {% endif %}
+    </section>
+
+    <aside class="report__disclaimer" role="note">{{ disclaimer }}</aside>
+
+    <footer class="report__footer">
+      <div>
+        <strong>Nhóm thực hiện</strong>
+        <ul>{% for member in team_members %}<li>{{ member }}</li>{% endfor %}</ul>
+      </div>
+      <small>Báo cáo được tạo lúc {{ generated_at_text }}</small>
+    </footer>
+  </main>
+
+  <div class="report-actions" aria-label="Tác vụ báo cáo">
+    <a id="report-download-button" class="print-button" href="{{ pdf_download_url }}">
+      Tải báo cáo PDF
+    </a>
+    <button id="report-print-button" class="print-button print-button--secondary" type="button">
+      In bản xem trước
+    </button>
+  </div>
+  <script>
+    document.getElementById("report-print-button").addEventListener("click", () => window.print());
+  </script>
+</body>
+</html>

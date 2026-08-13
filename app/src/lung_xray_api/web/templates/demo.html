@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f7fb">
+  <meta name="frontend-build" content="{{ frontend_asset_version }}">
+  <meta name="frontend-static-base" content="{{ frontend_static_base }}">
+  <meta name="description" content="Không gian phân tích ảnh X-quang phổi ngoại tuyến.">
+  <title>Lung X-ray AI Classification System</title>
+  <link rel="icon" href="{{ frontend_asset_url('assets/favicon.svg') }}" type="image/svg+xml">
+  <link rel="stylesheet" href="{{ frontend_asset_url('demo.css') }}">
+</head>
+<body>
+  <div class="app-shell">
+    {% include "partials/app_header.html" %}
+    <main id="main-content" class="main-content">
+      {% include "partials/analysis_workspace.html" %}
+      <aside class="academic-notice" role="note">
+        Kết quả chỉ phục vụ mục đích học thuật và không thay thế chẩn đoán của bác sĩ.
+      </aside>
+    </main>
+    {% include "partials/project_footer.html" %}
+    {% include "partials/history_drawer.html" %}
+    {% include "partials/floating_assistant.html" %}
+    {% include "partials/modals/reference_information.html" %}
+    {% include "partials/modals/about_project.html" %}
+    <output id="toast" class="toast" aria-live="polite" aria-atomic="true" hidden></output>
+  </div>
+  <script type="module" src="{{ frontend_asset_url('js/app.js') }}"></script>
+</body>
+</html>

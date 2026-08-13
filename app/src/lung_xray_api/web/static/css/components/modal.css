@@ -1,0 +1,10 @@
+dialog { border: 0; padding: 0; color: var(--ink); }
+dialog::backdrop { background: rgb(15 23 42 / 55%); }
+.teacher-modal { width: min(720px, calc(100vw - 24px)); max-height: calc(100vh - 40px); overflow: auto; border-radius: 16px; padding: 22px; }
+.dialog-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; border-bottom: 1px solid var(--border); padding-bottom: 14px; margin-bottom: 16px; }
+.dialog-header small { color: var(--brand); font-weight: 800; letter-spacing: .08em; }
+.dialog-header h2 { margin: 4px 0 0; }
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.about-grid section, .reference-content { border: 1px solid var(--border); border-radius: 12px; padding: 14px; background: var(--surface-soft); }
+.clinical-gate-message { color: var(--warning); font-weight: 800; }
+@media (max-width: 620px) { .about-grid { grid-template-columns: 1fr; } }

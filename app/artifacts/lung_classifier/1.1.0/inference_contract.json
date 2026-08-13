@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "endpoint": "/predict",
+    "content_type": "multipart/form-data",
+    "file_field": "file",
+    "allowed_extensions": [
+      ".jpg",
+      ".jpeg",
+      ".png"
+    ],
+    "allowed_mime_types": [
+      "image/jpeg",
+      "image/png"
+    ],
+    "max_file_size_mb": 10
+  },
+  "response": {
+    "status": "string",
+    "prediction": "string",
+    "model_probability": "float",
+    "normal_probability": "float",
+    "pneumonia_probability": "float",
+    "tuberculosis_probability": "float",
+    "model_version": "string",
+    "processing_time_ms": "integer",
+    "disclaimer": "string"
+  },
+  "probability_order": [
+    "normal",
+    "pneumonia",
+    "tuberculosis"
+  ],
+  "uncertain_threshold": null,
+  "disclaimer": "Kết quả chỉ phục vụ mục đích học thuật và không thay thế chẩn đoán của bác sĩ."
+}

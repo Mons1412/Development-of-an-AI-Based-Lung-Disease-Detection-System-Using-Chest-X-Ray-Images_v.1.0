@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 250" fill="none">
+  <defs>
+    <linearGradient id="g1" x1="85" y1="34" x2="430" y2="220" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#74A8FF" stop-opacity=".16"/>
+      <stop offset=".55" stop-color="#2F78FF" stop-opacity=".58"/>
+      <stop offset="1" stop-color="#7358E8" stop-opacity=".18"/>
+    </linearGradient>
+    <linearGradient id="g2" x1="250" y1="18" x2="260" y2="225" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2F78FF" stop-opacity=".8"/>
+      <stop offset="1" stop-color="#69A6FF" stop-opacity=".15"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <g opacity=".55" stroke="#8EB8FA" stroke-width=".8">
+    <path d="M8 48h504M8 88h504M8 128h504M8 168h504M8 208h504"/>
+    <path d="M48 8v234M108 8v234M168 8v234M228 8v234M288 8v234M348 8v234M408 8v234M468 8v234"/>
+  </g>
+
+  <g opacity=".55" fill="#4C8BF5">
+    <circle cx="52" cy="39" r="2.2"/><circle cx="94" cy="75" r="2"/>
+    <circle cx="438" cy="52" r="2.3"/><circle cx="475" cy="95" r="2"/>
+    <circle cx="448" cy="190" r="2.2"/><circle cx="385" cy="215" r="1.8"/>
+  </g>
+
+  <path d="M252 20v56c0 12-6 21-15 28l-8 6" stroke="url(#g2)" stroke-width="12" stroke-linecap="round" filter="url(#glow)"/>
+  <path d="M268 20v56c0 12 6 21 15 28l8 6" stroke="url(#g2)" stroke-width="12" stroke-linecap="round" filter="url(#glow)"/>
+
+  <path d="M245 92c-23 2-56 21-77 50-18 24-25 59-15 73 10 14 34 8 53-4 29-18 42-47 42-83V98c0-4-1-6-3-6Z" fill="url(#g1)" stroke="#4D8CF5" stroke-opacity=".48" stroke-width="2"/>
+  <path d="M275 92c23 2 56 21 77 50 18 24 25 59 15 73-10 14-34 8-53-4-29-18-42-47-42-83V98c0-4 1-6 3-6Z" fill="url(#g1)" stroke="#4D8CF5" stroke-opacity=".48" stroke-width="2"/>
+
+  <g stroke="#3E80EF" stroke-opacity=".64" stroke-width="2.1" stroke-linecap="round">
+    <path d="M240 111c-20 11-39 28-55 50M236 128c-15 8-30 22-40 39M233 146c-11 7-20 17-27 29M224 111c-11 4-20 11-28 19"/>
+    <path d="M280 111c20 11 39 28 55 50M284 128c15 8 30 22 40 39M287 146c11 7 20 17 27 29M296 111c11 4 20 11 28 19"/>
+  </g>
+
+  <g stroke="#92B7F5" stroke-width="1.1" opacity=".75">
+    <path d="M72 220 132 188l52 25 46-38M448 218l-60-28-50 25-48-36"/>
+    <path d="m132 188 15-46 38-28M388 190l-15-46-38-28"/>
+  </g>
+</svg>

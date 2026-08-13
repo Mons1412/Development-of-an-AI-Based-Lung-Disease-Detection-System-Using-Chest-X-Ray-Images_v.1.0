@@ -1,0 +1,1119 @@
+{
+  "schema_version": "1.0",
+  "knowledge_base_version": "1.0.0",
+  "mode": "production",
+  "built_at": "2026-07-27T03:23:18.700490+00:00",
+  "item_count": 21,
+  "items": [
+    {
+      "id": "model.confusion_matrix",
+      "version": "1.0.0",
+      "title": "Confusion matrix",
+      "domain": "model",
+      "intent": "confusion_matrix",
+      "stages": [
+        "before_analysis",
+        "after_analysis"
+      ],
+      "risk": "medium",
+      "requires_prediction": false,
+      "technical_review_required": true,
+      "clinical_review_required": false,
+      "clinical_review_status": "not_required",
+      "publication_status": "published_internal",
+      "author": "ML/Technical Owner",
+      "reviewer": "Backend/Technical Owner",
+      "source_ids": [
+        "MODEL_ARTIFACT_1_1_0",
+        "TRIPOD_AI_2024"
+      ],
+      "review_due": "2027-07-24",
+      "sample_questions": [
+        "Confusion matrix dùng để làm gì?",
+        "Model nhầm giữa các lớp ra sao?"
+      ],
+      "must_include": [
+        "đếm kiểu nhầm lẫn",
+        "không tự dựng số liệu"
+      ],
+      "must_not_include": [],
+      "answer_short": "Confusion matrix đếm số mẫu thật của mỗi lớp được dự đoán thành từng lớp, giúp nhìn rõ kiểu nhầm lẫn mà accuracy che khuất.",
+      "answer_detailed": "Bộ artifact hiện lưu metric theo lớp nhưng báo cáo runtime cần bổ sung confusion matrix từ tập test cố định nếu muốn trình bày chi tiết. Không được tự dựng số liệu khi thiếu file prediction hoặc nhãn ground truth.",
+      "source_file": "authored_content/model/model__confusion_matrix.vi.md"
+    },
+    {
+      "id": "model.explain_accuracy",
+      "version": "1.0.0",
+      "title": "Accuracy",
+      "domain": "model",
+      "intent": "explain_accuracy",
+      "stages": [
+        "before_analysis",
+        "after_analysis"
+      ],
+      "risk": "medium",
+      "requires_prediction": false,
+      "technical_review_required": true,
+      "clinical_review_required": false,
+      "clinical_review_status": "not_required",
+      "publication_status": "published_internal",
+      "author": "ML/Technical Owner",
+      "reviewer": "Backend/Technical Owner",
+      "source_ids": [
+        "MODEL_ARTIFACT_1_1_0",
+        "TRIPOD_AI_2024"
+      ],
+      "review_due": "2027-07-24",
+      "sample_questions": [
+        "Accuracy là gì?",
+        "Model chính xác bao nhiêu?"
+      ],
+      "must_include": [
+        "89,62%",
+        "318 ảnh",
+        "internal holdout"
+      ],
+      "must_not_include": [
+        "độ chính xác lâm sàng 89,62% ở mọi nơi"
+      ],
+      "answer_short": "Accuracy là tỷ lệ mẫu test được dự đoán đúng trên toàn bộ tập test; artifact hiện ghi khoảng 89,62% trên 318 ảnh internal holdout.",
+      "answer_detailed": "Accuracy tổng không cho biết model hoạt động đồng đều giữa các lớp và không được áp dụng trực tiếp cho từng bệnh nhân. Kết quả này chưa phải external clinical validation và có thể thay đổi khi dữ liệu triển khai khác nguồn huấn luyện.",
+      "source_file": "authored_content/model/model__explain_accuracy.vi.md"
+    },
+    {
+      "id": "model.explain_f1",
+      "version": "1.0.0",
+      "title": "F1-score",
+      "domain": "model",
+      "intent": "explain_f1",
+      "stages": [
+        "before_analysis",
+        "after_analysis"
+      ],
+      "risk": "medium",
+      "requires_prediction": false,
+      "technical_review_required": true,
+      "clinical_review_required": false,
+      "clinical_review_status": "not_required",
+      "publication_status": "published_internal",
+      "author": "ML/Technical Owner",
+      "reviewer": "Backend/Technical Owner",
+      "source_ids": [
+        "MODEL_ARTIFACT_1_1_0"
+      ],
+      "review_due": "2027-07-24",
+      "sample_questions": [
+        "F1-score là gì?",
+        "Tại sao dùng macro F1?"
+      ],
+      "must_include": [
+        "precision và recall",
+        "macro trung bình giữa lớp"
+      ],
+      "must_not_include": [],
+      "answer_short": "F1-score là trung bình điều hòa giữa precision và recall; macro F1 tính trung bình ngang nhau giữa các lớp.",
+      "answer_detailed": "Artifact ghi macro F1 khoảng 89,72% và weighted F1 khoảng 89,69%. Macro F1 hữu ích khi muốn tránh để lớp đông hơn chi phối hoàn toàn kết quả, nhưng vẫn cần xem từng lớp và confusion matrix.",
+      "source_file": "authored_content/model/model__explain_f1.vi.md"
+    },
+    {
+      "id": "model.explain_precision",
+      "version": "1.0.0",
+      "title": "Precision",
+      "domain": "model",
+      "intent": "explain_precision",
+      "stages": [
+        "before_analysis",
+        "after_analysis"
+      ],
+      "risk": "medium",
+      "requires_prediction": false,
+      "technical_review_required": true,
+      "clinical_review_required": false,
+      "clinical_review_status": "not_required",
+      "publication_status": "published_internal",
+      "author": "ML/Technical Owner",
+      "reviewer": "Backend/Technical Owner",
+      "source_ids": [
+        "MODEL_ARTIFACT_1_1_0"
+      ],
+      "review_due": "2027-07-24",
+      "sample_questions": [
+        "Precision là gì?",
+        "Precision viêm phổi thấp hơn nghĩa là sao?"
+      ],
+      "must_include": [
+        "tỷ lệ trong các dự đoán dương của lớp",
+        "phụ thuộc tập test"
+      ],
+      "must_not_include": [
+        "xác suất bệnh nhân mắc bệnh"
+      ],
+      "answer_short": "Precision của một lớp là tỷ lệ dự đoán thuộc lớp đó thực sự đúng trong tập đánh giá.",
+      "answer_detailed": "Artifact ghi precision xấp xỉ normal 91,0%, pneumonia 82,4% và tuberculosis 97,85%. Precision pneumonia thấp hơn cho thấy trong các ảnh model gọi là pneumonia có tỷ lệ nhầm cao hơn hai lớp còn lại trên tập test này.",
+      "source_file": "authored_content/model/model__explain_precision.vi.md"
+    },
+    {
+      "id": "model.explain_recall",
+      "version": "1.0.0",
+      "title": "Recall",
+      "domain": "model",
+      "intent": "explain_recall",
+      "stages": [
+        "before_analysis",
+        "after_analysis"
+      ],
+      "risk": "medium",
+      "requires_prediction": false,
+      "technical_review_required": true,
+      "clinical_review_required": false,
+      "clinical_review_status": "not_required",
+      "publication_status": "published_internal",
+      "author": "ML/Technical Owner",
+      "reviewer": "Backend/Technical Owner",
+      "source_ids": [
+        "MODEL_ARTIFACT_1_1_0"
+      ],
+      "review_due": "2027-07-24",
+      "sample_questions": [
+        "Recall là gì?",
+        "Model bỏ sót lớp nào?"
+      ],
+      "must_include": [
+        "tỷ lệ mẫu thật được nhận ra",
+        "phụ thuộc tập test"
+      ],
+      "must_not_include": [],
+      "answer_short": "Recall của một lớp là tỷ lệ mẫu thật thuộc lớp đó được model nhận ra trong tập đánh giá.",
+      "answer_detailed": "Artifact ghi recall xấp xỉ normal 85,85%, pneumonia 95,37% và tuberculosis 87,50%. Recall thấp hơn có nghĩa tập test có nhiều false negative hơn tương đối, nhưng không thể suy ra trực tiếp nguy cơ trên bệnh viện khác.",
+      "source_file": "authored_content/model/model__explain_recall.vi.md"
+    },
+    {
+      "id": "model.input_format",
+      "version": "1.0.0",
+      "title": "Đầu vào của model",
+      "domain": "model",
+      "intent": "input_format",
+      "stages": [
+        "before_analysis",
+        "after_analysis"
+      ],
+      "risk": "low",
+      "requires_prediction": false,
+      "technical_review_required": true,
+      "clinical_review_required": false,
+      "clinical_review_status": "not_required",
+      "publication_status": "published_internal",
+      "author": "ML/Technical Owner",
+      "reviewer": "Backend/Technical Owner",
+      "source_ids": [
+        "MODEL_ARTIFACT_1_1_0"
+      ],
+      "review_due": "2027-07-24",
+      "sample_questions": [
+        "Model nhận ảnh kích thước nào?",
+        "Ảnh được đổi về bao nhiêu pixel?"
+      ],
+      "must_include": [
+        "224 × 224 × 3",
+        "RGB",
+        "float32"
+      ],
+      "must_not_include": [],
+      "answer_short": "Đầu vào model là tensor float32 có kích thước 224 × 224 × 3 theo chế độ RGB.",
+      "answer_detailed": "FastAPI giải mã ảnh, chuyển RGB, resize bilinear về 224 × 224, ép float32 và thêm batch dimension. Việc resize có thể làm thay đổi chi tiết; model card phải ghi rõ đây là preprocessing đã sử dụng khi đánh giá.",
+      "source_file": "authored_content/model/model__input_format.vi.md"
+    },
+    {
+      "id": "model.output_classes",
+      "version": "1.0.0",
+      "title": "Đầu ra ba lớp",
+      "domain": "model",
+      "intent": "output_classes",
+      "stages": [
+        "before_analysis",
+        "after_analysis"
+      ],
+      "risk": "medium",
+      "requires_prediction": false,
+      "technical_review_required": true,
+      "clinical_review_required": false,
+      "clinical_review_status": "not_required",
+      "publication_status": "published_internal",
+      "author": "ML/Technical Owner",
+      "reviewer": "Backend/Technical Owner",
+      "source_ids": [
+        "MODEL_ARTIFACT_1_1_0"
+      ],
+      "review_due": "2027-07-24",
+      "sample_questions": [
+        "Thứ tự ba class là gì?",
+        "Model output gồm gì?"
+      ],
+      "must_include": [
+        "normal, pneumonia, tuberculosis",
+        "0,1,2"
+      ],
+      "must_not_include": [],
+      "answer_short": "Thứ tự đầu ra là normal, pneumonia, tuberculosis tương ứng chỉ số 0, 1, 2.",
+      "answer_detailed": "Ba giá trị softmax được ánh xạ theo đúng class_indices.json. Bất kỳ thay đổi thứ tự ở frontend, PDF hoặc chatbot đều có thể gán sai nhãn, nên class mapping phải lấy từ artifact thay vì viết lại tùy ý.",
+      "source_file": "authored_content/model/model__output_classes.vi.md"
+    },
+    {
+      "id": "model.preprocessing",
+      "version": "1.0.0",
+      "title": "Tiền xử lý ảnh",
+      "domain": "model",
+      "intent": "preprocessing",
+      "stages": [
+        "before_analysis",
+        "after_analysis"
+      ],
+      "risk": "medium",
+      "requires_prediction": false,
+      "technical_review_required": true,
+      "clinical_review_required": false,
+      "clinical_review_status": "not_required",
+      "publication_status": "published_internal",
+      "author": "ML/Technical Owner",
+      "reviewer": "Backend/Technical Owner",
+      "source_ids": [
+        "MODEL_ARTIFACT_1_1_0",
+        "KERAS_MOBILENET_DOCS"
+      ],
+      "review_due": "2027-07-24",
+      "sample_questions": [
+        "Ảnh được chuẩn hóa thế nào?",
+        "Có gọi preprocess_input không?",
+        "Tại sao không normalize hai lần?"
+      ],
+      "must_include": [
+        "Rescaling nhúng trong model",
+        "không chuẩn hóa hai lần"
+      ],
+      "must_not_include": [
+        "luôn gọi preprocess_input"
+      ],
+      "answer_short": "Model đã nhúng lớp Rescaling(scale=1/127.5, offset=-1), vì vậy FastAPI không được chuẩn hóa cùng phép biến đổi thêm lần nữa.",
+      "answer_detailed": "Backend chỉ decode, convert RGB, resize, cast float32 và tạo batch. Nếu vừa có Rescaling trong model vừa gọi MobileNetV2 preprocess_input ở ngoài, pixel sẽ bị biến đổi sai và prediction không còn khớp với lúc đánh giá.",
+      "source_file": "authored_content/model/model__preprocessing.vi.md"
+    },
+    {
+      "id": "model.transfer_learning",
+      "version": "1.0.0",
+      "title": "Transfer Learning",
+      "domain": "model",
+      "intent": "transfer_learning",
+      "stages": [
+        "before_analysis",
+        "after_analysis"
+      ],
+      "risk": "low",
+      "requires_prediction": false,
+      "technical_review_required": true,
+      "clinical_review_required": false,
+      "clinical_review_status": "not_required",
+      "publication_status": "published_internal",
+      "author": "ML/Technical Owner",
+      "reviewer": "Backend/Technical Owner",
+      "source_ids": [
+        "TF_TRANSFER_LEARNING",
+        "MODEL_ARTIFACT_1_1_0"
+      ],
+      "review_due": "2027-07-24",
+      "sample_questions": [
+        "Transfer learning là gì?",
+        "Model có train từ đầu không?"
+      ],
+      "must_include": [
+        "tái sử dụng đặc trưng",
+        "cần đối chiếu pipeline huấn luyện"
+      ],
+      "must_not_include": [
+        "chắc chắn đã train theo một lịch cụ thể khi thiếu bằng chứng"
+      ],
+      "answer_short": "Transfer learning tái sử dụng các đặc trưng đã học từ mô hình tiền huấn luyện rồi điều chỉnh cho bài toán X-quang ba lớp.",
+      "answer_detailed": "Quy trình thường gồm đóng băng backbone để huấn luyện phần classifier, sau đó fine-tune một phần mạng với learning rate nhỏ. Cần đối chiếu notebook hoặc pipeline Phase 01 để mô tả chính xác các tầng đã đóng băng và lịch huấn luyện; ZIP hiện tại chủ yếu chứa artifact inference.",
+      "source_file": "authored_content/model/model__transfer_learning.vi.md"
+    },
+    {
+      "id": "model.what_is_cnn",
+      "version": "1.0.0",
+      "title": "CNN là gì",
+      "domain": "model",
+      "intent": "what_is_cnn",
+      "stages": [
+        "before_analysis",
+        "after_analysis"
+      ],
+      "risk": "low",
+      "requires_prediction": false,
+      "technical_review_required": true,
+      "clinical_review_required": false,
+      "clinical_review_status": "not_required",
+      "publication_status": "published_internal",
+      "author": "ML/Technical Owner",
+      "reviewer": "Backend/Technical Owner",
+      "source_ids": [
+        "MOBILENETV2_CVPR_2018"
+      ],
+      "review_due": "2027-07-24",
+      "sample_questions": [
+        "CNN là gì?",
+        "Mạng tích chập hoạt động ra sao?"
+      ],
+      "must_include": [
+        "học đặc trưng từ ảnh",
+        "phụ thuộc dữ liệu"
+      ],
+      "must_not_include": [
+        "CNN suy nghĩ như bác sĩ"
+      ],
+      "answer_short": "CNN là mạng nơ-ron được thiết kế để học các đặc trưng không gian từ ảnh thông qua các lớp tích chập, kích hoạt và tổng hợp.",
+      "answer_detailed": "Trong phân loại ảnh, các lớp đầu học mẫu cục bộ như cạnh và texture; các tầng sâu kết hợp chúng thành biểu diễn phức tạp hơn. Kết quả cuối cùng vẫn phụ thuộc dữ liệu huấn luyện và không tự mang ý nghĩa lâm sàng nếu chưa được đánh giá phù hợp.",
+      "source_file": "authored_content/model/model__what_is_cnn.vi.md"
+    },
+    {
+      "id": "model.what_is_mobilenetv2",
+      "version": "1.0.0",
+      "title": "MobileNetV2 là gì",
+      "domain": "model",
+      "intent": "what_is_mobilenetv2",
+      "stages": [
+        "before_analysis",
+        "after_analysis"
+      ],
+      "risk": "low",
+      "requires_prediction": false,
+      "technical_review_required": true,
+      "clinical_review_required": false,
+      "clinical_review_status": "not_required",
+      "publication_status": "published_internal",
+      "author": "ML/Technical Owner",
+      "reviewer": "Backend/Technical Owner",
+      "source_ids": [
+        "MOBILENETV2_CVPR_2018",
+        "MODEL_ARTIFACT_1_1_0"
+      ],
+      "review_due": "2027-07-24",
+      "sample_questions": [
+        "MobileNetV2 là gì?",
+        "Model sử dụng kiến trúc nào?"
+      ],
+      "must_include": [
+        "inverted residual",
+        "linear bottleneck",
+        "kiến trúc nhẹ"
+      ],
+      "must_not_include": [
+        "tốt nhất cho mọi bài toán"
+      ],
+      "answer_short": "MobileNetV2 là kiến trúc CNN nhẹ sử dụng inverted residual và linear bottleneck để cân bằng khả năng biểu diễn với chi phí tính toán.",
+      "answer_detailed": "Project dùng MobileNetV2 làm backbone trong mô hình transfer learning ba lớp. Lựa chọn này phù hợp với mục tiêu chạy inference trên máy Windows không cần GPU mạnh, nhưng hiệu quả thực tế phải được đánh giá trên dữ liệu X-quang mục tiêu.",
+      "source_file": "authored_content/model/model__what_is_mobilenetv2.vi.md"
+    },
+    {
+      "id": "model.why_mobilenetv2",
+      "version": "1.0.0",
+      "title": "Lý do chọn MobileNetV2",
+      "domain": "model",
+      "intent": "why_mobilenetv2",
+      "stages": [
+        "before_analysis",
+        "after_analysis"
+      ],
+      "risk": "low",
+      "requires_prediction": false,
+      "technical_review_required": true,
+      "clinical_review_required": false,
+      "clinical_review_status": "not_required",
+      "publication_status": "published_internal",
+      "author": "ML/Technical Owner",
+      "reviewer": "Backend/Technical Owner",
+      "source_ids": [
+        "MOBILENETV2_CVPR_2018",
+        "MODEL_ARTIFACT_1_1_0"
+      ],
+      "review_due": "2027-07-24",
+      "sample_questions": [
+        "Tại sao chọn MobileNetV2?",
+        "Sao không dùng model lớn hơn?"
+      ],
+      "must_include": [
+        "cân bằng tốc độ/kích thước/hiệu năng"
+      ],
+      "must_not_include": [
+        "MobileNetV2 luôn chính xác nhất"
+      ],
+      "answer_short": "MobileNetV2 được chọn để đạt cân bằng giữa tốc độ, kích thước model và hiệu năng cho ứng dụng portable.",
+      "answer_detailed": "Model artifact chỉ khoảng vài MB trong khi runtime TensorFlow lớn hơn nhiều. Kiến trúc nhẹ giúp inference CPU khả thi, nhưng lựa chọn cuối phải dựa trên metric cùng tập test, latency và giới hạn phần cứng thay vì chỉ dựa trên tên kiến trúc.",
+      "source_file": "authored_content/model/model__why_mobilenetv2.vi.md"
+    },
+    {
+      "id": "product.application_purpose",
+      "version": "1.0.0",
+      "title": "Mục đích của ứng dụng",
+      "domain": "product",
+      "intent": "application_purpose",
+      "stages": [
+        "before_analysis",
+        "after_analysis"
+      ],
+      "risk": "low",
+      "requires_prediction": false,
+      "technical_review_required": true,
+      "clinical_review_required": false,
+      "clinical_review_status": "not_required",
+      "publication_status": "published_internal",
+      "author": "Research/Product Owner",
+      "reviewer": "Backend/Technical Owner",
+      "source_ids": [
+        "PROJECT_SOURCE_V1_0_0",
+        "MODEL_ARTIFACT_1_1_0",
+        "WHO_AI_ETHICS_2021"
+      ],
+      "review_due": "2027-07-24",
+      "sample_questions": [
+        "Phần mềm này dùng để làm gì?",
+        "Hệ thống có chức năng gì?",
+        "Đây có phải phần mềm chẩn đoán không?"
+      ],
+      "must_include": [
+        "nguyên mẫu học thuật",
+        "ba lớp",
+        "không thay thế bác sĩ"
+      ],
+      "must_not_include": [
+        "chẩn đoán tự động chính thức",
+        "được phép dùng thay bác sĩ"
+      ],
+      "answer_short": "Ứng dụng là nguyên mẫu học thuật dùng MobileNetV2 để phân loại ảnh X-quang phổi vào ba lớp: normal, pneumonia và tuberculosis.",
+      "answer_detailed": "Ứng dụng nhận ảnh JPG/JPEG/PNG, kiểm tra tệp, tiền xử lý về kích thước 224 × 224 RGB và chạy mô hình cục bộ. Kết quả là nhãn phân loại cùng ba giá trị đầu ra của mô hình. Hệ thống không thay thế báo cáo của bác sĩ chẩn đoán hình ảnh, thông tin lâm sàng hoặc xét nghiệm xác nhận.",
+      "source_file": "authored_content/product/product__application_purpose.vi.md"
+    },
+    {
+      "id": "product.image_validation",
+      "version": "1.0.0",
+      "title": "Kiểm tra tệp ảnh",
+      "domain": "product",
+      "intent": "image_validation",
+      "stages": [
+        "before_analysis",
+        "after_analysis"
+      ],
+      "risk": "medium",
+      "requires_prediction": false,
+      "technical_review_required": true,
+      "clinical_review_required": false,
+      "clinical_review_status": "not_required",
+      "publication_status": "published_internal",
+      "author": "Research/Product Owner",
+      "reviewer": "Backend/Technical Owner",
+      "source_ids": [
+        "PROJECT_SOURCE_V1_0_0",
+        "MODEL_ARTIFACT_1_1_0"
+      ],
+      "review_due": "2027-07-24",
+      "sample_questions": [
+        "Hệ thống kiểm tra ảnh thế nào?",
+        "Tại sao ảnh bị báo không hợp lệ?",
+        "Ứng dụng có biết đây là ảnh X-quang không?"
+      ],
+      "must_include": [
+        "kiểm tra kỹ thuật tệp",
+        "chưa xác nhận chắc chắn là X-quang ngực"
+      ],
+      "must_not_include": [
+        "đảm bảo đúng ảnh X-quang phổi"
+      ],
+      "answer_short": "Hệ thống kiểm tra tệp có phải JPEG/PNG hợp lệ và có giải mã được hay không; hiện chưa xác nhận chắc chắn ảnh là X-quang ngực phù hợp.",
+      "answer_detailed": "Các kiểm tra hiện có gồm dung lượng, extension, MIME, magic bytes, ảnh lỗi và số pixel quá lớn. Đây là kiểm tra kỹ thuật tệp. Một ảnh phong cảnh hoặc X-quang bộ phận khác vẫn có thể vượt qua nếu là JPEG/PNG hợp lệ; cần một mô-đun quality/OOD riêng để giải quyết vấn đề đó.",
+      "source_file": "authored_content/product/product__image_validation.vi.md"
+    },
+    {
+      "id": "product.max_file_size",
+      "version": "1.0.0",
+      "title": "Giới hạn dung lượng",
+      "domain": "product",
+      "intent": "max_file_size",
+      "stages": [
+        "before_analysis",
+        "after_analysis"
+      ],
+      "risk": "low",
+      "requires_prediction": false,
+      "technical_review_required": true,
+      "clinical_review_required": false,
+      "clinical_review_status": "not_required",
+      "publication_status": "published_internal",
+      "author": "Research/Product Owner",
+      "reviewer": "Backend/Technical Owner",
+      "source_ids": [
+        "MODEL_ARTIFACT_1_1_0",
+        "PROJECT_SOURCE_V1_0_0"
+      ],
+      "review_due": "2027-07-24",
+      "sample_questions": [
+        "Ảnh tối đa bao nhiêu MB?",
+        "Tại sao file lớn bị từ chối?"
+      ],
+      "must_include": [
+        "10 MB"
+      ],
+      "must_not_include": [],
+      "answer_short": "Dung lượng tối đa theo hợp đồng API hiện tại là 10 MB mỗi ảnh.",
+      "answer_detailed": "Tệp vượt 10 MB phải bị từ chối và người dùng nên xuất lại ảnh ở định dạng JPG hoặc PNG phù hợp. Giới hạn này là giới hạn sản phẩm, không phải tiêu chí chất lượng chẩn đoán ảnh.",
+      "source_file": "authored_content/product/product__max_file_size.vi.md"
+    },
+    {
+      "id": "product.reset_analysis",
+      "version": "1.0.0",
+      "title": "Phân tích ảnh khác",
+      "domain": "product",
+      "intent": "reset_analysis",
+      "stages": [
+        "after_analysis"
+      ],
+      "risk": "low",
+      "requires_prediction": true,
+      "technical_review_required": true,
+      "clinical_review_required": false,
+      "clinical_review_status": "not_required",
+      "publication_status": "published_internal",
+      "author": "Research/Product Owner",
+      "reviewer": "Backend/Technical Owner",
+      "source_ids": [
+        "PROJECT_SOURCE_V1_0_0"
+      ],
+      "review_due": "2027-07-24",
+      "sample_questions": [
+        "Làm sao chọn ảnh khác?",
+        "Có thể phân tích lại không?",
+        "Cách xóa kết quả cũ?"
+      ],
+      "must_include": [
+        "xóa ngữ cảnh ảnh cũ"
+      ],
+      "must_not_include": [],
+      "answer_short": "Bấm Chọn lại hoặc đặt lại phiên, sau đó chọn ảnh mới; giao diện phải xóa kết quả và ngữ cảnh chat của ảnh cũ.",
+      "answer_detailed": "Prediction context không được dùng lại cho ảnh mới. Chatbot cần chuyển từ trạng thái after_analysis về before_analysis cho đến khi có prediction mới.",
+      "source_file": "authored_content/product/product__reset_analysis.vi.md"
+    },
+    {
+      "id": "product.start_analysis",
+      "version": "1.0.0",
+      "title": "Bắt đầu phân tích",
+      "domain": "product",
+      "intent": "start_analysis",
+      "stages": [
+        "before_analysis"
+      ],
+      "risk": "low",
+      "requires_prediction": false,
+      "technical_review_required": true,
+      "clinical_review_required": false,
+      "clinical_review_status": "not_required",
+      "publication_status": "published_internal",
+      "author": "Research/Product Owner",
+      "reviewer": "Backend/Technical Owner",
+      "source_ids": [
+        "PROJECT_SOURCE_V1_0_0"
+      ],
+      "review_due": "2027-07-24",
+      "sample_questions": [
+        "Làm sao chạy model?",
+        "Khi nào bấm Phân tích ảnh?",
+        "Tại sao chưa phân tích được?"
+      ],
+      "must_include": [
+        "model sẵn sàng",
+        "inference cục bộ"
+      ],
+      "must_not_include": [],
+      "answer_short": "Sau khi tệp hợp lệ và model ở trạng thái sẵn sàng, bấm Phân tích ảnh để gửi ảnh đến FastAPI và chạy inference cục bộ.",
+      "answer_detailed": "Trong lúc xử lý, giao diện cần khóa thao tác gửi lặp, hiển thị trạng thái đang phân tích và chỉ mở kết quả khi API trả thành công. Nếu model chưa sẵn sàng hoặc lỗi, hệ thống phải thông báo rõ thay vì hiển thị số 0 như một kết quả giả.",
+      "source_file": "authored_content/product/product__start_analysis.vi.md"
+    },
+    {
+      "id": "product.supported_classes",
+      "version": "1.0.0",
+      "title": "Ba lớp được hỗ trợ",
+      "domain": "product",
+      "intent": "supported_classes",
+      "stages": [
+        "before_analysis",
+        "after_analysis"
+      ],
+      "risk": "low",
+      "requires_prediction": false,
+      "technical_review_required": true,
+      "clinical_review_required": false,
+      "clinical_review_status": "not_required",
+      "publication_status": "published_internal",
+      "author": "Research/Product Owner",
+      "reviewer": "Backend/Technical Owner",
+      "source_ids": [
+        "MODEL_ARTIFACT_1_1_0"
+      ],
+      "review_due": "2027-07-24",
+      "sample_questions": [
+        "Model phân loại những bệnh nào?",
+        "Hệ thống hỗ trợ bao nhiêu lớp?",
+        "Có phát hiện ung thư phổi không?"
+      ],
+      "must_include": [
+        "chỉ ba lớp",
+        "không phát hiện bệnh ngoài phạm vi"
+      ],
+      "must_not_include": [
+        "phát hiện mọi bệnh phổi"
+      ],
+      "answer_short": "Model hiện chỉ phân loại ba lớp: phổi bình thường, viêm phổi và lao phổi.",
+      "answer_detailed": "Mọi ảnh hợp lệ đều được so sánh trong đúng ba lớp normal, pneumonia và tuberculosis. Model không có lớp ung thư, tràn dịch, khí phế thũng hoặc các bất thường khác; vì vậy không được dùng để loại trừ các bệnh ngoài phạm vi này.",
+      "source_file": "authored_content/product/product__supported_classes.vi.md"
+    },
+    {
+      "id": "product.supported_formats",
+      "version": "1.0.0",
+      "title": "Định dạng ảnh được hỗ trợ",
+      "domain": "product",
+      "intent": "supported_formats",
+      "stages": [
+        "before_analysis",
+        "after_analysis"
+      ],
+      "risk": "low",
+      "requires_prediction": false,
+      "technical_review_required": true,
+      "clinical_review_required": false,
+      "clinical_review_status": "not_required",
+      "publication_status": "published_internal",
+      "author": "Research/Product Owner",
+      "reviewer": "Backend/Technical Owner",
+      "source_ids": [
+        "PROJECT_SOURCE_V1_0_0",
+        "MODEL_ARTIFACT_1_1_0"
+      ],
+      "review_due": "2027-07-24",
+      "sample_questions": [
+        "Hệ thống nhận file gì?",
+        "Có dùng DICOM được không?",
+        "Có tải PDF lên được không?"
+      ],
+      "must_include": [
+        "JPG/JPEG/PNG",
+        "chưa hỗ trợ DICOM"
+      ],
+      "must_not_include": [
+        "hỗ trợ DICOM"
+      ],
+      "answer_short": "Phiên bản hiện tại hỗ trợ JPG, JPEG và PNG; chưa hỗ trợ DICOM hoặc PDF.",
+      "answer_detailed": "Backend kiểm tra phần mở rộng, MIME type, magic bytes và khả năng giải mã ảnh. Việc đổi tên một tệp không hợp lệ thành .jpg không làm tệp đó trở thành ảnh hợp lệ.",
+      "source_file": "authored_content/product/product__supported_formats.vi.md"
+    },
+    {
+      "id": "product.upload_help",
+      "version": "1.0.0",
+      "title": "Hướng dẫn tải ảnh",
+      "domain": "product",
+      "intent": "upload_help",
+      "stages": [
+        "before_analysis",
+        "after_analysis"
+      ],
+      "risk": "low",
+      "requires_prediction": false,
+      "technical_review_required": true,
+      "clinical_review_required": false,
+      "clinical_review_status": "not_required",
+      "publication_status": "published_internal",
+      "author": "Research/Product Owner",
+      "reviewer": "Backend/Technical Owner",
+      "source_ids": [
+        "PROJECT_SOURCE_V1_0_0"
+      ],
+      "review_due": "2027-07-24",
+      "sample_questions": [
+        "Tải ảnh lên như thế nào?",
+        "Làm sao chọn ảnh X-quang?",
+        "Có kéo thả ảnh được không?"
+      ],
+      "must_include": [
+        "một ảnh mỗi lần",
+        "kiểm tra bản xem trước"
+      ],
+      "must_not_include": [],
+      "answer_short": "Kéo thả ảnh vào vùng tải lên hoặc bấm Chọn tệp từ máy, kiểm tra bản xem trước rồi bấm Phân tích ảnh.",
+      "answer_detailed": "Chỉ chọn một ảnh cho mỗi lần phân tích. Sau khi ảnh hợp lệ, giao diện hiển thị tên tệp, dung lượng, kích thước và nút Phân tích ảnh. Khi chọn ảnh mới, kết quả cũ cần được xóa khỏi phiên giao diện để tránh nhầm lẫn.",
+      "source_file": "authored_content/product/product__upload_help.vi.md"
+    },
+    {
+      "id": "safety.no_prediction",
+      "version": "1.0.0",
+      "title": "Hỏi kết quả khi chưa phân tích",
+      "domain": "safety",
+      "intent": "no_prediction",
+      "stages": [
+        "before_analysis"
+      ],
+      "risk": "medium",
+      "requires_prediction": false,
+      "technical_review_required": true,
+      "clinical_review_required": false,
+      "clinical_review_status": "not_required",
+      "publication_status": "published_internal",
+      "author": "Backend/Knowledge Engineer",
+      "reviewer": "Clinical reviewer + Product Owner",
+      "source_ids": [
+        "PROJECT_SOURCE_V1_0_0"
+      ],
+      "review_due": "2027-07-24",
+      "sample_questions": [
+        "Kết quả ảnh này là gì?",
+        "Giải thích kết quả hiện tại",
+        "Bệnh nhân bị gì?"
+      ],
+      "must_include": [
+        "chưa có kết quả",
+        "không suy đoán"
+      ],
+      "must_not_include": [
+        "một nhãn bệnh bất kỳ"
+      ],
+      "answer_short": "Phiên hiện tại chưa có kết quả phân tích. Hãy tải ảnh hợp lệ và chạy phân tích trước.",
+      "answer_detailed": "Chatbot không được tạo hoặc suy đoán prediction khi analysis_context chưa ở trạng thái completed. Sau khi có kết quả, nó chỉ giải thích metadata do FastAPI cung cấp.",
+      "source_file": "authored_content/safety/safety__no_prediction.vi.md"
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "PROJECT_SOURCE_V1_0_0",
+      "title": "Lung X-ray FastAPI Portable Windows x64 - source code and API documentation",
+      "publisher": "Project team",
+      "source_type": "project_artifact",
+      "year": "2026",
+      "url": "local://Lung_Xray_FastAPI_Portable_Windows_x64_v1.0.0_model1.1.0_20260723.zip",
+      "topics": [
+        "product",
+        "api",
+        "upload",
+        "security",
+        "runtime"
+      ],
+      "authority": "primary_project_evidence",
+      "status": "approved_technical"
+    },
+    {
+      "source_id": "MODEL_ARTIFACT_1_1_0",
+      "title": "Lung classifier model artifact, metadata, preprocessing contract and metrics v1.1.0",
+      "publisher": "Project team",
+      "source_type": "model_artifact",
+      "year": "2026",
+      "url": "local://app/artifacts/lung_classifier/1.1.0/",
+      "topics": [
+        "model",
+        "classes",
+        "preprocessing",
+        "metrics",
+        "limitations"
+      ],
+      "authority": "primary_project_evidence",
+      "status": "approved_technical"
+    },
+    {
+      "source_id": "MOBILENETV2_CVPR_2018",
+      "title": "MobileNetV2: Inverted Residuals and Linear Bottlenecks",
+      "publisher": "IEEE/CVF CVPR",
+      "source_type": "peer_reviewed_paper",
+      "year": "2018",
+      "url": "https://openaccess.thecvf.com/content_cvpr_2018/html/Sandler_MobileNetV2_Inverted_Residuals_CVPR_2018_paper.html",
+      "topics": [
+        "mobilenetv2",
+        "cnn",
+        "architecture"
+      ],
+      "authority": "primary_research",
+      "status": "approved_technical"
+    },
+    {
+      "source_id": "KERAS_MOBILENET_DOCS",
+      "title": "Keras Applications - MobileNet, MobileNetV2 and MobileNetV3",
+      "publisher": "Keras",
+      "source_type": "official_documentation",
+      "year": "2026",
+      "url": "https://keras.io/api/applications/mobilenet/",
+      "topics": [
+        "mobilenetv2",
+        "preprocessing",
+        "transfer_learning"
+      ],
+      "authority": "official_technical",
+      "status": "approved_technical"
+    },
+    {
+      "source_id": "TF_TRANSFER_LEARNING",
+      "title": "Transfer learning and fine-tuning",
+      "publisher": "TensorFlow",
+      "source_type": "official_documentation",
+      "year": "2026",
+      "url": "https://www.tensorflow.org/tutorials/images/transfer_learning",
+      "topics": [
+        "transfer_learning",
+        "fine_tuning"
+      ],
+      "authority": "official_technical",
+      "status": "approved_technical"
+    },
+    {
+      "source_id": "MODEL_CARDS_2019",
+      "title": "Model Cards for Model Reporting",
+      "publisher": "Google Research",
+      "source_type": "peer_reviewed_paper",
+      "year": "2019",
+      "url": "https://research.google/pubs/model-cards-for-model-reporting/",
+      "topics": [
+        "model_card",
+        "transparency",
+        "intended_use",
+        "limitations"
+      ],
+      "authority": "primary_research",
+      "status": "approved_governance"
+    },
+    {
+      "source_id": "DATASHEETS_DATASETS_2021",
+      "title": "Datasheets for Datasets",
+      "publisher": "Communications of the ACM",
+      "source_type": "peer_reviewed_paper",
+      "year": "2021",
+      "url": "https://cacm.acm.org/research/datasheets-for-datasets/",
+      "topics": [
+        "dataset",
+        "provenance",
+        "documentation",
+        "bias"
+      ],
+      "authority": "primary_research",
+      "status": "approved_governance"
+    },
+    {
+      "source_id": "TRIPOD_AI_2024",
+      "title": "TRIPOD+AI statement: updated guidance for reporting clinical prediction models",
+      "publisher": "The BMJ",
+      "source_type": "reporting_guideline",
+      "year": "2024",
+      "url": "https://www.bmj.com/content/385/bmj-2023-078378",
+      "topics": [
+        "clinical_prediction",
+        "reporting",
+        "evaluation",
+        "transparency"
+      ],
+      "authority": "peer_reviewed_guideline",
+      "status": "approved_governance"
+    },
+    {
+      "source_id": "CALIBRATION_GUO_2017",
+      "title": "On Calibration of Modern Neural Networks",
+      "publisher": "Proceedings of Machine Learning Research",
+      "source_type": "peer_reviewed_paper",
+      "year": "2017",
+      "url": "https://proceedings.mlr.press/v70/guo17a.html",
+      "topics": [
+        "calibration",
+        "confidence",
+        "softmax",
+        "uncertainty"
+      ],
+      "authority": "primary_research",
+      "status": "approved_technical"
+    },
+    {
+      "source_id": "WHO_AI_ETHICS_2021",
+      "title": "Ethics and governance of artificial intelligence for health",
+      "publisher": "World Health Organization",
+      "source_type": "official_guidance",
+      "year": "2021",
+      "url": "https://www.who.int/publications/i/item/9789240029200",
+      "topics": [
+        "health_ai",
+        "ethics",
+        "human_oversight",
+        "accountability",
+        "privacy"
+      ],
+      "authority": "international_health_authority",
+      "status": "approved_governance"
+    },
+    {
+      "source_id": "WHO_LMM_HEALTH_2024",
+      "title": "Ethics and governance of artificial intelligence for health: guidance on large multi-modal models",
+      "publisher": "World Health Organization",
+      "source_type": "official_guidance",
+      "year": "2024",
+      "url": "https://www.who.int/publications/i/item/9789240084759",
+      "topics": [
+        "generative_ai",
+        "health",
+        "safety",
+        "governance"
+      ],
+      "authority": "international_health_authority",
+      "status": "approved_governance"
+    },
+    {
+      "source_id": "CDC_PNEUMONIA_ABOUT_2025",
+      "title": "About Pneumonia",
+      "publisher": "US Centers for Disease Control and Prevention",
+      "source_type": "official_health_information",
+      "year": "2025",
+      "url": "https://www.cdc.gov/pneumonia/about/index.html",
+      "topics": [
+        "pneumonia",
+        "overview",
+        "causes"
+      ],
+      "authority": "national_public_health_authority",
+      "status": "pending_clinical_review"
+    },
+    {
+      "source_id": "RADINFO_PNEUMONIA_2026",
+      "title": "Pneumonia - Diagnosis, Evaluation and Treatment",
+      "publisher": "RadiologyInfo.org (ACR/RSNA)",
+      "source_type": "professional_radiology_information",
+      "year": "2026",
+      "url": "https://www.radiologyinfo.org/en/info/pneumonia",
+      "topics": [
+        "pneumonia",
+        "chest_xray",
+        "imaging_role"
+      ],
+      "authority": "professional_society_information",
+      "status": "pending_clinical_review"
+    },
+    {
+      "source_id": "RADINFO_CHEST_XRAY_2024",
+      "title": "Chest X-ray (Radiography)",
+      "publisher": "RadiologyInfo.org (ACR/RSNA)",
+      "source_type": "professional_radiology_information",
+      "year": "2024",
+      "url": "https://www.radiologyinfo.org/en/info/chestrad",
+      "topics": [
+        "chest_xray",
+        "role",
+        "limitations"
+      ],
+      "authority": "professional_society_information",
+      "status": "pending_clinical_review"
+    },
+    {
+      "source_id": "WHO_TB_FACTSHEET_2026",
+      "title": "Tuberculosis fact sheet",
+      "publisher": "World Health Organization",
+      "source_type": "official_health_information",
+      "year": "2026",
+      "url": "https://www.who.int/news-room/fact-sheets/detail/tuberculosis",
+      "topics": [
+        "tuberculosis",
+        "overview",
+        "symptoms",
+        "transmission",
+        "diagnosis"
+      ],
+      "authority": "international_health_authority",
+      "status": "pending_clinical_review"
+    },
+    {
+      "source_id": "WHO_TB_DIAGNOSIS_2025",
+      "title": "WHO consolidated guidelines on tuberculosis: module 3 - diagnosis",
+      "publisher": "World Health Organization",
+      "source_type": "official_clinical_guideline",
+      "year": "2025",
+      "url": "https://www.who.int/publications/i/item/9789240107984",
+      "topics": [
+        "tuberculosis",
+        "diagnosis",
+        "testing",
+        "drug_resistance"
+      ],
+      "authority": "international_clinical_guideline",
+      "status": "pending_clinical_review"
+    },
+    {
+      "source_id": "WHO_TB_CAD_2025",
+      "title": "WHO policy on computer-aided detection software for interpreting chest X-ray for TB screening",
+      "publisher": "World Health Organization",
+      "source_type": "official_policy",
+      "year": "2025",
+      "url": "https://www.who.int/publications/i/item/9789240110373",
+      "topics": [
+        "tuberculosis",
+        "computer_aided_detection",
+        "screening",
+        "chest_xray"
+      ],
+      "authority": "international_clinical_policy",
+      "status": "pending_clinical_review"
+    },
+    {
+      "source_id": "CDC_TB_DIAGNOSIS_2025",
+      "title": "Clinical and Laboratory Diagnosis for Tuberculosis",
+      "publisher": "US Centers for Disease Control and Prevention",
+      "source_type": "official_clinical_information",
+      "year": "2025",
+      "url": "https://www.cdc.gov/tb/hcp/testing-diagnosis/clinical-and-laboratory-diagnosis.html",
+      "topics": [
+        "tuberculosis",
+        "diagnosis",
+        "laboratory",
+        "chest_xray"
+      ],
+      "authority": "national_public_health_authority",
+      "status": "pending_clinical_review"
+    },
+    {
+      "source_id": "GEMINI_API_KEY_DOCS_2026",
+      "title": "Using Gemini API keys",
+      "publisher": "Google AI for Developers",
+      "source_type": "official_documentation",
+      "year": "2026",
+      "url": "https://ai.google.dev/gemini-api/docs/api-key",
+      "topics": [
+        "gemini",
+        "api_key",
+        "security"
+      ],
+      "authority": "official_technical",
+      "status": "approved_technical"
+    },
+    {
+      "source_id": "GEMINI_STRUCTURED_OUTPUT_2026",
+      "title": "Structured outputs with the Gemini API",
+      "publisher": "Google AI for Developers",
+      "source_type": "official_documentation",
+      "year": "2026",
+      "url": "https://ai.google.dev/gemini-api/docs/structured-output",
+      "topics": [
+        "gemini",
+        "json_schema",
+        "structured_output"
+      ],
+      "authority": "official_technical",
+      "status": "approved_technical"
+    },
+    {
+      "source_id": "GEMINI_INTERACTIONS_2026",
+      "title": "Interactions API overview",
+      "publisher": "Google AI for Developers",
+      "source_type": "official_documentation",
+      "year": "2026",
+      "url": "https://ai.google.dev/gemini-api/docs/interactions-overview",
+      "topics": [
+        "gemini",
+        "interactions_api",
+        "conversation"
+      ],
+      "authority": "official_technical",
+      "status": "approved_technical"
+    }
+  ]
+}

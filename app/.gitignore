@@ -1,0 +1,29 @@
+.env
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+coverage.xml
+*.egg-info/
+
+var/logs/*
+!var/logs/.gitkeep
+var/tmp/*
+!var/tmp/.gitkeep
+var/data/*
+!var/data/.gitkeep
+*.log
+*.tmp
+
+# Local model-evaluation datasets and generated metrics must not enter source control.
+/evaluation_dataset/
+/var/evaluation/
+
+# Online AI credentials
+.env.*
+!.env.example
+*.key
+secrets/

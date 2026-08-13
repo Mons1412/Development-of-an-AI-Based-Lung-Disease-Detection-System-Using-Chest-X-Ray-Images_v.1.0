@@ -1,0 +1,69 @@
+<fieldset id="patient-fieldset" class="patient-form">
+  <legend>
+    <span class="legend-icon" aria-hidden="true">
+      <svg class="ui-icon"><use href="{{ frontend_asset_url('assets/ui-icons.svg') }}#icon-patient"></use></svg>
+    </span>
+    <span>Thông tin ca phân tích</span>
+  </legend>
+  <p class="form-hint">Thông tin nhận từ tên tệp chỉ là gợi ý. Hãy kiểm tra lại trước khi phân tích.</p>
+  <div class="form-grid">
+    <label>
+      <span>Mã bệnh nhân / mã ca <small>(không bắt buộc)</small></span>
+      <input
+        id="patient-code"
+        name="patient_code"
+        type="text"
+        maxlength="32"
+        autocomplete="off"
+        spellcheck="false"
+        aria-describedby="patient-code-help patient-code-error"
+        aria-invalid="false"
+        placeholder="Ví dụ: BN001 hoặc để trống"
+      >
+      <small id="patient-code-help" class="field-help">Chỉ dùng chữ, số và dấu gạch ngang. Không nhập tên bệnh nhân vào ô này.</small>
+      <small id="patient-code-error" class="field-error" aria-live="polite"></small>
+    </label>
+    <label>
+      <span>Tên hiển thị <strong aria-hidden="true">*</strong></span>
+      <input
+        id="patient-name"
+        name="patient_display_name"
+        type="text"
+        maxlength="80"
+        autocomplete="off"
+        aria-describedby="patient-name-help patient-name-error"
+        aria-invalid="false"
+        placeholder="Nhập tên bệnh nhân hoặc tên ca"
+      >
+      <small id="patient-name-help" class="field-help">Ví dụ: Văn A. Trường này bắt buộc với ca có định danh.</small>
+      <small id="patient-name-error" class="field-error" aria-live="polite"></small>
+    </label>
+  </div>
+  <p class="metadata-source">
+    <span>Nguồn thông tin</span>
+    <strong id="metadata-source-label">Nhập thủ công</strong>
+  </p>
+  <div class="choice-list">
+    <label class="choice-card">
+      <input id="anonymous-toggle" type="checkbox">
+      <span class="choice-card__icon" aria-hidden="true">
+        <svg class="ui-icon"><use href="{{ frontend_asset_url('assets/ui-icons.svg') }}#icon-anonymous"></use></svg>
+      </span>
+      <span class="choice-card__copy">
+        <strong>Ảnh mẫu hoặc ca ẩn danh</strong>
+        <small>Không gắn tên hoặc mã bệnh nhân vào lần phân tích.</small>
+      </span>
+    </label>
+    <label class="choice-card choice-card--confirm">
+      <input id="patient-confirmed" type="checkbox" aria-describedby="patient-confirmation-error" aria-invalid="false">
+      <span class="choice-card__icon" aria-hidden="true">
+        <svg class="ui-icon"><use href="{{ frontend_asset_url('assets/ui-icons.svg') }}#icon-check"></use></svg>
+      </span>
+      <span class="choice-card__copy">
+        <strong>Tôi đã kiểm tra thông tin</strong>
+        <small>Xác nhận thông tin ca trước khi gửi ảnh đến mô hình.</small>
+      </span>
+    </label>
+  </div>
+  <small id="patient-confirmation-error" class="field-error" aria-live="polite"></small>
+</fieldset>

@@ -1,0 +1,100 @@
+
+<button
+  id="assistant-launcher"
+  class="assistant-launcher"
+  type="button"
+  aria-controls="assistant-panel"
+  aria-expanded="false"
+>
+  <span aria-hidden="true">✦</span>
+  <span>Trợ lý</span>
+</button>
+
+<section
+  id="assistant-panel"
+  class="assistant-panel"
+  hidden
+  aria-labelledby="assistant-title"
+>
+  <header class="assistant-header">
+    <div>
+      <small
+        id="assistant-mode-badge"
+        class="assistant-mode-badge assistant-mode-badge--offline"
+      >
+        Ngoại tuyến
+      </small>
+      <h2 id="assistant-title">Trợ lý thông tin X-quang phổi</h2>
+    </div>
+
+    <div>
+      <button
+        id="assistant-skip"
+        class="icon-button"
+        type="button"
+        aria-label="Hiện ngay toàn bộ câu trả lời"
+        hidden
+      >
+        »
+      </button>
+      <button
+        id="assistant-minimize"
+        class="icon-button"
+        type="button"
+        aria-label="Thu nhỏ trợ lý"
+      >
+        −
+      </button>
+      <button
+        id="assistant-new"
+        class="icon-button"
+        type="button"
+        aria-label="Cuộc trò chuyện mới"
+      >
+        ↻
+      </button>
+      <button
+        id="assistant-close"
+        class="icon-button"
+        type="button"
+        aria-label="Đóng trợ lý"
+      >
+        ×
+      </button>
+    </div>
+  </header>
+
+  <div
+    id="assistant-messages"
+    class="assistant-messages"
+    aria-live="polite"
+  ></div>
+
+  <p id="assistant-online-notice" class="assistant-online-notice" aria-live="polite" hidden>
+    Chế độ trực tuyến chỉ gửi câu hỏi và ngữ cảnh dự đoán không định danh tới Gemini.
+    Không nhập tên, mã ca, số điện thoại hoặc thông tin nhận dạng.
+  </p>
+
+  <div
+    id="assistant-suggestions"
+    class="assistant-suggestions"
+    aria-label="Câu hỏi gợi ý"
+  ></div>
+
+  <form id="assistant-form" class="assistant-composer">
+    <label class="visually-hidden" for="assistant-input">Nhập câu hỏi</label>
+    <textarea
+      id="assistant-input"
+      rows="2"
+      maxlength="1200"
+      placeholder="Hỏi về cách dùng hoặc kết quả mô hình…"
+    ></textarea>
+    <button
+      id="assistant-send"
+      class="button button--primary"
+      type="submit"
+    >
+      Gửi
+    </button>
+  </form>
+</section>

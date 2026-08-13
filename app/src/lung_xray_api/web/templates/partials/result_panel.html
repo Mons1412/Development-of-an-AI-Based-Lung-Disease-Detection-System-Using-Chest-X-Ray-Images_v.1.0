@@ -1,0 +1,155 @@
+<article class="workspace-panel result-panel" aria-labelledby="result-title">
+  <header class="panel-heading">
+    <span class="step-badge">02</span>
+    <div>
+      <h2 id="result-title">Kết quả phân loại của mô hình</h2>
+      <p>Đầu ra ba lớp, không phải chẩn đoán lâm sàng.</p>
+    </div>
+  </header>
+
+  <section id="result-empty" class="result-state result-state--empty">
+    <img src="{{ frontend_asset_url('assets/lungs-result.svg') }}" width="160" height="120" alt="" aria-hidden="true">
+    <h3>Chưa có kết quả</h3>
+    <p>Chọn ảnh, xác nhận thông tin và bấm “Phân tích ảnh”.</p>
+  </section>
+
+  <section id="result-loading" class="result-state" hidden aria-live="polite">
+    <div class="spinner" aria-hidden="true"></div>
+    <h3>Đang phân tích ảnh</h3>
+    <p>Đang kiểm tra ảnh, tiền xử lý và chạy MobileNetV2…</p>
+  </section>
+
+  <section id="result-error" class="result-state" hidden role="alert">
+    <h3>Không thể hoàn tất phân tích</h3>
+    <p id="result-error-message">Vui lòng thử lại.</p>
+  </section>
+
+  <section id="result-success" class="result-success" hidden>
+    <div class="result-hero">
+      <div class="result-hero__copy">
+        <span class="result-label">KẾT QUẢ PHÂN LOẠI CỦA MÔ HÌNH</span>
+        <h3 id="prediction-label">—</h3>
+        <p>Nhãn kỹ thuật (API): <code id="api-label">—</code></p>
+      </div>
+      <div class="result-probability">
+        <span>XÁC SUẤT ĐẦU RA CAO NHẤT</span>
+        <strong id="prediction-confidence">0%</strong>
+      </div>
+    </div>
+
+    <p id="result-visualization-summary" class="visually-hidden" aria-live="polite" aria-atomic="true"></p>
+
+    <section class="result-view-workspace" aria-labelledby="selected-views-title">
+      <header class="result-view-workspace__heading">
+        <div>
+          <p class="result-view-workspace__eyebrow">KHÔNG GIAN KẾT QUẢ</p>
+          <h4 id="selected-views-title">Các dạng hiển thị đã chọn</h4>
+          <p>Mọi dạng được chọn sẽ hiển thị đồng thời và dùng cùng một bộ xác suất đầu ra.</p>
+        </div>
+        <div id="result-view-badges" class="result-view-badges" aria-label="Các dạng đang hiển thị"></div>
+      </header>
+
+      <div id="result-content" class="result-view-grid" aria-label="Các dạng hiển thị kết quả">
+        <section id="result-view-probability-bars" class="result-view result-view--wide" aria-labelledby="result-view-probability-bars-title" hidden>
+          <header class="result-view__heading">
+            <span class="result-view__icon" aria-hidden="true">
+              <svg class="ui-icon"><use href="{{ frontend_asset_url('assets/ui-icons.svg') }}#icon-bars"></use></svg>
+            </span>
+            <div>
+              <h4 id="result-view-probability-bars-title">Thanh xác suất</h4>
+              <p>So sánh xác suất đầu ra của ba lớp phân loại.</p>
+            </div>
+          </header>
+          <div class="probability-list">
+            {% for label, title in [("normal", "Bình thường"), ("pneumonia", "Viêm phổi"), ("tuberculosis", "Lao phổi")] %}
+            <div class="probability-row" data-class="{{ label }}">
+              <span>{{ title }} <small>({{ label }})</small></span>
+              <div class="progress-track"><span id="bar-{{ label }}"></span></div>
+              <strong id="value-{{ label }}">0%</strong>
+            </div>
+            {% endfor %}
+          </div>
+        </section>
+
+        <section id="result-view-column-chart" class="result-view" aria-labelledby="result-view-column-chart-title" hidden>
+          <header class="result-view__heading">
+            <span class="result-view__icon" aria-hidden="true">
+              <svg class="ui-icon"><use href="{{ frontend_asset_url('assets/ui-icons.svg') }}#icon-column"></use></svg>
+            </span>
+            <div>
+              <h4 id="result-view-column-chart-title">Biểu đồ cột</h4>
+              <p>Đối chiếu trực quan trên cùng một thang xác suất.</p>
+            </div>
+          </header>
+          <div id="result-chart" class="chart-container"></div>
+        </section>
+
+        <section id="result-view-donut-chart" class="result-view" aria-labelledby="result-view-donut-chart-title" hidden>
+          <header class="result-view__heading">
+            <span class="result-view__icon" aria-hidden="true">
+              <svg class="ui-icon"><use href="{{ frontend_asset_url('assets/ui-icons.svg') }}#icon-donut"></use></svg>
+            </span>
+            <div>
+              <h4 id="result-view-donut-chart-title">Biểu đồ tròn</h4>
+              <p>Tỷ trọng đầu ra và chú thích chính xác cho từng lớp.</p>
+            </div>
+          </header>
+          <div id="result-donut" class="chart-container chart-container--donut"></div>
+        </section>
+
+        <section id="result-view-data-table" class="result-view result-view--wide" aria-labelledby="result-view-data-table-title" hidden>
+          <header class="result-view__heading">
+            <span class="result-view__icon" aria-hidden="true">
+              <svg class="ui-icon"><use href="{{ frontend_asset_url('assets/ui-icons.svg') }}#icon-table"></use></svg>
+            </span>
+            <div>
+              <h4 id="result-view-data-table-title">Bảng số liệu</h4>
+              <p>Giá trị đầu ra chính xác theo nhãn kỹ thuật.</p>
+            </div>
+          </header>
+          <div class="data-table-wrapper" tabindex="0" aria-label="Bảng xác suất đầu ra của mô hình">
+            <table class="data-table">
+              <thead><tr><th>Lớp</th><th>Nhãn kỹ thuật</th><th>Xác suất đầu ra</th></tr></thead>
+              <tbody id="result-table-body"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <p class="trend-note">
+      <svg class="ui-icon" aria-hidden="true"><use href="{{ frontend_asset_url('assets/ui-icons.svg') }}#icon-history"></use></svg>
+      Biểu đồ đường nằm trong <strong>Lịch sử phân tích</strong> và chỉ có ý nghĩa khi cùng một ca có từ hai lần phân tích theo thời gian.
+    </p>
+
+    <dl class="result-metadata">
+      <div>
+        <dt>Phiên bản mô hình</dt>
+        <dd id="model-version">—</dd>
+      </div>
+      <div>
+        <dt>Thời gian xử lý</dt>
+        <dd id="processing-time">—</dd>
+      </div>
+      <div>
+        <dt>Mã lần phân tích</dt>
+        <dd id="analysis-id">—</dd>
+      </div>
+    </dl>
+
+    <div class="reference-actions">
+      <button id="reference-info-button" class="button button--secondary" type="button" aria-haspopup="dialog" aria-controls="reference-info-modal" hidden>
+        <svg class="ui-icon" aria-hidden="true"><use href="{{ frontend_asset_url('assets/ui-icons.svg') }}#icon-info"></use></svg>
+        <span>Xem thông tin tham khảo</span>
+      </button>
+      <button id="preview-report-button" class="button button--primary" type="button" hidden>
+        <svg class="ui-icon" aria-hidden="true"><use href="{{ frontend_asset_url('assets/ui-icons.svg') }}#icon-preview"></use></svg>
+        <span>Xem trước báo cáo PDF</span>
+      </button>
+      <button id="export-report-button" class="button button--ghost" type="button" hidden>
+        <svg class="ui-icon" aria-hidden="true"><use href="{{ frontend_asset_url('assets/ui-icons.svg') }}#icon-download"></use></svg>
+        <span>Tải PDF ngay</span>
+      </button>
+    </div>
+  </section>
+</article>

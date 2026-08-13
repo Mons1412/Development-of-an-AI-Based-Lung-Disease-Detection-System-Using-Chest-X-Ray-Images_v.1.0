@@ -1,0 +1,12 @@
+Package: Lung X-ray FastAPI Portable
+Package version: 1.2.0
+Model version: 1.1.0
+Knowledge Base: production only
+Python: 3.12 Windows x64 portable
+Default host: 127.0.0.1
+Default port: 8000
+Gemini API key included: No
+Offline startup requires Internet: No
+Gemini online mode requires Internet: Yes
+Source commit: 8963e5af597bb87a69b3b104b5edf6b8adb0b916
+Source state: current working-tree snapshot
