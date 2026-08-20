@@ -1,0 +1,2 @@
+# Development-of-an-AI-Based-Lung-Disease-Detection-System-Using-Chest-X-Ray-Images_v.1.0
+Graduation Project: An AI-based system for detecting and classifying lung diseases from chest X-ray images. Using Deep Learning and MobileNetV2, the system analyzes X-ray images and provides prediction results through a FastAPI REST API, enabling integration with external applications. Developed for educational and research purposes.
