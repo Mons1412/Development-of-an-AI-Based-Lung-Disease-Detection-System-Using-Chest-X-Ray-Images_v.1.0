@@ -1,0 +1,23 @@
+services:
+  lung-xray-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: lung-xray-api
+
+    ports:
+      - "8000:8000"
+
+    env_file:
+      - .env
+
+    environment:
+      HOST: 0.0.0.0
+      PORT: 8000
+      PYTHONUTF8: "1"
+      PYTHONIOENCODING: utf-8
+      PYTHONPATH: /app/src
+      ARTIFACT_DIR: /app/artifacts/lung_classifier/1.1.0
+
+    restart: unless-stopped
