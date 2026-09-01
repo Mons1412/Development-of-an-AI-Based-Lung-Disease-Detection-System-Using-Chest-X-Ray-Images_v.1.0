@@ -16,8 +16,8 @@ router = APIRouter(
 def health_live():
     return {
         "status": "ok",
-        "service": "LungXrayAI2",
-        "version": "2.0.0-dev",
+        "service": "LungXrayAI",
+	"version": "1.5.0-dev",
     }
 
 
