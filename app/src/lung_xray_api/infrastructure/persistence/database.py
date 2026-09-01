@@ -17,6 +17,13 @@ SessionLocal = sessionmaker(
     autocommit=False,
 )
 
+def get_db():
+    db = SessionLocal()
+
+    try:
+        yield db
+    finally:
+        db.close()
 
 def check_database_connection() -> bool:
     with engine.connect() as connection:
