@@ -59,5 +59,16 @@ def get_current_user(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="User account is inactive.",
         )
-
     return user
+
+def require_admin(
+    current_user: UserModel = Depends(get_current_user),
+) -> UserModel:
+
+    if current_user.role != "ADMIN":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Administrator permission required.",
+        )
+
+    return current_user

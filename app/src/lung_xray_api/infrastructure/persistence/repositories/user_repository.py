@@ -6,6 +6,16 @@ from lung_xray_api.infrastructure.persistence.orm import UserModel
 
 class UserRepository:
 
+    def list_all(
+        self,
+        db: Session,
+    ) -> list[UserModel]:
+        statement = select(UserModel).order_by(
+            UserModel.id.asc()
+        )
+
+        return list(db.scalars(statement).all())
+
     def get_by_id(
         self,
         db: Session,
@@ -36,24 +46,29 @@ class UserRepository:
         return db.scalar(statement)
 
     def create(
-        self,
-        db: Session,
-        *,
-        username: str,
-        email: str,
-        password_hash: str,
-        role: str = "USER",
+    	self,
+    	db: Session,
+    	*,
+    	username: str,
+    	email: str,
+    	password_hash: str,
+    	role: str = "USER",
     ) -> UserModel:
 
-        user = UserModel(
+    	user = UserModel(
             username=username,
             email=email,
             password_hash=password_hash,
             role=role,
-        )
+    )
 
-        db.add(user)
-        db.commit()
-        db.refresh(user)
+    	try:
+            db.add(user)
+            db.commit()
+            db.refresh(user)
 
-        return user
+            return user
+
+    	except Exception:
+            db.rollback()
+            raise
