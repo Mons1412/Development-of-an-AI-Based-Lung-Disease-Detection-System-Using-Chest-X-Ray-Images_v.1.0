@@ -1,6 +1,10 @@
 from datetime import datetime, timezone
 from uuid import uuid4
 
+from lung_xray_api.infrastructure.imaging.chest_xray_validator import (
+    chest_xray_validator,
+)
+
 from sqlalchemy.orm import Session
 
 from lung_xray_api.application.services.ai_model_service import (
@@ -199,6 +203,18 @@ class AnalysisService:
                 content_type,
             )
         )
+
+        chest_xray_result = (
+            chest_xray_validator.validate(
+                image_bytes
+            )
+        )
+
+        if not chest_xray_result.accepted:
+            raise ValueError(
+                "Image does not appear to be "
+                "a chest X-ray."
+            )
 
         stored_image_path = (
             image_storage.save(
