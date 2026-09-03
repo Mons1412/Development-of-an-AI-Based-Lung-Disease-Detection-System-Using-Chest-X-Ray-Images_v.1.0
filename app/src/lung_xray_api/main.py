@@ -12,6 +12,9 @@ from lung_xray_api.api.v1.medical_histories import (
 from lung_xray_api.api.v1.models import (
     router as models_router,
 )
+from lung_xray_api.api.v1.analyses import (
+    router as analyses_router,
+)
 app = FastAPI(
     title="LungXrayAI 2.0",
     version="2.0.0-dev",
@@ -24,3 +27,4 @@ app.include_router(users_router)
 app.include_router(patient_profiles_router)
 app.include_router(medical_histories_router)
 app.include_router(models_router)
+app.include_router(analyses_router)
