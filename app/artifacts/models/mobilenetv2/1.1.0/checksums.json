@@ -1,0 +1,9 @@
+{
+  "lung_classifier_v1.keras": "aae036ba1ac8a1b82fe6bfbf4834078564a6be07557f9bf5e4d1c7d0a9fcac2c",
+  "class_indices.json": "11e9ee76563dedc347814e3d92e05ec09de9b42caf5fb0cbd6c0db8f5db28081",
+  "preprocessing_config.json": "87deb452e45453eabac166725e437b31f97546220d53c23359b6f0206ceae153",
+  "model_metadata.json": "5cc15373e06e1f873d728419050c478524ef0852748c890b8dbd86f00106b20f",
+  "inference_contract.json": "45b253fb0ce5c89458a785bff815560713d4368152897fd253c0a35771a55818",
+  "metrics.json": "ee33218f931012c3330f4d31f853a2ff0ef9273a4d648c95499080cda807c24b",
+  "model_runtime_requirements.txt": "77fc32b0a7374a5c67fd1bc018e5056caf4223cae7054ebca62f25dfd9d39601"
+}

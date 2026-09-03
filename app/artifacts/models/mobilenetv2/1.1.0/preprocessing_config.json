@@ -1,0 +1,15 @@
+{
+  "input_width": 224,
+  "input_height": 224,
+  "channels": 3,
+  "color_mode": "rgb",
+  "input_dtype": "float32",
+  "raw_pixel_range": [
+    0,
+    255
+  ],
+  "resize_interpolation": "bilinear",
+  "preprocessing_location": "embedded_in_model",
+  "embedded_layer": "Rescaling(scale=1/127.5, offset=-1)",
+  "fastapi_rule": "Decode image, convert RGB, resize 224x224, cast float32, expand batch dimension, then call model.predict. Do not normalize again."
+}

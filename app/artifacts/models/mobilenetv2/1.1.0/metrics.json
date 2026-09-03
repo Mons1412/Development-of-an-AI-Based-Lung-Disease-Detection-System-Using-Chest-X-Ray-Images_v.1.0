@@ -1,0 +1,30 @@
+{
+  "accuracy": 0.8962264150943396,
+  "macro_precision": 0.9041648745519714,
+  "macro_recall": 0.8957314232471466,
+  "macro_f1": 0.8971577284417308,
+  "weighted_f1": 0.8969078058231994,
+  "test_samples": 318,
+  "per_class": {
+    "normal": {
+      "precision": 0.91,
+      "recall": 0.8584905660377359,
+      "f1": 0.883495145631068,
+      "support": 106
+    },
+    "pneumonia": {
+      "precision": 0.824,
+      "recall": 0.9537037037037037,
+      "f1": 0.8841201716738197,
+      "support": 108
+    },
+    "tuberculosis": {
+      "precision": 0.978494623655914,
+      "recall": 0.875,
+      "f1": 0.9238578680203046,
+      "support": 104
+    }
+  },
+  "champion_checkpoint_name": "mobilenet_finetuned_best.keras",
+  "champion_validation_macro_f1": 0.882768295534253
+}

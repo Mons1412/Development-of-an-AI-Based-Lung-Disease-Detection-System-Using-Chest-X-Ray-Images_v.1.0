@@ -1,0 +1,17 @@
+{
+  "class_names": [
+    "normal",
+    "pneumonia",
+    "tuberculosis"
+  ],
+  "index_to_class": {
+    "0": "normal",
+    "1": "pneumonia",
+    "2": "tuberculosis"
+  },
+  "class_to_index": {
+    "normal": 0,
+    "pneumonia": 1,
+    "tuberculosis": 2
+  }
+}

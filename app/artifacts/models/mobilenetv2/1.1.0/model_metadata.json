@@ -1,0 +1,31 @@
+{
+  "model_name": "lung_classifier",
+  "model_version": "1.1.0",
+  "project_version": "1.1.0",
+  "architecture": "MobileNetV2 Transfer Learning",
+  "framework": "TensorFlow/Keras",
+  "python_version": "3.12.13",
+  "tensorflow_version": "2.20.0",
+  "task": "three-class chest X-ray image classification",
+  "input_shape": [
+    224,
+    224,
+    3
+  ],
+  "classes": [
+    "normal",
+    "pneumonia",
+    "tuberculosis"
+  ],
+  "dataset_version": "1.1.0",
+  "dataset_fingerprint": "0fc9135b7766c27ab63343300bc7ad840811b6924c067e2331f799868e8866c1",
+  "selection_metric": "validation_macro_f1",
+  "champion_checkpoint_name": "mobilenet_finetuned_best.keras",
+  "clinical_status": "Academic prototype; not clinically validated; not a replacement for a physician.",
+  "limitations": [
+    "Pneumonia và Tuberculosis đến từ hai dataset khác nhau.",
+    "Kermany chủ yếu là ảnh nhi khoa; Rahman TB có domain khác.",
+    "Patient ID của Rahman không có trong pipeline; filename stem chỉ là proxy.",
+    "Test set là internal holdout, chưa phải external clinical validation."
+  ]
+}
