@@ -1,8 +1,8 @@
-from datetime import datetime, timezone
+﻿from datetime import datetime, timezone
 from uuid import uuid4
 
-from lung_xray_api.infrastructure.imaging.chest_xray_validator import (
-    chest_xray_validator,
+from lung_xray_api.infrastructure.imaging.semantic_chest_xray_validator import (
+    semantic_chest_xray_validator as chest_xray_validator,
 )
 
 from sqlalchemy.orm import Session

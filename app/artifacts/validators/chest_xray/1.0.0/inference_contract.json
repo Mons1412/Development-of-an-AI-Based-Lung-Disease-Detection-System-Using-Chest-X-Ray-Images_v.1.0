@@ -1,0 +1,31 @@
+{
+  "model_type": "chest_xray_semantic_validator",
+  "version": "1.0.0",
+  "input": {
+    "shape": [
+      224,
+      224,
+      3
+    ],
+    "color_mode": "RGB",
+    "dtype": "float32",
+    "pixel_range_before_model": [
+      0,
+      255
+    ]
+  },
+  "preprocessing": {
+    "external_normalization": false,
+    "embedded_rescaling": {
+      "scale": 0.00784313725490196,
+      "offset": -1.0
+    }
+  },
+  "output": {
+    "type": "sigmoid",
+    "meaning": "P(CHEST_XRAY)",
+    "negative_class": "NOT_CHEST_XRAY",
+    "positive_class": "CHEST_XRAY"
+  },
+  "threshold_file": "threshold_config.json"
+}
