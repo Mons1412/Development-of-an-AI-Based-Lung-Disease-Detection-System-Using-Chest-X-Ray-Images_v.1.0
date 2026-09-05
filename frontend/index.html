@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>LungXrayAI 2.0</title>
+
+    <link
+        rel="stylesheet"
+        href="/frontend/style.css"
+    >
+</head>
+
+<body>
+    <main class="container">
+
+        <header class="page-header">
+            <div>
+                <p class="eyebrow">
+                    LungXrayAI 2.0
+                </p>
+
+                <h1>
+                    Batch Chest X-ray Analysis
+                </h1>
+
+                <p class="subtitle">
+                    Analyze multiple chest X-ray images
+                    using the LungXrayAI backend.
+                </p>
+            </div>
+        </header>
+
+
+        <section class="panel">
+            <h2>1. Authentication</h2>
+
+            <p class="help-text">
+                For B241 testing, paste a USER access token
+                obtained from the authentication API.
+            </p>
+
+            <label for="token-input">
+                Access token
+            </label>
+
+            <input
+                id="token-input"
+                type="password"
+                autocomplete="off"
+                placeholder="Paste USER access token here"
+            >
+        </section>
+
+
+        <section class="panel">
+            <h2>2. AI Model</h2>
+
+            <label for="model-id">
+                Model ID
+            </label>
+
+            <input
+                id="model-id"
+                type="number"
+                min="1"
+                value="1"
+            >
+
+            <p class="help-text">
+                Leave it empty to let the backend
+                select the default model.
+            </p>
+        </section>
+
+
+        <section class="panel">
+            <h2>3. Select Images</h2>
+
+            <div class="upload-area">
+                <div class="picker-grid">
+
+    <div class="upload-area">
+        <h3>Select individual images</h3>
+
+        <input
+            id="batch-files"
+            type="file"
+            accept="image/*"
+            multiple
+        >
+
+        <p class="help-text">
+            Select one or multiple image files.
+        </p>
+    </div>
+
+
+    <div class="upload-area">
+        <h3>Select a folder</h3>
+
+        <input
+            id="batch-folder"
+            type="file"
+            webkitdirectory
+            directory
+            multiple
+        >
+
+        <p class="help-text">
+            Select an entire folder.
+            Non-image files will be ignored.
+        </p>
+    </div>
+
+</div>
+            </div>
+
+            <div
+                id="file-summary"
+                class="file-summary"
+            >
+                No images selected.
+            </div>
+
+            <div
+                id="validation-message"
+                class="validation-message"
+                hidden
+            ></div>
+
+            <ul
+                id="file-list"
+                class="file-list"
+            ></ul>
+
+            <div class="actions">
+                <button
+                    id="analyze-button"
+                    type="button"
+                    disabled
+                >
+                    Analyze Batch
+                </button>
+
+                <button
+                    id="clear-button"
+                    type="button"
+                    class="secondary"
+                >
+                    Clear
+                </button>
+            </div>
+        </section>
+
+
+        <section class="panel">
+            <h2>4. Analysis Status</h2>
+
+            <div
+                id="request-status"
+                class="request-status"
+            >
+                Waiting for images.
+            </div>
+        </section>
+
+
+        <section
+            id="result-section"
+            class="panel"
+            hidden
+        >
+            <h2>5. Batch Results</h2>
+
+            <div
+    id="batch-summary"
+    class="batch-summary"
+        ></div>
+
+
+        <div class="result-toolbar">
+            <span class="filter-label">
+                Filter results:
+            </span>
+
+            <div class="filter-buttons">
+                <button
+                    id="filter-all"
+                    type="button"
+                    class="filter-button active"
+                    data-filter="ALL"
+                >
+                    All
+                </button>
+
+                <button
+                    id="filter-completed"
+                    type="button"
+                    class="filter-button"
+                    data-filter="COMPLETED"
+                >
+                    Completed
+                </button>
+
+                <button
+                    id="filter-rejected"
+                    type="button"
+                    class="filter-button"
+                    data-filter="REJECTED"
+                >
+                    Rejected
+                </button>
+
+                <button
+                    id="filter-failed"
+                    type="button"
+                    class="filter-button"
+                    data-filter="FAILED"
+                >
+                    Failed
+                </button>
+            </div>
+        </div>
+
+
+        <div
+            id="results"
+            class="results"
+        ></div>
+        </section>
+
+    </main>
+
+    <script src="/frontend/script.js"></script>
+</body>
+</html>
