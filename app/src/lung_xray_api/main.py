@@ -20,6 +20,12 @@ from lung_xray_api.api.v1.health import (
 from lung_xray_api.api.v1.models import (
     router as models_router,
 )
+from lung_xray_api.api.v1.medical_histories import (
+    router as medical_histories_router,
+)
+from lung_xray_api.api.v1.patient_profiles import (
+    router as patient_profiles_router,
+)
 from lung_xray_api.api.v1.users import (
     router as users_router,
 )
@@ -74,6 +80,13 @@ app.include_router(
     analyses_router
 )
 
+app.include_router(
+    patient_profiles_router
+)
+
+app.include_router(
+    medical_histories_router
+)
 
 app.mount(
     "/frontend",

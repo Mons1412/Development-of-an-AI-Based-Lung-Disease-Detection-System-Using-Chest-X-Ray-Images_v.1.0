@@ -335,6 +335,10 @@ class AnalysisService:
         self,
         db: Session,
         current_user: UserModel,
+        *,
+        patient_code: str | None = None,
+        limit: int = 20,
+        offset: int = 0,
     ) -> list[dict]:
 
         patient = self._get_patient(
@@ -342,11 +346,45 @@ class AnalysisService:
             current_user,
         )
 
+        if limit < 1 or limit > 100:
+            raise ValueError(
+                "Limit must be between 1 and 100."
+            )
+
+        if offset < 0:
+            raise ValueError(
+                "Offset must be greater than or equal to 0."
+            )
+
+        if patient_code is not None:
+            requested_patient_code = (
+                patient_code
+                .strip()
+                .upper()
+            )
+
+            actual_patient_code = (
+                patient.patient_code
+                .strip()
+                .upper()
+            )
+
+            if (
+                not requested_patient_code
+                or requested_patient_code
+                != actual_patient_code
+            ):
+                raise LookupError(
+                    "Patient not found."
+                )
+
         analyses = (
             self.analysis_repository
             .list_by_patient_id(
                 db,
                 patient.id,
+                limit=limit,
+                offset=offset,
             )
         )
 
@@ -355,7 +393,70 @@ class AnalysisService:
                 analysis,
                 patient.patient_code,
             )
-            for analysis in analyses
+            for analysis
+            in analyses
+        ]
+
+    def list_patient_analyses_for_admin(
+        self,
+        db: Session,
+        *,
+        patient_code: str,
+        limit: int = 20,
+        offset: int = 0,
+    ) -> list[dict]:
+
+        normalized_patient_code = (
+            patient_code
+            .strip()
+            .upper()
+        )
+
+        if not normalized_patient_code:
+            raise ValueError(
+                "Patient code is required."
+            )
+
+        if limit < 1 or limit > 100:
+            raise ValueError(
+                "Limit must be between 1 and 100."
+            )
+
+        if offset < 0:
+            raise ValueError(
+                "Offset must be greater than or equal to 0."
+            )
+
+        patient = (
+            self.patient_repository
+            .get_by_patient_code(
+                db,
+                normalized_patient_code,
+            )
+        )
+
+        if patient is None:
+            raise LookupError(
+                "Patient not found."
+            )
+
+        analyses = (
+            self.analysis_repository
+            .list_by_patient_id(
+                db,
+                patient.id,
+                limit=limit,
+                offset=offset,
+            )
+        )
+
+        return [
+            self._to_response(
+                analysis,
+                patient.patient_code,
+            )
+            for analysis
+            in analyses
         ]
 
     def get_my_analysis(

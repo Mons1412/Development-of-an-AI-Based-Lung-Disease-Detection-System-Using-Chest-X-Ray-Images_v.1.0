@@ -81,6 +81,9 @@ class AnalysisRepository:
         self,
         db: Session,
         patient_id: int,
+        *,
+        limit: int | None = None,
+        offset: int = 0,
     ) -> list[AnalysisModel]:
 
         statement = (
@@ -104,6 +107,16 @@ class AnalysisRepository:
                 AnalysisModel.id.desc(),
             )
         )
+
+        if offset > 0:
+            statement = statement.offset(
+                offset
+            )
+
+        if limit is not None:
+            statement = statement.limit(
+                limit
+            )
 
         return list(
             db.scalars(statement).all()

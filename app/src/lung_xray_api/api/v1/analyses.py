@@ -6,6 +6,7 @@ from fastapi import (
     File,
     Form,
     HTTPException,
+    Query,
     UploadFile,
     status,
 )
@@ -249,11 +250,44 @@ def create_batch_analysis(
             ),
             detail=str(exc),
         )
+
 @router.get(
     "",
     response_model=list[AnalysisResponse],
 )
 def list_my_analyses(
+    patient_code: Annotated[
+        str | None,
+        Query(
+            min_length=1,
+            max_length=64,
+            description=(
+                "Optional patient code. "
+                "USER can only query their "
+                "own patient profile."
+            ),
+        ),
+    ] = None,
+    limit: Annotated[
+        int,
+        Query(
+            ge=1,
+            le=100,
+            description=(
+                "Maximum number of analyses "
+                "to return."
+            ),
+        ),
+    ] = 20,
+    offset: Annotated[
+        int,
+        Query(
+            ge=0,
+            description=(
+                "Number of analyses to skip."
+            ),
+        ),
+    ] = 0,
     db: Session = Depends(get_db),
     current_user: UserModel = Depends(
         require_user
@@ -265,6 +299,9 @@ def list_my_analyses(
             .list_my_analyses(
                 db,
                 current_user,
+                patient_code=patient_code,
+                limit=limit,
+                offset=offset,
             )
         )
 
@@ -274,6 +311,11 @@ def list_my_analyses(
             detail=str(exc),
         )
 
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(exc),
+        )
 
 @router.get(
     "/{analysis_id}",

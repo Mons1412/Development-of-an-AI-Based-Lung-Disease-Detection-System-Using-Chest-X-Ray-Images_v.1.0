@@ -41,8 +41,10 @@
             <h2>1. Authentication</h2>
 
             <p class="help-text">
-                For B241 testing, paste a USER access token
-                obtained from the authentication API.
+                Paste an access token obtained from
+                the authentication API.
+                The same token is used for analysis,
+                patient data, and history requests.
             </p>
 
             <label for="token-input">
@@ -79,46 +81,44 @@
         </section>
 
 
-        <section class="panel">
+                <section class="panel">
             <h2>3. Select Images</h2>
 
-            <div class="upload-area">
-                <div class="picker-grid">
+            <div class="picker-grid">
 
-    <div class="upload-area">
-        <h3>Select individual images</h3>
+                <div class="upload-area">
+                    <h3>Select individual images</h3>
 
-        <input
-            id="batch-files"
-            type="file"
-            accept="image/*"
-            multiple
-        >
+                    <input
+                        id="batch-files"
+                        type="file"
+                        accept="image/*"
+                        multiple
+                    >
 
-        <p class="help-text">
-            Select one or multiple image files.
-        </p>
-    </div>
+                    <p class="help-text">
+                        Select one or multiple image files.
+                    </p>
+                </div>
 
 
-    <div class="upload-area">
-        <h3>Select a folder</h3>
+                <div class="upload-area">
+                    <h3>Select a folder</h3>
 
-        <input
-            id="batch-folder"
-            type="file"
-            webkitdirectory
-            directory
-            multiple
-        >
+                    <input
+                        id="batch-folder"
+                        type="file"
+                        webkitdirectory
+                        directory
+                        multiple
+                    >
 
-        <p class="help-text">
-            Select an entire folder.
-            Non-image files will be ignored.
-        </p>
-    </div>
+                    <p class="help-text">
+                        Select an entire folder.
+                        Non-image files will be ignored.
+                    </p>
+                </div>
 
-</div>
             </div>
 
             <div
@@ -234,9 +234,574 @@
             class="results"
         ></div>
         </section>
+        <section
+            id="history-section"
+            class="panel"
+        >
+            <h2>
+                6. Analysis History
+            </h2>
 
+            <p class="help-text">
+                Load analysis history for the
+                authenticated USER.
+            </p>
+
+            <div class="history-controls">
+
+                <div>
+                    <label for="history-patient-code">
+                        Patient code
+                    </label>
+
+                    <input
+                        id="history-patient-code"
+                        type="text"
+                        maxlength="64"
+                        placeholder="Optional for USER"
+                    >
+
+                    <p class="help-text">
+                        Leave empty to load your own
+                        analysis history.
+                    </p>
+                </div>
+
+
+                <div>
+                    <label for="history-limit">
+                        Limit
+                    </label>
+
+                    <input
+                        id="history-limit"
+                        type="number"
+                        min="1"
+                        max="100"
+                        value="20"
+                    >
+                </div>
+
+
+                <div>
+                    <label for="history-offset">
+                        Offset
+                    </label>
+
+                    <input
+                        id="history-offset"
+                        type="number"
+                        min="0"
+                        value="0"
+                    >
+                </div>
+
+            </div>
+
+
+            <div class="actions">
+
+                <button
+                    id="load-history-button"
+                    type="button"
+                >
+                    Load History
+                </button>
+
+                <button
+                    id="history-previous-button"
+                    type="button"
+                    class="secondary"
+                    disabled
+                >
+                    Previous
+                </button>
+
+                <button
+                    id="history-next-button"
+                    type="button"
+                    class="secondary"
+                    disabled
+                >
+                    Next
+                </button>
+
+            </div>
+
+
+            <div
+                id="history-status"
+                class="request-status history-status"
+            >
+                History has not been loaded.
+            </div>
+
+
+            <div
+                id="history-summary"
+                class="history-summary"
+                hidden
+            ></div>
+
+
+            <div
+                id="history-results"
+                class="history-results"
+            ></div>
+
+        </section>
+            <section
+            id="patient-profile-section"
+            class="panel"
+        >
+            <h2>
+                7. Patient Profile
+            </h2>
+
+            <p class="help-text">
+                View, create, or update the patient profile
+                for the authenticated USER.
+            </p>
+
+
+            <div
+                id="profile-status"
+                class="request-status"
+            >
+                Patient profile has not been loaded.
+            </div>
+
+
+            <div class="profile-grid">
+
+                <div>
+                    <label for="profile-patient-code">
+                        Patient code
+                    </label>
+
+                    <input
+                        id="profile-patient-code"
+                        type="text"
+                        readonly
+                        placeholder="Assigned by backend"
+                    >
+                </div>
+
+
+                <div>
+                    <label for="profile-full-name">
+                        Full name
+                    </label>
+
+                    <input
+                        id="profile-full-name"
+                        type="text"
+                        maxlength="255"
+                        placeholder="Patient full name"
+                    >
+                </div>
+
+
+                <div>
+                    <label for="profile-birth-year">
+                        Birth year
+                    </label>
+
+                    <input
+                        id="profile-birth-year"
+                        type="number"
+                        placeholder="Optional"
+                    >
+                </div>
+
+
+                <div>
+                    <label for="profile-gender">
+                        Gender
+                    </label>
+
+                    <input
+                        id="profile-gender"
+                        type="text"
+                        maxlength="50"
+                        placeholder="Optional"
+                    >
+                </div>
+
+
+                <div>
+                    <label for="profile-phone">
+                        Phone
+                    </label>
+
+                    <input
+                        id="profile-phone"
+                        type="text"
+                        maxlength="50"
+                        placeholder="Optional"
+                    >
+                </div>
+
+
+                <div>
+                    <label for="profile-address">
+                        Address
+                    </label>
+
+                    <input
+                        id="profile-address"
+                        type="text"
+                        maxlength="255"
+                        placeholder="Optional"
+                    >
+                </div>
+
+            </div>
+
+
+            <div class="actions">
+
+                <button
+                    id="load-profile-button"
+                    type="button"
+                >
+                    Load Profile
+                </button>
+
+                <button
+                    id="save-profile-button"
+                    type="button"
+                    class="secondary"
+                >
+                    Save Profile
+                </button>
+
+            </div>
+
+        </section>
+        <section
+            id="medical-history-section"
+            class="panel"
+        >
+            <h2>
+                8. Medical History
+            </h2>
+
+            <p class="help-text">
+                View, create, and update medical history
+                records for the authenticated USER.
+            </p>
+
+
+            <div
+                id="medical-history-status"
+                class="request-status"
+            >
+                Medical histories have not been loaded.
+            </div>
+
+
+            <div class="actions">
+
+                <button
+                    id="load-medical-histories-button"
+                    type="button"
+                >
+                    Load Histories
+                </button>
+
+                <button
+                    id="new-medical-history-button"
+                    type="button"
+                    class="secondary"
+                >
+                    New Record
+                </button>
+
+            </div>
+
+
+            <div
+                id="medical-history-summary"
+                class="medical-history-summary"
+                hidden
+            ></div>
+
+
+            <div
+                id="medical-history-results"
+                class="medical-history-results"
+            ></div>
+
+
+            <div class="medical-history-editor">
+
+                <h3 id="medical-history-editor-title">
+                    New Medical History
+                </h3>
+
+
+                <div class="medical-history-grid">
+
+                    <div>
+                        <label for="medical-history-id">
+                            Record ID
+                        </label>
+
+                        <input
+                            id="medical-history-id"
+                            type="text"
+                            readonly
+                            placeholder="New record"
+                        >
+                    </div>
+
+
+                    <div>
+                        <label for="medical-history-diseases">
+                            Diseases
+                        </label>
+
+                        <textarea
+                            id="medical-history-diseases"
+                            rows="3"
+                            placeholder="Example: Asthma, Hypertension"
+                        ></textarea>
+
+                        <p class="help-text">
+                            Separate multiple values with commas.
+                        </p>
+                    </div>
+
+
+                    <div>
+                        <label for="medical-history-medications">
+                            Medications
+                        </label>
+
+                        <textarea
+                            id="medical-history-medications"
+                            rows="3"
+                            placeholder="Example: Medication A, Medication B"
+                        ></textarea>
+
+                        <p class="help-text">
+                            Separate multiple values with commas.
+                        </p>
+                    </div>
+
+
+                    <div>
+                        <label for="medical-history-allergies">
+                            Allergies
+                        </label>
+
+                        <textarea
+                            id="medical-history-allergies"
+                            rows="3"
+                            placeholder="Example: Penicillin, Dust"
+                        ></textarea>
+
+                        <p class="help-text">
+                            Separate multiple values with commas.
+                        </p>
+                    </div>
+
+
+                    <div>
+                        <label for="medical-history-smoking-status">
+                            Smoking status
+                        </label>
+
+                        <input
+                            id="medical-history-smoking-status"
+                            type="text"
+                            maxlength="30"
+                            placeholder="Optional"
+                        >
+                    </div>
+
+
+                    <div>
+                        <label for="medical-history-alcohol-status">
+                            Alcohol status
+                        </label>
+
+                        <input
+                            id="medical-history-alcohol-status"
+                            type="text"
+                            maxlength="30"
+                            placeholder="Optional"
+                        >
+                    </div>
+
+
+                    <div class="medical-history-full-width">
+                        <label for="medical-history-occupational-exposure">
+                            Occupational exposure
+                        </label>
+
+                        <textarea
+                            id="medical-history-occupational-exposure"
+                            rows="4"
+                            maxlength="2000"
+                            placeholder="Optional occupational exposure information"
+                        ></textarea>
+                    </div>
+
+
+                    <div class="medical-history-full-width">
+                        <label for="medical-history-notes">
+                            Notes
+                        </label>
+
+                        <textarea
+                            id="medical-history-notes"
+                            rows="5"
+                            maxlength="5000"
+                            placeholder="Optional notes"
+                        ></textarea>
+                    </div>
+
+                </div>
+
+
+                <div class="actions">
+
+                    <button
+                        id="save-medical-history-button"
+                        type="button"
+                    >
+                        Create History
+                    </button>
+
+                    <button
+                        id="clear-medical-history-button"
+                        type="button"
+                        class="secondary"
+                    >
+                        Clear Editor
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+        <section
+            id="admin-search-section"
+            class="panel"
+        >
+            <h2>
+                9. ADMIN Patient Search
+            </h2>
+
+            <p class="help-text">
+                Search analysis history by patient code.
+                This function requires an ADMIN access token.
+            </p>
+
+
+            <div class="admin-search-grid">
+
+                <div>
+                    <label for="admin-patient-code">
+                        Patient code
+                    </label>
+
+                    <input
+                        id="admin-patient-code"
+                        type="text"
+                        maxlength="64"
+                        placeholder="Example: PX74BAD2D43F"
+                    >
+                </div>
+
+
+                <div>
+                    <label for="admin-history-limit">
+                        Limit
+                    </label>
+
+                    <input
+                        id="admin-history-limit"
+                        type="number"
+                        min="1"
+                        max="100"
+                        value="20"
+                    >
+                </div>
+
+
+                <div>
+                    <label for="admin-history-offset">
+                        Offset
+                    </label>
+
+                    <input
+                        id="admin-history-offset"
+                        type="number"
+                        min="0"
+                        value="0"
+                    >
+                </div>
+
+            </div>
+
+
+            <div class="actions">
+
+                <button
+                    id="admin-search-button"
+                    type="button"
+                >
+                    Search Patient
+                </button>
+
+                <button
+                    id="admin-history-previous-button"
+                    type="button"
+                    class="secondary"
+                    disabled
+                >
+                    Previous
+                </button>
+
+                <button
+                    id="admin-history-next-button"
+                    type="button"
+                    class="secondary"
+                    disabled
+                >
+                    Next
+                </button>
+
+            </div>
+
+
+            <div
+                id="admin-search-status"
+                class="request-status"
+            >
+                ADMIN search has not been performed.
+            </div>
+
+
+            <div
+                id="admin-search-summary"
+                class="history-summary"
+                hidden
+            ></div>
+
+
+            <div
+                id="admin-search-results"
+                class="history-results"
+            ></div>
+
+        </section>
     </main>
 
-    <script src="/frontend/script.js"></script>
+    <script src="/frontend/script.js?v=m9105"></script>
 </body>
 </html>
