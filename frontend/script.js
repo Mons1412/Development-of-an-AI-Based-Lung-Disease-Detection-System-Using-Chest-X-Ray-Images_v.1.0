@@ -1520,6 +1520,205 @@ function createProbabilityTable(
     return wrapper;
 }
 
+function createProbabilityVisualizationSwitcher(
+    entries,
+    predictedClass
+) {
+    const viewer =
+        document.createElement(
+            "div"
+        );
+
+    viewer.className =
+        "probability-viewer";
+
+
+    const switcher =
+        document.createElement(
+            "div"
+        );
+
+    switcher.className =
+        "probability-view-switcher";
+
+    switcher.setAttribute(
+        "role",
+        "group"
+    );
+
+    switcher.setAttribute(
+        "aria-label",
+        "Probability visualization type"
+    );
+
+
+    const content =
+        document.createElement(
+            "div"
+        );
+
+    content.className =
+        "probability-view-content";
+
+
+    const views = [
+        {
+            key: "bar",
+            label: "Bar",
+            element:
+                createProbabilityBarChart(
+                    entries
+                ),
+        },
+        {
+            key: "column",
+            label: "Column",
+            element:
+                createProbabilityColumnChart(
+                    entries
+                ),
+        },
+        {
+            key: "donut",
+            label: "Donut",
+            element:
+                createProbabilityDonutChart(
+                    entries
+                ),
+        },
+        {
+            key: "table",
+            label: "Table",
+            element:
+                createProbabilityTable(
+                    entries,
+                    predictedClass
+                ),
+        },
+    ];
+
+
+    const buttons = [];
+    const panels = [];
+
+
+    for (
+        const [
+            index,
+            view,
+        ]
+        of views.entries()
+    ) {
+        const isActive =
+            index === 0;
+
+
+        const button =
+            document.createElement(
+                "button"
+            );
+
+        button.type =
+            "button";
+
+        button.className =
+            "probability-view-button";
+
+        button.textContent =
+            view.label;
+
+        button.dataset.view =
+            view.key;
+
+        button.setAttribute(
+            "aria-pressed",
+            isActive
+                ? "true"
+                : "false"
+        );
+
+
+        const panel =
+            document.createElement(
+                "div"
+            );
+
+        panel.className =
+            "probability-view-panel";
+
+        panel.dataset.view =
+            view.key;
+
+        panel.hidden =
+            !isActive;
+
+        panel.appendChild(
+            view.element
+        );
+
+
+        buttons.push(
+            button
+        );
+
+        panels.push(
+            panel
+        );
+
+        switcher.appendChild(
+            button
+        );
+
+        content.appendChild(
+            panel
+        );
+    }
+
+
+    buttons.forEach(
+        (
+            button,
+            selectedIndex
+        ) => {
+            button.addEventListener(
+                "click",
+                () => {
+                    buttons.forEach(
+                        (
+                            currentButton,
+                            currentIndex
+                        ) => {
+                            const isActive =
+                                currentIndex
+                                === selectedIndex;
+
+                            currentButton.setAttribute(
+                                "aria-pressed",
+                                isActive
+                                    ? "true"
+                                    : "false"
+                            );
+
+                            panels[
+                                currentIndex
+                            ].hidden =
+                                !isActive;
+                        }
+                    );
+                }
+            );
+        }
+    );
+
+
+    viewer.append(
+        switcher,
+        content
+    );
+
+    return viewer;
+}
+
 function createImagePreview(file) {
     const wrapper =
         document.createElement(
@@ -1818,27 +2017,8 @@ function renderResultItem(
                     analysis.probabilities
                 );
 
-
             section.appendChild(
-                createProbabilityBarChart(
-                    entries
-                )
-            );
-
-            section.appendChild(
-                createProbabilityColumnChart(
-                    entries
-                )
-            );
-
-            section.appendChild(
-                createProbabilityDonutChart(
-                    entries
-                )
-            );
-
-            section.appendChild(
-                createProbabilityTable(
+                createProbabilityVisualizationSwitcher(
                     entries,
                     analysis.predicted_class
                 )
@@ -2226,29 +2406,12 @@ function createHistoryItem(
 
 
         section.appendChild(
-            createProbabilityBarChart(
-                probabilityEntries
-            )
-        );
-
-        section.appendChild(
-            createProbabilityColumnChart(
-                probabilityEntries
-            )
-        );
-
-        section.appendChild(
-            createProbabilityDonutChart(
-                probabilityEntries
-            )
-        );
-
-        section.appendChild(
-            createProbabilityTable(
+            createProbabilityVisualizationSwitcher(
                 probabilityEntries,
                 analysis.predicted_class
             )
         );
+
 
         card.appendChild(
             section
