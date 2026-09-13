@@ -950,6 +950,125 @@ function createProbabilityBarChart(
     return chart;
 }
 
+function createProbabilityColumnChart(
+    entries
+) {
+    const chart =
+        document.createElement(
+            "div"
+        );
+
+    chart.className =
+        "probability-column-chart";
+
+    chart.setAttribute(
+        "aria-label",
+        "Class probability column chart"
+    );
+
+
+    for (
+        const entry
+        of entries
+    ) {
+        const item =
+            document.createElement(
+                "div"
+            );
+
+        item.className =
+            "probability-column-item";
+
+
+        const value =
+            document.createElement(
+                "div"
+            );
+
+        value.className =
+            "probability-column-value";
+
+        value.textContent =
+            entry.formattedPercent;
+
+
+        const plot =
+            document.createElement(
+                "div"
+            );
+
+        plot.className =
+            "probability-column-plot";
+
+
+        const column =
+            document.createElement(
+                "div"
+            );
+
+        column.className =
+            "probability-column";
+
+        column.style.height =
+            `${entry.percent}%`;
+
+        column.setAttribute(
+            "role",
+            "progressbar"
+        );
+
+        column.setAttribute(
+            "aria-label",
+            `${entry.displayName} probability`
+        );
+
+        column.setAttribute(
+            "aria-valuemin",
+            "0"
+        );
+
+        column.setAttribute(
+            "aria-valuemax",
+            "100"
+        );
+
+        column.setAttribute(
+            "aria-valuenow",
+            entry.percent.toFixed(2)
+        );
+
+
+        const label =
+            document.createElement(
+                "div"
+            );
+
+        label.className =
+            "probability-column-label";
+
+        label.textContent =
+            entry.displayName;
+
+
+        plot.appendChild(
+            column
+        );
+
+        item.append(
+            value,
+            plot,
+            label
+        );
+
+        chart.appendChild(
+            item
+        );
+    }
+
+
+    return chart;
+}
+
 function createProbabilityTable(
     entries,
     predictedClass
@@ -1434,6 +1553,12 @@ function renderResultItem(
             );
 
             section.appendChild(
+                createProbabilityColumnChart(
+                    entries
+                )
+            );
+
+            section.appendChild(
                 createProbabilityTable(
                     entries,
                     analysis.predicted_class
@@ -1823,6 +1948,12 @@ function createHistoryItem(
 
         section.appendChild(
             createProbabilityBarChart(
+                probabilityEntries
+            )
+        );
+
+        section.appendChild(
+            createProbabilityColumnChart(
                 probabilityEntries
             )
         );

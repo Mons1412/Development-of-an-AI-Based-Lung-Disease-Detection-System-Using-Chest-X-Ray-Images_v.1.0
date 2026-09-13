@@ -392,13 +392,76 @@ button:disabled {
     border-radius: inherit;
     background: #334155;
 }
+
+.probability-bar-chart {
+    display: grid;
+    gap: 12px;
+}
+
+.probability-row {
+    min-width: 0;
+}
+
+.probability-column-chart {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(8px, 2vw, 16px);
+    margin-top: 18px;
+    padding: clamp(10px, 2vw, 16px);
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    background: #f8fafc;
+}
+
+.probability-column-item {
+    display: grid;
+    grid-template-rows: auto auto auto;
+    gap: 8px;
+    min-width: 0;
+    text-align: center;
+}
+
+
+.probability-column-value {
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+
+.probability-column-plot {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    height: clamp(140px, 24vw, 200px);
+    min-width: 0;
+    border-bottom: 1px solid #cbd5e1;
+}
+
+
+.probability-column {
+    width: min(70%, 72px);
+    min-width: 24px;
+    max-width: 72px;
+    border-radius: 8px 8px 0 0;
+    background: #2563eb;
+    transition: height 0.2s ease;
+}
+
+
+.probability-column-label {
+    min-width: 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+}
 .probability-table-wrapper {
     margin-top: 18px;
     overflow-x: auto;
     border: 1px solid #e2e8f0;
     border-radius: 10px;
 }
-
 
 .probability-table {
     width: 100%;
