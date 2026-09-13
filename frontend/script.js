@@ -1069,6 +1069,279 @@ function createProbabilityColumnChart(
     return chart;
 }
 
+function createProbabilityDonutChart(
+    entries
+) {
+    const wrapper =
+        document.createElement(
+            "div"
+        );
+
+    wrapper.className =
+        "probability-donut-chart";
+
+
+    const visual =
+        document.createElement(
+            "div"
+        );
+
+    visual.className =
+        "probability-donut-visual";
+
+
+    const svgNamespace =
+        "http://www.w3.org/2000/svg";
+
+    const svg =
+        document.createElementNS(
+            svgNamespace,
+            "svg"
+        );
+
+    svg.classList.add(
+        "probability-donut-svg"
+    );
+
+    svg.setAttribute(
+        "viewBox",
+        "0 0 120 120"
+    );
+
+    svg.setAttribute(
+        "role",
+        "img"
+    );
+
+    svg.setAttribute(
+        "aria-label",
+        "Class probability donut chart"
+    );
+
+
+    const track =
+        document.createElementNS(
+            svgNamespace,
+            "circle"
+        );
+
+    track.classList.add(
+        "probability-donut-track"
+    );
+
+    track.setAttribute(
+        "cx",
+        "60"
+    );
+
+    track.setAttribute(
+        "cy",
+        "60"
+    );
+
+    track.setAttribute(
+        "r",
+        "44"
+    );
+
+
+    svg.appendChild(
+        track
+    );
+
+
+    const totalPercent =
+        entries.reduce(
+            (
+                total,
+                entry
+            ) =>
+                total
+                + entry.percent,
+            0
+        );
+
+
+    let cumulativePercent =
+        0;
+
+
+    entries.forEach(
+        (
+            entry,
+            index
+        ) => {
+            const slicePercent =
+                totalPercent > 0
+                    ? (
+                        entry.percent
+                        / totalPercent
+                        * 100
+                    )
+                    : 0;
+
+
+            const slice =
+                document.createElementNS(
+                    svgNamespace,
+                    "circle"
+                );
+
+            slice.classList.add(
+                "probability-donut-slice",
+                `probability-donut-slice-${index + 1}`
+            );
+
+            slice.setAttribute(
+                "cx",
+                "60"
+            );
+
+            slice.setAttribute(
+                "cy",
+                "60"
+            );
+
+            slice.setAttribute(
+                "r",
+                "44"
+            );
+
+            slice.setAttribute(
+                "pathLength",
+                "100"
+            );
+
+            slice.setAttribute(
+                "stroke-dasharray",
+                `${slicePercent} ${100 - slicePercent}`
+            );
+
+            slice.setAttribute(
+                "stroke-dashoffset",
+                `${-cumulativePercent}`
+            );
+
+            slice.setAttribute(
+                "transform",
+                "rotate(-90 60 60)"
+            );
+
+
+            const title =
+                document.createElementNS(
+                    svgNamespace,
+                    "title"
+                );
+
+            title.textContent =
+                `${entry.displayName}: ${entry.formattedPercent}`;
+
+
+            slice.appendChild(
+                title
+            );
+
+            svg.appendChild(
+                slice
+            );
+
+
+            cumulativePercent +=
+                slicePercent;
+        }
+    );
+
+
+    visual.appendChild(
+        svg
+    );
+
+
+    const legend =
+        document.createElement(
+            "div"
+        );
+
+    legend.className =
+        "probability-donut-legend";
+
+
+    entries.forEach(
+        (
+            entry,
+            index
+        ) => {
+            const legendItem =
+                document.createElement(
+                    "div"
+                );
+
+            legendItem.className =
+                "probability-donut-legend-item";
+
+
+            const marker =
+                document.createElement(
+                    "span"
+                );
+
+            marker.classList.add(
+                "probability-donut-legend-marker",
+                `probability-donut-marker-${index + 1}`
+            );
+
+            marker.setAttribute(
+                "aria-hidden",
+                "true"
+            );
+
+
+            const label =
+                document.createElement(
+                    "span"
+                );
+
+            label.className =
+                "probability-donut-legend-label";
+
+            label.textContent =
+                entry.displayName;
+
+
+            const value =
+                document.createElement(
+                    "span"
+                );
+
+            value.className =
+                "probability-donut-legend-value";
+
+            value.textContent =
+                entry.formattedPercent;
+
+
+            legendItem.append(
+                marker,
+                label,
+                value
+            );
+
+            legend.appendChild(
+                legendItem
+            );
+        }
+    );
+
+
+    wrapper.append(
+        visual,
+        legend
+    );
+
+    return wrapper;
+}
+
 function createProbabilityTable(
     entries,
     predictedClass
@@ -1559,6 +1832,12 @@ function renderResultItem(
             );
 
             section.appendChild(
+                createProbabilityDonutChart(
+                    entries
+                )
+            );
+
+            section.appendChild(
                 createProbabilityTable(
                     entries,
                     analysis.predicted_class
@@ -1954,6 +2233,12 @@ function createHistoryItem(
 
         section.appendChild(
             createProbabilityColumnChart(
+                probabilityEntries
+            )
+        );
+
+        section.appendChild(
+            createProbabilityDonutChart(
                 probabilityEntries
             )
         );
