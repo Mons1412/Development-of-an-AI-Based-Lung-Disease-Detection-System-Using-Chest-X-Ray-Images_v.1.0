@@ -706,6 +706,112 @@ function probabilityToPercent(value) {
         )
     );
 }
+function formatProbabilityClassName(
+    className
+) {
+    const normalized =
+        String(
+            className ?? ""
+        )
+            .trim()
+            .replace(
+                /[_-]+/g,
+                " "
+            );
+
+    if (!normalized) {
+        return "Unknown";
+    }
+
+    return normalized.replace(
+        /\b\w/g,
+        (character) =>
+            character.toUpperCase()
+    );
+}
+
+
+function normalizeProbabilityEntries(
+    probabilities
+) {
+    if (
+        !probabilities
+        || typeof probabilities !== "object"
+        || Array.isArray(probabilities)
+    ) {
+        return [];
+    }
+
+    const entries = [];
+
+    for (
+        const [
+            className,
+            value,
+        ]
+        of Object.entries(
+            probabilities
+        )
+    ) {
+        const numericValue =
+            Number(value);
+
+        if (
+            !Number.isFinite(
+                numericValue
+            )
+        ) {
+            continue;
+        }
+
+        const percent =
+            probabilityToPercent(
+                numericValue
+            );
+
+        entries.push(
+            {
+                className:
+                    String(className),
+                displayName:
+                    formatProbabilityClassName(
+                        className
+                    ),
+                value:
+                    numericValue,
+                percent,
+                formattedPercent:
+                    `${percent.toFixed(2)}%`,
+            }
+        );
+    }
+
+    entries.sort(
+        (
+            first,
+            second
+        ) => {
+            const probabilityDifference =
+                second.percent
+                - first.percent;
+
+            if (
+                probabilityDifference !== 0
+            ) {
+                return probabilityDifference;
+            }
+
+            return (
+                first.displayName
+                    .localeCompare(
+                        second.displayName
+                    )
+            );
+        }
+    );
+
+    return entries;
+}
 
 function createImagePreview(file) {
     const wrapper =
@@ -1093,38 +1199,19 @@ function renderResultItem(
 
 
             const entries =
-                Object.entries(
+                normalizeProbabilityEntries(
                     analysis.probabilities
-                )
-                .sort(
-                    (
-                        first,
-                        second
-                    ) => {
-                        return (
-                            Number(
-                                second[1]
-                            )
-                            -
-                            Number(
-                                first[1]
-                            )
-                        );
-                    }
                 );
 
 
             for (
-                const [
-                    className,
-                    probability,
-                ]
+                const entry
                 of entries
             ) {
                 section.appendChild(
                     createProbabilityRow(
-                        className,
-                        probability
+                        entry.displayName,
+                        entry.value
                     )
                 );
             }
@@ -1593,64 +1680,57 @@ function createHistoryItem(
     );
 
 
-    const probabilities =
-        analysis.probabilities;
+    const probabilityEntries =
+        normalizeProbabilityEntries(
+            analysis.probabilities
+        );
 
     if (
-        probabilities
-        && typeof probabilities === "object"
+        probabilityEntries.length
+        > 0
     ) {
-        const entries =
-            Object.entries(
-                probabilities
+        const section =
+            document.createElement(
+                "div"
             );
 
-        if (entries.length > 0) {
-            const section =
-                document.createElement(
-                    "div"
-                );
-
-            section.className =
-                "probability-section";
+        section.className =
+            "probability-section";
 
 
-            const title =
-                document.createElement(
-                    "div"
-                );
+        const title =
+            document.createElement(
+                "div"
+            );
 
-            title.className =
-                "probability-title";
+        title.className =
+            "probability-title";
 
-            title.textContent =
-                "Probabilities";
+        title.textContent =
+            "Probabilities";
 
 
+        section.appendChild(
+            title
+        );
+
+
+        for (
+            const entry
+            of probabilityEntries
+        ) {
             section.appendChild(
-                title
-            );
-
-
-            for (
-                const [
-                    className,
-                    probability
-                ]
-                of entries
-            ) {
-                section.appendChild(
-                    createHistoryProbabilityRow(
-                        className,
-                        probability
-                    )
-                );
-            }
-
-            card.appendChild(
-                section
+                createHistoryProbabilityRow(
+                    entry.displayName,
+                    entry.value
+                )
             );
         }
+
+
+        card.appendChild(
+            section
+        );
     }
 
     return card;
