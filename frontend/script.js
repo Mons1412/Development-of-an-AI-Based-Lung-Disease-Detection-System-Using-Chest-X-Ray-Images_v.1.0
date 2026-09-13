@@ -813,6 +813,184 @@ function normalizeProbabilityEntries(
     return entries;
 }
 
+function createProbabilityTable(
+    entries,
+    predictedClass
+) {
+    const wrapper =
+        document.createElement(
+            "div"
+        );
+
+    wrapper.className =
+        "probability-table-wrapper";
+
+
+    const table =
+        document.createElement(
+            "table"
+        );
+
+    table.className =
+        "probability-table";
+
+    table.setAttribute(
+        "aria-label",
+        "Class probability table"
+    );
+
+
+    const caption =
+        document.createElement(
+            "caption"
+        );
+
+    caption.textContent =
+        "Probability table";
+
+
+    const head =
+        document.createElement(
+            "thead"
+        );
+
+    const headRow =
+        document.createElement(
+            "tr"
+        );
+
+    for (
+        const heading
+        of [
+            "Class",
+            "Probability",
+            "Result",
+        ]
+    ) {
+        const cell =
+            document.createElement(
+                "th"
+            );
+
+        cell.scope =
+            "col";
+
+        cell.textContent =
+            heading;
+
+        headRow.appendChild(
+            cell
+        );
+    }
+
+    head.appendChild(
+        headRow
+    );
+
+
+    const body =
+        document.createElement(
+            "tbody"
+        );
+
+    const normalizedPrediction =
+        String(
+            predictedClass ?? ""
+        )
+            .trim()
+            .toLowerCase();
+
+
+    for (
+        const entry
+        of entries
+    ) {
+        const row =
+            document.createElement(
+                "tr"
+            );
+
+        const normalizedClass =
+            String(
+                entry.className
+            )
+                .trim()
+                .toLowerCase();
+
+        const isPredicted =
+            (
+                normalizedPrediction
+                && normalizedClass
+                === normalizedPrediction
+            );
+
+        if (isPredicted) {
+            row.classList.add(
+                "probability-table-row-predicted"
+            );
+        }
+
+
+        const classCell =
+            document.createElement(
+                "td"
+            );
+
+        classCell.textContent =
+            entry.displayName;
+
+
+        const probabilityCell =
+            document.createElement(
+                "td"
+            );
+
+        probabilityCell.className =
+            "probability-table-number";
+
+        probabilityCell.textContent =
+            entry.formattedPercent;
+
+
+        const resultCell =
+            document.createElement(
+                "td"
+            );
+
+        resultCell.className =
+            "probability-table-result";
+
+        resultCell.textContent =
+            isPredicted
+                ? "Predicted"
+                : "—";
+
+
+        row.append(
+            classCell,
+            probabilityCell,
+            resultCell
+        );
+
+        body.appendChild(
+            row
+        );
+    }
+
+
+    table.append(
+        caption,
+        head,
+        body
+    );
+
+    wrapper.appendChild(
+        table
+    );
+
+    return wrapper;
+}
+
 function createImagePreview(file) {
     const wrapper =
         document.createElement(
@@ -1216,6 +1394,12 @@ function renderResultItem(
                 );
             }
 
+            section.appendChild(
+                createProbabilityTable(
+                    entries,
+                    analysis.predicted_class
+                )
+            );
 
             information.appendChild(
                 section
@@ -1726,7 +1910,12 @@ function createHistoryItem(
                 )
             );
         }
-
+        section.appendChild(
+            createProbabilityTable(
+                probabilityEntries,
+                analysis.predicted_class
+            )
+        );
 
         card.appendChild(
             section
