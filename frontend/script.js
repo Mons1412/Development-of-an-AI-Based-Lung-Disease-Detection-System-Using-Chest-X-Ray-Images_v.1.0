@@ -813,6 +813,143 @@ function normalizeProbabilityEntries(
     return entries;
 }
 
+function createProbabilityBarRow(
+    entry
+) {
+    const row =
+        document.createElement(
+            "div"
+        );
+
+    row.className =
+        "probability-row";
+
+
+    const header =
+        document.createElement(
+            "div"
+        );
+
+    header.className =
+        "probability-header";
+
+
+    const classElement =
+        document.createElement(
+            "span"
+        );
+
+    classElement.className =
+        "probability-class";
+
+    classElement.textContent =
+        entry.displayName;
+
+
+    const valueElement =
+        document.createElement(
+            "span"
+        );
+
+    valueElement.className =
+        "probability-value";
+
+    valueElement.textContent =
+        entry.formattedPercent;
+
+
+    header.append(
+        classElement,
+        valueElement
+    );
+
+
+    const track =
+        document.createElement(
+            "div"
+        );
+
+    track.className =
+        "probability-track";
+
+    track.setAttribute(
+        "role",
+        "progressbar"
+    );
+
+    track.setAttribute(
+        "aria-label",
+        `${entry.displayName} probability`
+    );
+
+    track.setAttribute(
+        "aria-valuemin",
+        "0"
+    );
+
+    track.setAttribute(
+        "aria-valuemax",
+        "100"
+    );
+
+    track.setAttribute(
+        "aria-valuenow",
+        entry.percent.toFixed(2)
+    );
+
+
+    const fill =
+        document.createElement(
+            "div"
+        );
+
+    fill.className =
+        "probability-fill";
+
+    fill.style.width =
+        `${entry.percent}%`;
+
+
+    track.appendChild(
+        fill
+    );
+
+    row.append(
+        header,
+        track
+    );
+
+    return row;
+}
+
+
+function createProbabilityBarChart(
+    entries
+) {
+    const chart =
+        document.createElement(
+            "div"
+        );
+
+    chart.className =
+        "probability-bar-chart";
+
+
+    for (
+        const entry
+        of entries
+    ) {
+        chart.appendChild(
+            createProbabilityBarRow(
+                entry
+            )
+        );
+    }
+
+
+    return chart;
+}
+
 function createProbabilityTable(
     entries,
     predictedClass
@@ -1073,98 +1210,6 @@ function createImagePreview(file) {
     return wrapper;
 }
 
-function createProbabilityRow(
-    className,
-    probability
-) {
-    const row =
-        document.createElement(
-            "div"
-        );
-
-    row.className =
-        "probability-row";
-
-
-    const header =
-        document.createElement(
-            "div"
-        );
-
-    header.className =
-        "probability-header";
-
-
-    const classElement =
-        document.createElement(
-            "span"
-        );
-
-    classElement.className =
-        "probability-class";
-
-    classElement.textContent =
-        className;
-
-
-    const valueElement =
-        document.createElement(
-            "span"
-        );
-
-    valueElement.className =
-        "probability-value";
-
-    valueElement.textContent =
-        formatConfidence(
-            probability
-        );
-
-
-    header.append(
-        classElement,
-        valueElement
-    );
-
-
-    const track =
-        document.createElement(
-            "div"
-        );
-
-    track.className =
-        "probability-track";
-
-
-    const fill =
-        document.createElement(
-            "div"
-        );
-
-    fill.className =
-        "probability-fill";
-
-    fill.style.width =
-        `${
-            probabilityToPercent(
-                probability
-            )
-        }%`;
-
-
-    track.appendChild(
-        fill
-    );
-
-
-    row.append(
-        header,
-        track
-    );
-
-    return row;
-}
-
 function renderResultItem(
     item,
     sourceFile
@@ -1382,17 +1427,11 @@ function renderResultItem(
                 );
 
 
-            for (
-                const entry
-                of entries
-            ) {
-                section.appendChild(
-                    createProbabilityRow(
-                        entry.displayName,
-                        entry.value
-                    )
-                );
-            }
+            section.appendChild(
+                createProbabilityBarChart(
+                    entries
+                )
+            );
 
             section.appendChild(
                 createProbabilityTable(
@@ -1611,123 +1650,6 @@ function createHistoryDetail(
     return item;
 }
 
-
-function createHistoryProbabilityRow(
-    className,
-    probability
-) {
-    const row =
-        document.createElement(
-            "div"
-        );
-
-    row.className =
-        "probability-row";
-
-
-    const header =
-        document.createElement(
-            "div"
-        );
-
-    header.className =
-        "probability-header";
-
-
-    const label =
-        document.createElement(
-            "span"
-        );
-
-    label.className =
-        "probability-class";
-
-    label.textContent =
-        className;
-
-
-    const value =
-        document.createElement(
-            "span"
-        );
-
-    value.className =
-        "probability-value";
-
-    value.textContent =
-        formatHistoryConfidence(
-            probability
-        );
-
-
-    header.append(
-        label,
-        value
-    );
-
-
-    const track =
-        document.createElement(
-            "div"
-        );
-
-    track.className =
-        "probability-track";
-
-
-    const fill =
-        document.createElement(
-            "div"
-        );
-
-    fill.className =
-        "probability-fill";
-
-
-    const numericProbability =
-        Number(probability);
-
-    let percentage = 0;
-
-    if (
-        Number.isFinite(
-            numericProbability
-        )
-    ) {
-        percentage =
-            (
-                numericProbability <= 1
-                    ? numericProbability * 100
-                    : numericProbability
-            );
-
-        percentage =
-            Math.max(
-                0,
-                Math.min(
-                    100,
-                    percentage
-                )
-            );
-    }
-
-    fill.style.width =
-        `${percentage}%`;
-
-    track.appendChild(
-        fill
-    );
-
-
-    row.append(
-        header,
-        track
-    );
-
-    return row;
-}
-
-
 function createHistoryItem(
     analysis
 ) {
@@ -1899,17 +1821,12 @@ function createHistoryItem(
         );
 
 
-        for (
-            const entry
-            of probabilityEntries
-        ) {
-            section.appendChild(
-                createHistoryProbabilityRow(
-                    entry.displayName,
-                    entry.value
-                )
-            );
-        }
+        section.appendChild(
+            createProbabilityBarChart(
+                probabilityEntries
+            )
+        );
+
         section.appendChild(
             createProbabilityTable(
                 probabilityEntries,

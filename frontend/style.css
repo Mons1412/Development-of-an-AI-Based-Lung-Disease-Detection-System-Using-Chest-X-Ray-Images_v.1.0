@@ -359,11 +359,6 @@ button:disabled {
 }
 
 
-.probability-row {
-    margin-bottom: 12px;
-}
-
-
 .probability-header {
     display: flex;
     justify-content: space-between;
