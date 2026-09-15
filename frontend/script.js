@@ -2062,6 +2062,17 @@ function renderResultItem(
     );
 
 
+    const reportControls =
+        createReportControls(
+            item
+        );
+
+    if (reportControls !== null) {
+        card.appendChild(
+            reportControls
+        );
+    }
+
     return card;
 }
 
@@ -2114,6 +2125,631 @@ function renderBatchResult(data) {
     resultSection.hidden = false;
 }
 
+
+function getReportAccessToken() {
+    const input =
+        document.getElementById(
+            "token-input"
+        );
+
+    if (!input) {
+        return "";
+    }
+
+    return input.value.trim();
+}
+
+
+function getReportAnalysisId(
+    analysisLike
+) {
+    const candidates = [
+        analysisLike?.id,
+        analysisLike?.analysis_id,
+        analysisLike?.analysis?.id,
+        analysisLike?.result?.id,
+    ];
+
+    for (
+        const candidate
+        of candidates
+    ) {
+        const analysisId =
+            Number(candidate);
+
+        if (
+            Number.isInteger(
+                analysisId
+            )
+            && analysisId > 0
+        ) {
+            return analysisId;
+        }
+    }
+
+    return null;
+}
+
+
+function getReportAnalysisStatus(
+    analysisLike
+) {
+    const status =
+        (
+            analysisLike?.status
+            ?? analysisLike?.analysis?.status
+            ?? analysisLike?.result?.status
+            ?? ""
+        );
+
+    return String(
+        status
+    ).trim().toUpperCase();
+}
+
+
+function getReportErrorMessage(
+    payload,
+    fallback
+) {
+    if (
+        payload
+        && typeof payload === "object"
+        && payload.detail
+    ) {
+        return String(
+            payload.detail
+        );
+    }
+
+    if (
+        typeof payload === "string"
+        && payload.trim()
+    ) {
+        return payload.trim();
+    }
+
+    return fallback;
+}
+
+
+async function fetchReportPdf(
+    reportId,
+    action,
+    token
+) {
+    const response =
+        await fetch(
+            (
+                "/api/v1/reports/"
+                + encodeURIComponent(
+                    reportId
+                )
+                + "/"
+                + action
+            ),
+            {
+                method: "GET",
+
+                headers: {
+                    Authorization:
+                        `Bearer ${token}`,
+                },
+            }
+        );
+
+    if (!response.ok) {
+        const payload =
+            await parseResponse(
+                response
+            );
+
+        throw new Error(
+            getReportErrorMessage(
+                payload,
+                (
+                    "PDF request failed "
+                    + `(${response.status}).`
+                )
+            )
+        );
+    }
+
+    const blob =
+        await response.blob();
+
+    if (
+        blob.size === 0
+    ) {
+        throw new Error(
+            "The generated PDF is empty."
+        );
+    }
+
+    return blob;
+}
+
+
+function createReportControls(
+    analysisLike
+) {
+    const analysisId =
+        getReportAnalysisId(
+            analysisLike
+        );
+
+    const analysisStatus =
+        getReportAnalysisStatus(
+            analysisLike
+        );
+
+    if (
+        analysisId === null
+        || analysisStatus !== "COMPLETED"
+    ) {
+        return null;
+    }
+
+    const container =
+        document.createElement(
+            "div"
+        );
+
+    container.className =
+        "report-actions";
+
+    container.dataset.analysisId =
+        String(analysisId);
+
+    const title =
+        document.createElement(
+            "strong"
+        );
+
+    title.className =
+        "report-actions-title";
+
+    title.textContent =
+        "PDF Report";
+
+    const controls =
+        document.createElement(
+            "div"
+        );
+
+    controls.className =
+        "report-actions-row";
+
+    const languageSelect =
+        document.createElement(
+            "select"
+        );
+
+    languageSelect.className =
+        "report-language-select";
+
+    languageSelect.setAttribute(
+        "aria-label",
+        "Report language"
+    );
+
+    const viOption =
+        document.createElement(
+            "option"
+        );
+
+    viOption.value = "vi";
+    viOption.textContent =
+        "Vietnamese";
+
+    const enOption =
+        document.createElement(
+            "option"
+        );
+
+    enOption.value = "en";
+    enOption.textContent =
+        "English";
+
+    languageSelect.append(
+        viOption,
+        enOption
+    );
+
+    const generateButton =
+        document.createElement(
+            "button"
+        );
+
+    generateButton.type =
+        "button";
+
+    generateButton.className =
+        "report-generate-button";
+
+    generateButton.textContent =
+        "Generate PDF";
+
+    const previewButton =
+        document.createElement(
+            "button"
+        );
+
+    previewButton.type =
+        "button";
+
+    previewButton.className =
+        "secondary report-preview-button";
+
+    previewButton.textContent =
+        "Preview";
+
+    previewButton.disabled =
+        true;
+
+    const downloadButton =
+        document.createElement(
+            "button"
+        );
+
+    downloadButton.type =
+        "button";
+
+    downloadButton.className =
+        "secondary report-download-button";
+
+    downloadButton.textContent =
+        "Download";
+
+    downloadButton.disabled =
+        true;
+
+    const statusText =
+        document.createElement(
+            "div"
+        );
+
+    statusText.className =
+        "report-action-status";
+
+    statusText.setAttribute(
+        "role",
+        "status"
+    );
+
+    statusText.setAttribute(
+        "aria-live",
+        "polite"
+    );
+
+    statusText.textContent =
+        "No PDF generated yet.";
+
+    let currentReportId =
+        null;
+
+    let currentReportCode =
+        null;
+
+    generateButton.addEventListener(
+        "click",
+        async () => {
+            const token =
+                getReportAccessToken();
+
+            if (!token) {
+                statusText.textContent =
+                    "Access token is required.";
+                return;
+            }
+
+            generateButton.disabled =
+                true;
+
+            languageSelect.disabled =
+                true;
+
+            statusText.textContent =
+                "Generating PDF...";
+
+            try {
+                const response =
+                    await fetch(
+                        "/api/v1/reports",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                Authorization:
+                                    `Bearer ${token}`,
+
+                                "Content-Type":
+                                    "application/json",
+                            },
+
+                            body:
+                                JSON.stringify(
+                                    {
+                                        analysis_id:
+                                            analysisId,
+
+                                        language:
+                                            languageSelect.value,
+                                    }
+                                ),
+                        }
+                    );
+
+                const payload =
+                    await parseResponse(
+                        response
+                    );
+
+                if (!response.ok) {
+                    throw new Error(
+                        getReportErrorMessage(
+                            payload,
+                            (
+                                "Could not generate PDF "
+                                + `(${response.status}).`
+                            )
+                        )
+                    );
+                }
+
+                currentReportId =
+                    Number(
+                        payload.id
+                    );
+
+                currentReportCode =
+                    String(
+                        payload.report_code
+                        ?? (
+                            "report-"
+                            + currentReportId
+                        )
+                    );
+
+                if (
+                    !Number.isInteger(
+                        currentReportId
+                    )
+                    || currentReportId <= 0
+                ) {
+                    throw new Error(
+                        "The report API returned an invalid report ID."
+                    );
+                }
+
+                previewButton.disabled =
+                    false;
+
+                downloadButton.disabled =
+                    false;
+
+                statusText.textContent =
+                    (
+                        "Generated "
+                        + currentReportCode
+                        + "."
+                    );
+
+            } catch (error) {
+                statusText.textContent =
+                    (
+                        "PDF generation failed: "
+                        + (
+                            error?.message
+                            ?? String(error)
+                        )
+                    );
+
+            } finally {
+                generateButton.disabled =
+                    false;
+
+                languageSelect.disabled =
+                    false;
+            }
+        }
+    );
+
+    previewButton.addEventListener(
+        "click",
+        async () => {
+            if (
+                currentReportId === null
+            ) {
+                return;
+            }
+
+            const token =
+                getReportAccessToken();
+
+            if (!token) {
+                statusText.textContent =
+                    "Access token is required.";
+                return;
+            }
+
+            const previewWindow =
+                window.open(
+                    "",
+                    "_blank"
+                );
+
+            if (!previewWindow) {
+                statusText.textContent =
+                    (
+                        "Preview was blocked by the browser. "
+                        + "Allow pop-ups and try again."
+                    );
+                return;
+            }
+
+            previewWindow.opener =
+                null;
+
+            previewButton.disabled =
+                true;
+
+            statusText.textContent =
+                "Loading PDF preview...";
+
+            try {
+                const blob =
+                    await fetchReportPdf(
+                        currentReportId,
+                        "preview",
+                        token
+                    );
+
+                const objectUrl =
+                    URL.createObjectURL(
+                        blob
+                    );
+
+                previewWindow.location.href =
+                    objectUrl;
+
+                window.setTimeout(
+                    () => {
+                        URL.revokeObjectURL(
+                            objectUrl
+                        );
+                    },
+                    60000
+                );
+
+                statusText.textContent =
+                    "PDF preview opened.";
+
+            } catch (error) {
+                previewWindow.close();
+
+                statusText.textContent =
+                    (
+                        "Preview failed: "
+                        + (
+                            error?.message
+                            ?? String(error)
+                        )
+                    );
+
+            } finally {
+                previewButton.disabled =
+                    false;
+            }
+        }
+    );
+
+    downloadButton.addEventListener(
+        "click",
+        async () => {
+            if (
+                currentReportId === null
+            ) {
+                return;
+            }
+
+            const token =
+                getReportAccessToken();
+
+            if (!token) {
+                statusText.textContent =
+                    "Access token is required.";
+                return;
+            }
+
+            downloadButton.disabled =
+                true;
+
+            statusText.textContent =
+                "Preparing PDF download...";
+
+            try {
+                const blob =
+                    await fetchReportPdf(
+                        currentReportId,
+                        "download",
+                        token
+                    );
+
+                const objectUrl =
+                    URL.createObjectURL(
+                        blob
+                    );
+
+                const link =
+                    document.createElement(
+                        "a"
+                    );
+
+                link.href =
+                    objectUrl;
+
+                link.download =
+                    (
+                        currentReportCode
+                        ?? (
+                            "report-"
+                            + currentReportId
+                        )
+                    )
+                    + ".pdf";
+
+                document.body.appendChild(
+                    link
+                );
+
+                link.click();
+                link.remove();
+
+                window.setTimeout(
+                    () => {
+                        URL.revokeObjectURL(
+                            objectUrl
+                        );
+                    },
+                    1000
+                );
+
+                statusText.textContent =
+                    "PDF download started.";
+
+            } catch (error) {
+                statusText.textContent =
+                    (
+                        "Download failed: "
+                        + (
+                            error?.message
+                            ?? String(error)
+                        )
+                    );
+
+            } finally {
+                downloadButton.disabled =
+                    false;
+            }
+        }
+    );
+
+    controls.append(
+        languageSelect,
+        generateButton,
+        previewButton,
+        downloadButton
+    );
+
+    container.append(
+        title,
+        controls,
+        statusText
+    );
+
+    return container;
+}
 
 async function parseResponse(response) {
     const text =
@@ -2415,6 +3051,17 @@ function createHistoryItem(
 
         card.appendChild(
             section
+        );
+    }
+
+    const reportControls =
+        createReportControls(
+            analysis
+        );
+
+    if (reportControls !== null) {
+        card.appendChild(
+            reportControls
         );
     }
 
