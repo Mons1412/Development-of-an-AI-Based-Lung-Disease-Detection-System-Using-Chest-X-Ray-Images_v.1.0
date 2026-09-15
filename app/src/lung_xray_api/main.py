@@ -29,6 +29,7 @@ from lung_xray_api.api.v1.patient_profiles import (
 from lung_xray_api.api.v1.users import (
     router as users_router,
 )
+from lung_xray_api.api.v1.reports import router as reports_router
 
 
 PROJECT_ROOT = (
@@ -86,6 +87,10 @@ app.include_router(
 
 app.include_router(
     medical_histories_router
+)
+
+app.include_router(
+    reports_router
 )
 
 app.mount(
