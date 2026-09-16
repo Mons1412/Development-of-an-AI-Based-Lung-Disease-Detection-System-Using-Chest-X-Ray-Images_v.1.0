@@ -1,5 +1,6 @@
 from functools import lru_cache
 
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from sqlalchemy import URL
 
@@ -16,6 +17,27 @@ class Settings(BaseSettings):
     db_name: str = "lungxray"
     db_user: str = "lungxray"
     db_password: str
+
+    db_connect_timeout_seconds: int = Field(
+        default=10,
+        gt=0,
+    )
+    db_pool_size: int = Field(
+        default=5,
+        gt=0,
+    )
+    db_max_overflow: int = Field(
+        default=10,
+        ge=0,
+    )
+    db_pool_timeout_seconds: int = Field(
+        default=30,
+        gt=0,
+    )
+    db_pool_recycle_seconds: int = Field(
+        default=3600,
+        gt=0,
+    )
 
     jwt_secret: str
     jwt_algorithm: str = "HS256"
