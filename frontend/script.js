@@ -2073,6 +2073,17 @@ function renderResultItem(
         );
     }
 
+    const drAIControls =
+        createDrAIControls(
+            item
+        );
+
+    if (drAIControls !== null) {
+        card.appendChild(
+            drAIControls
+        );
+    }
+
     return card;
 }
 
@@ -2751,6 +2762,631 @@ function createReportControls(
     return container;
 }
 
+function getDrAIErrorMessage(
+    response,
+    data
+) {
+    const detail =
+        getErrorMessage(data);
+
+    const detailText =
+        typeof detail === "string"
+            ? detail.trim()
+            : "";
+
+    if (response.status === 401) {
+        return (
+            "Session expired or the access "
+            + "token is invalid."
+        );
+    }
+
+    if (response.status === 400) {
+        return (
+            detailText
+            || "This analysis cannot be "
+            + "used by Dr.AI."
+        );
+    }
+
+    if (response.status === 404) {
+        return (
+            detailText
+            || "Analysis or Dr.AI advice "
+            + "was not found."
+        );
+    }
+
+    if (response.status === 502) {
+        return (
+            "Dr.AI provider failed to "
+            + "generate a response."
+        );
+    }
+
+    if (response.status === 503) {
+        return (
+            "Dr.AI is not configured "
+            + "on the server."
+        );
+    }
+
+    return (
+        detailText
+        || (
+            "Dr.AI request failed "
+            + `(${response.status}).`
+        )
+    );
+}
+
+
+function createDrAIAdviceCard(
+    advice
+) {
+    const card =
+        document.createElement(
+            "article"
+        );
+
+    card.className =
+        "drai-advice-card";
+
+    const meta =
+        document.createElement(
+            "div"
+        );
+
+    meta.className =
+        "drai-advice-meta";
+
+    const language =
+        String(
+            advice?.language
+            || "unknown"
+        ).toUpperCase();
+
+    const provider =
+        String(
+            advice?.provider
+            || "unknown provider"
+        );
+
+    const model =
+        String(
+            advice?.model_name
+            || "unknown model"
+        );
+
+    const createdAt =
+        formatHistoryDate(
+            advice?.created_at
+        );
+
+    meta.textContent =
+        (
+            `${language} ? ${provider}`
+            + ` ? ${model}`
+            + ` ? ${createdAt}`
+        );
+
+    const text =
+        document.createElement(
+            "p"
+        );
+
+    text.className =
+        "drai-advice-text";
+
+    text.textContent =
+        String(
+            advice?.advice_text
+            || "No advice text returned."
+        );
+
+    card.append(
+        meta,
+        text
+    );
+
+    return card;
+}
+
+
+function renderDrAIAdviceHistory(
+    container,
+    advices
+) {
+    container.replaceChildren();
+
+    if (
+        !Array.isArray(advices)
+    ) {
+        throw new Error(
+            "Unexpected Dr.AI history "
+            + "response."
+        );
+    }
+
+    if (advices.length === 0) {
+        const empty =
+            document.createElement(
+                "p"
+            );
+
+        empty.className =
+            "drai-history-empty";
+
+        empty.textContent =
+            "No Dr.AI advice generated yet.";
+
+        container.appendChild(
+            empty
+        );
+
+        return;
+    }
+
+    for (const advice of advices) {
+        container.appendChild(
+            createDrAIAdviceCard(
+                advice
+            )
+        );
+    }
+}
+
+
+async function fetchDrAIAdviceHistory(
+    analysisId,
+    token
+) {
+    const response =
+        await fetch(
+            (
+                "/api/v1/analyses/"
+                + encodeURIComponent(
+                    analysisId
+                )
+                + "/medical-advices"
+            ),
+            {
+                method: "GET",
+
+                headers: {
+                    Authorization:
+                        `Bearer ${token}`,
+                },
+            }
+        );
+
+    const payload =
+        await parseResponse(
+            response
+        );
+
+    if (!response.ok) {
+        throw new Error(
+            getDrAIErrorMessage(
+                response,
+                payload
+            )
+        );
+    }
+
+    if (!Array.isArray(payload)) {
+        throw new Error(
+            "Unexpected Dr.AI history "
+            + "response."
+        );
+    }
+
+    return payload;
+}
+
+
+function createDrAIControls(
+    analysisLike
+) {
+    const analysisId =
+        getReportAnalysisId(
+            analysisLike
+        );
+
+    const analysisStatus =
+        getReportAnalysisStatus(
+            analysisLike
+        );
+
+    if (
+        analysisId === null
+        || analysisStatus !== "COMPLETED"
+    ) {
+        return null;
+    }
+
+    const container =
+        document.createElement(
+            "section"
+        );
+
+    container.className =
+        "report-actions drai-actions";
+
+    container.dataset.analysisId =
+        String(analysisId);
+
+    const title =
+        document.createElement(
+            "strong"
+        );
+
+    title.className =
+        "report-actions-title";
+
+    title.textContent =
+        "Dr.AI";
+
+    const controls =
+        document.createElement(
+            "div"
+        );
+
+    controls.className =
+        (
+            "report-actions-row "
+            + "drai-actions-row"
+        );
+
+    const languageSelect =
+        document.createElement(
+            "select"
+        );
+
+    languageSelect.className =
+        (
+            "report-language-select "
+            + "drai-language-select"
+        );
+
+    languageSelect.setAttribute(
+        "aria-label",
+        "Dr.AI response language"
+    );
+
+    const viOption =
+        document.createElement(
+            "option"
+        );
+
+    viOption.value = "vi";
+    viOption.textContent =
+        "Vietnamese";
+
+    const enOption =
+        document.createElement(
+            "option"
+        );
+
+    enOption.value = "en";
+    enOption.textContent =
+        "English";
+
+    languageSelect.append(
+        viOption,
+        enOption
+    );
+
+    const generateButton =
+        document.createElement(
+            "button"
+        );
+
+    generateButton.type =
+        "button";
+
+    generateButton.className =
+        "drai-generate-button";
+
+    generateButton.textContent =
+        "Generate Dr.AI";
+
+    const historyButton =
+        document.createElement(
+            "button"
+        );
+
+    historyButton.type =
+        "button";
+
+    historyButton.className =
+        (
+            "secondary "
+            + "drai-history-button"
+        );
+
+    historyButton.textContent =
+        "Load History";
+
+    controls.append(
+        languageSelect,
+        generateButton,
+        historyButton
+    );
+
+    const statusText =
+        document.createElement(
+            "p"
+        );
+
+    statusText.className =
+        (
+            "report-action-status "
+            + "drai-status"
+        );
+
+    statusText.setAttribute(
+        "aria-live",
+        "polite"
+    );
+
+    statusText.textContent =
+        "Dr.AI is ready.";
+
+    const disclaimer =
+        document.createElement(
+            "p"
+        );
+
+    disclaimer.className =
+        "drai-disclaimer";
+
+    disclaimer.textContent =
+        (
+            "AI-generated explanation only. "
+            + "It is not a confirmed "
+            + "medical diagnosis."
+        );
+
+    const historyTitle =
+        document.createElement(
+            "strong"
+        );
+
+    historyTitle.className =
+        "drai-history-title";
+
+    historyTitle.textContent =
+        "Previous Dr.AI advice";
+
+    const historyContainer =
+        document.createElement(
+            "div"
+        );
+
+    historyContainer.className =
+        "drai-history";
+
+    historyContainer.setAttribute(
+        "aria-live",
+        "polite"
+    );
+
+    const initialMessage =
+        document.createElement(
+            "p"
+        );
+
+    initialMessage.className =
+        "drai-history-empty";
+
+    initialMessage.textContent =
+        "Advice history has not been loaded.";
+
+    historyContainer.appendChild(
+        initialMessage
+    );
+
+    function setBusy(
+        busy
+    ) {
+        languageSelect.disabled =
+            busy;
+
+        generateButton.disabled =
+            busy;
+
+        historyButton.disabled =
+            busy;
+    }
+
+    historyButton.addEventListener(
+        "click",
+        async () => {
+            const token =
+                getReportAccessToken();
+
+            if (!token) {
+                statusText.textContent =
+                    "Access token is required.";
+
+                return;
+            }
+
+            setBusy(true);
+
+            statusText.textContent =
+                "Loading Dr.AI history...";
+
+            try {
+                const advices =
+                    await fetchDrAIAdviceHistory(
+                        analysisId,
+                        token
+                    );
+
+                renderDrAIAdviceHistory(
+                    historyContainer,
+                    advices
+                );
+
+                statusText.textContent =
+                    (
+                        "Dr.AI history loaded: "
+                        + `${advices.length} `
+                        + "record(s)."
+                    );
+
+            } catch (error) {
+                statusText.textContent =
+                    (
+                        "Dr.AI history failed: "
+                        + error.message
+                    );
+
+            } finally {
+                setBusy(false);
+            }
+        }
+    );
+
+    generateButton.addEventListener(
+        "click",
+        async () => {
+            const token =
+                getReportAccessToken();
+
+            if (!token) {
+                statusText.textContent =
+                    "Access token is required.";
+
+                return;
+            }
+
+            setBusy(true);
+
+            statusText.textContent =
+                "Generating Dr.AI advice...";
+
+            try {
+                const response =
+                    await fetch(
+                        "/api/v1/medical-advices",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                Authorization:
+                                    `Bearer ${token}`,
+
+                                "Content-Type":
+                                    "application/json",
+                            },
+
+                            body:
+                                JSON.stringify(
+                                    {
+                                        analysis_id:
+                                            analysisId,
+
+                                        language:
+                                            languageSelect
+                                            .value,
+                                    }
+                                ),
+                        }
+                    );
+
+                const payload =
+                    await parseResponse(
+                        response
+                    );
+
+                if (!response.ok) {
+                    throw new Error(
+                        getDrAIErrorMessage(
+                            response,
+                            payload
+                        )
+                    );
+                }
+
+                if (
+                    !payload
+                    || !Number.isInteger(
+                        Number(
+                            payload.id
+                        )
+                    )
+                ) {
+                    throw new Error(
+                        "The Dr.AI API returned "
+                        + "an invalid advice ID."
+                    );
+                }
+
+                try {
+                    const advices =
+                        await fetchDrAIAdviceHistory(
+                            analysisId,
+                            token
+                        );
+
+                    renderDrAIAdviceHistory(
+                        historyContainer,
+                        advices
+                    );
+
+                    statusText.textContent =
+                        (
+                            "Dr.AI advice generated "
+                            + "and history refreshed."
+                        );
+
+                } catch (
+                    refreshError
+                ) {
+                    renderDrAIAdviceHistory(
+                        historyContainer,
+                        [
+                            payload
+                        ]
+                    );
+
+                    statusText.textContent =
+                        (
+                            "Dr.AI advice generated, "
+                            + "but history refresh "
+                            + "failed: "
+                            + refreshError.message
+                        );
+                }
+
+            } catch (error) {
+                statusText.textContent =
+                    (
+                        "Dr.AI generation failed: "
+                        + error.message
+                    );
+
+            } finally {
+                setBusy(false);
+            }
+        }
+    );
+
+    container.append(
+        title,
+        controls,
+        statusText,
+        disclaimer,
+        historyTitle,
+        historyContainer
+    );
+
+    return container;
+}
+
 async function parseResponse(response) {
     const text =
         await response.text();
@@ -3062,6 +3698,17 @@ function createHistoryItem(
     if (reportControls !== null) {
         card.appendChild(
             reportControls
+        );
+    }
+
+    const drAIControls =
+        createDrAIControls(
+            analysis
+        );
+
+    if (drAIControls !== null) {
+        card.appendChild(
+            drAIControls
         );
     }
 
