@@ -24,6 +24,7 @@ from lung_xray_api.api.v1.medical_histories import (
     router as medical_histories_router,
 )
 from lung_xray_api.api.v1.medical_advices import (
+    analysis_router as analysis_medical_advices_router,
     router as medical_advices_router,
 )
 from lung_xray_api.api.v1.patient_profiles import (
@@ -94,6 +95,10 @@ app.include_router(
 
 app.include_router(
     medical_advices_router
+)
+
+app.include_router(
+    analysis_medical_advices_router
 )
 
 app.include_router(

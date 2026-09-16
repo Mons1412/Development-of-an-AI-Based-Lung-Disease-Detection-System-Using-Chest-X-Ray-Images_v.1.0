@@ -34,6 +34,12 @@ router = APIRouter(
 )
 
 
+analysis_router = APIRouter(
+    prefix="/api/v1/analyses",
+    tags=["Medical Advices"],
+)
+
+
 def _raise_medical_advice_http_exception(
     exc: Exception,
 ) -> None:
@@ -123,3 +129,66 @@ def create_medical_advice(
         _raise_medical_advice_http_exception(
             exc
         )
+
+
+@router.get(
+    "/{advice_id}",
+    response_model=MedicalAdviceResponse,
+)
+def get_medical_advice(
+    advice_id: int,
+    db: Session = Depends(get_db),
+    current_user: UserModel = Depends(
+        get_current_user
+    ),
+):
+    try:
+        return (
+            medical_advice_service
+            .get_advice(
+                db,
+                current_user,
+                advice_id=advice_id,
+            )
+        )
+
+    except (
+        LookupError,
+        PermissionError,
+    ) as exc:
+        _raise_medical_advice_http_exception(
+            exc
+        )
+
+
+@analysis_router.get(
+    "/{analysis_id}/medical-advices",
+    response_model=list[
+        MedicalAdviceResponse
+    ],
+)
+def list_analysis_medical_advices(
+    analysis_id: int,
+    db: Session = Depends(get_db),
+    current_user: UserModel = Depends(
+        get_current_user
+    ),
+):
+    try:
+        return (
+            medical_advice_service
+            .list_analysis_advices(
+                db,
+                current_user,
+                analysis_id=analysis_id,
+            )
+        )
+
+    except (
+        LookupError,
+        PermissionError,
+    ) as exc:
+        _raise_medical_advice_http_exception(
+            exc
+        )
+
