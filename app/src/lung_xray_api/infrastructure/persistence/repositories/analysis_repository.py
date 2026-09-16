@@ -47,6 +47,35 @@ class AnalysisRepository:
             db.rollback()
             raise
 
+    def get_by_id(
+        self,
+        db: Session,
+        analysis_id: int,
+    ) -> AnalysisModel | None:
+
+        statement = (
+            select(AnalysisModel)
+            .where(
+                AnalysisModel.id
+                == analysis_id
+            )
+            .options(
+                selectinload(
+                    AnalysisModel.patient
+                ),
+                selectinload(
+                    AnalysisModel.ai_model
+                ),
+                selectinload(
+                    AnalysisModel.prediction
+                ).selectinload(
+                    PredictionModel.probabilities
+                ),
+            )
+        )
+
+        return db.scalar(statement)
+
     def get_by_id_for_patient(
         self,
         db: Session,
