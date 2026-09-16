@@ -689,11 +689,100 @@
 
         </section>
         <section
+            id="admin-dashboard-section"
+            class="panel"
+        >
+            <h2>
+                9. ADMIN Dashboard
+            </h2>
+
+            <p class="help-text">
+                System overview, prediction distribution,
+                model usage, and recent analyses.
+                This function requires an ADMIN access token.
+            </p>
+
+            <div class="admin-dashboard-toolbar">
+                <div>
+                    <label for="admin-dashboard-recent-limit">
+                        Recent analyses limit
+                    </label>
+
+                    <input
+                        id="admin-dashboard-recent-limit"
+                        type="number"
+                        min="1"
+                        max="50"
+                        value="10"
+                    >
+                </div>
+
+                <button
+                    id="admin-dashboard-refresh-button"
+                    type="button"
+                >
+                    Refresh Dashboard
+                </button>
+            </div>
+
+            <div
+                id="admin-dashboard-status"
+                class="request-status"
+            >
+                ADMIN dashboard has not been loaded.
+            </div>
+
+            <h3 class="admin-dashboard-heading">
+                Overview
+            </h3>
+
+            <div
+                id="admin-dashboard-overview"
+                class="admin-dashboard-overview"
+            ></div>
+
+            <div class="admin-dashboard-columns">
+                <div class="admin-dashboard-block">
+                    <h3>
+                        Prediction Distribution
+                    </h3>
+
+                    <div
+                        id="admin-dashboard-predictions"
+                        class="admin-dashboard-bars"
+                    ></div>
+                </div>
+
+                <div class="admin-dashboard-block">
+                    <h3>
+                        Model Usage
+                    </h3>
+
+                    <div
+                        id="admin-dashboard-model-usage"
+                        class="admin-dashboard-bars"
+                    ></div>
+                </div>
+            </div>
+
+            <div class="admin-dashboard-block">
+                <h3>
+                    Recent Analyses
+                </h3>
+
+                <div
+                    id="admin-dashboard-recent-analyses"
+                    class="admin-dashboard-recent"
+                ></div>
+            </div>
+        </section>
+
+        <section
             id="admin-search-section"
             class="panel"
         >
             <h2>
-                9. ADMIN Patient Search
+                10. ADMIN Patient Search
             </h2>
 
             <p class="help-text">
@@ -802,6 +891,6 @@
         </section>
     </main>
 
-    <script src="/frontend/script.js?v=m9105"></script>
+    <script src="/frontend/script.js?v=m13dashboard1"></script>
 </body>
 </html>

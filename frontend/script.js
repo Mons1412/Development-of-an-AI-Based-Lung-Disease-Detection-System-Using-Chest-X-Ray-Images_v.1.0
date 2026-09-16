@@ -244,6 +244,46 @@ const clearMedicalHistoryButton =
         "clear-medical-history-button"
     );
 
+const adminDashboardSection =
+    document.getElementById(
+        "admin-dashboard-section"
+    );
+
+const adminDashboardRecentLimitInput =
+    document.getElementById(
+        "admin-dashboard-recent-limit"
+    );
+
+const adminDashboardRefreshButton =
+    document.getElementById(
+        "admin-dashboard-refresh-button"
+    );
+
+const adminDashboardStatus =
+    document.getElementById(
+        "admin-dashboard-status"
+    );
+
+const adminDashboardOverview =
+    document.getElementById(
+        "admin-dashboard-overview"
+    );
+
+const adminDashboardPredictions =
+    document.getElementById(
+        "admin-dashboard-predictions"
+    );
+
+const adminDashboardModelUsage =
+    document.getElementById(
+        "admin-dashboard-model-usage"
+    );
+
+const adminDashboardRecentAnalyses =
+    document.getElementById(
+        "admin-dashboard-recent-analyses"
+    );
+
 const adminPatientCodeInput =
     document.getElementById(
         "admin-patient-code"
@@ -5238,6 +5278,740 @@ async function saveMedicalHistory() {
             false;
     }
 }
+function getAdminDashboardTokenRole(
+    token
+) {
+    const normalizedToken =
+        String(token || "").trim();
+
+    if (!normalizedToken) {
+        return null;
+    }
+
+    const parts =
+        normalizedToken.split(".");
+
+    if (parts.length < 2) {
+        return null;
+    }
+
+    try {
+        let payload = parts[1]
+            .replace(/-/g, "+")
+            .replace(/_/g, "/");
+
+        while (
+            payload.length % 4 !== 0
+        ) {
+            payload += "=";
+        }
+
+        const parsed =
+            JSON.parse(
+                atob(payload)
+            );
+
+        const role =
+            String(
+                parsed?.role || ""
+            )
+                .trim()
+                .toUpperCase();
+
+        return role || null;
+
+    } catch {
+        return null;
+    }
+}
+
+
+function resetAdminDashboardView() {
+    adminDashboardOverview
+        .replaceChildren();
+
+    adminDashboardPredictions
+        .replaceChildren();
+
+    adminDashboardModelUsage
+        .replaceChildren();
+
+    adminDashboardRecentAnalyses
+        .replaceChildren();
+}
+
+
+function createAdminDashboardMetricCard(
+    label,
+    value
+) {
+    const card =
+        document.createElement("div");
+
+    card.className =
+        "summary-card "
+        + "admin-dashboard-metric";
+
+    const labelElement =
+        document.createElement("span");
+
+    labelElement.textContent =
+        String(label);
+
+    const valueElement =
+        document.createElement("strong");
+
+    valueElement.textContent =
+        String(value ?? 0);
+
+    card.append(
+        labelElement,
+        valueElement
+    );
+
+    return card;
+}
+
+
+function renderAdminDashboardOverview(
+    overview
+) {
+    adminDashboardOverview
+        .replaceChildren();
+
+    const metrics = [
+        [
+            "Total Users",
+            overview?.total_users,
+        ],
+        [
+            "Active Users",
+            overview?.active_users,
+        ],
+        [
+            "Patients",
+            overview?.total_patients,
+        ],
+        [
+            "Analyses",
+            overview?.total_analyses,
+        ],
+        [
+            "Completed",
+            overview?.completed_analyses,
+        ],
+        [
+            "Failed",
+            overview?.failed_analyses,
+        ],
+        [
+            "Dr.AI Advices",
+            overview
+                ?.total_medical_advices,
+        ],
+        [
+            "PDF Reports",
+            overview?.total_reports,
+        ],
+    ];
+
+    for (
+        const [label, value]
+        of metrics
+    ) {
+        adminDashboardOverview.append(
+            createAdminDashboardMetricCard(
+                label,
+                value
+            )
+        );
+    }
+}
+
+
+function createAdminDashboardBar(
+    label,
+    count,
+    maximum
+) {
+    const item =
+        document.createElement("div");
+
+    item.className =
+        "admin-dashboard-bar-item";
+
+    const header =
+        document.createElement("div");
+
+    header.className =
+        "admin-dashboard-bar-header";
+
+    const labelElement =
+        document.createElement("span");
+
+    labelElement.textContent =
+        String(label);
+
+    const countElement =
+        document.createElement("strong");
+
+    countElement.textContent =
+        String(count);
+
+    header.append(
+        labelElement,
+        countElement
+    );
+
+    const track =
+        document.createElement("div");
+
+    track.className =
+        "admin-dashboard-bar-track";
+
+    const fill =
+        document.createElement("div");
+
+    fill.className =
+        "admin-dashboard-bar-fill";
+
+    const numericMaximum =
+        Math.max(
+            Number(maximum) || 0,
+            1
+        );
+
+    const numericCount =
+        Math.max(
+            Number(count) || 0,
+            0
+        );
+
+    const percentage =
+        Math.min(
+            100,
+            (
+                numericCount
+                / numericMaximum
+            ) * 100
+        );
+
+    fill.style.width =
+        `${percentage}%`;
+
+    track.append(fill);
+
+    item.append(
+        header,
+        track
+    );
+
+    return item;
+}
+
+
+function renderAdminPredictionDistribution(
+    items
+) {
+    adminDashboardPredictions
+        .replaceChildren();
+
+    const rows =
+        Array.isArray(items)
+            ? items
+            : [];
+
+    if (rows.length === 0) {
+        const empty =
+            document.createElement("p");
+
+        empty.className =
+            "help-text";
+
+        empty.textContent =
+            "No prediction data.";
+
+        adminDashboardPredictions
+            .append(empty);
+
+        return;
+    }
+
+    const maximum =
+        Math.max(
+            ...rows.map(
+                (item) =>
+                    Number(
+                        item?.count
+                    ) || 0
+            ),
+            1
+        );
+
+    for (const item of rows) {
+        adminDashboardPredictions
+            .append(
+                createAdminDashboardBar(
+                    item?.class_name
+                        || "Unknown",
+                    item?.count
+                        ?? 0,
+                    maximum
+                )
+            );
+    }
+}
+
+
+function renderAdminModelUsage(
+    items
+) {
+    adminDashboardModelUsage
+        .replaceChildren();
+
+    const rows =
+        Array.isArray(items)
+            ? items
+            : [];
+
+    if (rows.length === 0) {
+        const empty =
+            document.createElement("p");
+
+        empty.className =
+            "help-text";
+
+        empty.textContent =
+            "No model usage data.";
+
+        adminDashboardModelUsage
+            .append(empty);
+
+        return;
+    }
+
+    const maximum =
+        Math.max(
+            ...rows.map(
+                (item) =>
+                    Number(
+                        item
+                            ?.analysis_count
+                    ) || 0
+            ),
+            1
+        );
+
+    for (const item of rows) {
+        const name =
+            String(
+                item?.display_name
+                || item?.model_key
+                || "Unknown model"
+            );
+
+        const version =
+            String(
+                item?.version || ""
+            );
+
+        const label =
+            version
+                ? `${name} ${version}`
+                : name;
+
+        adminDashboardModelUsage
+            .append(
+                createAdminDashboardBar(
+                    label,
+                    item
+                        ?.analysis_count
+                        ?? 0,
+                    maximum
+                )
+            );
+    }
+}
+
+
+function formatAdminDashboardDate(
+    value
+) {
+    if (!value) {
+        return "N/A";
+    }
+
+    const date =
+        new Date(value);
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+        return String(value);
+    }
+
+    return date.toLocaleString();
+}
+
+
+function appendAdminRecentField(
+    card,
+    label,
+    value
+) {
+    const row =
+        document.createElement("div");
+
+    row.className =
+        "admin-dashboard-recent-field";
+
+    const labelElement =
+        document.createElement("strong");
+
+    labelElement.textContent =
+        `${label}:`;
+
+    const valueElement =
+        document.createElement("span");
+
+    valueElement.textContent =
+        String(
+            value ?? "N/A"
+        );
+
+    row.append(
+        labelElement,
+        valueElement
+    );
+
+    card.append(row);
+}
+
+
+function renderAdminRecentAnalyses(
+    items
+) {
+    adminDashboardRecentAnalyses
+        .replaceChildren();
+
+    const rows =
+        Array.isArray(items)
+            ? items
+            : [];
+
+    if (rows.length === 0) {
+        const empty =
+            document.createElement("p");
+
+        empty.className =
+            "help-text";
+
+        empty.textContent =
+            "No analyses available.";
+
+        adminDashboardRecentAnalyses
+            .append(empty);
+
+        return;
+    }
+
+    for (const item of rows) {
+        const card =
+            document.createElement("article");
+
+        card.className =
+            "admin-dashboard-recent-card";
+
+        appendAdminRecentField(
+            card,
+            "Analysis",
+            item?.analysis_code
+        );
+
+        appendAdminRecentField(
+            card,
+            "Patient",
+            item?.patient_code
+        );
+
+        appendAdminRecentField(
+            card,
+            "Status",
+            item?.status
+        );
+
+        const modelText =
+            [
+                item?.model_key,
+                item?.model_version,
+            ]
+                .filter(Boolean)
+                .join(" ");
+
+        appendAdminRecentField(
+            card,
+            "Model",
+            modelText || "N/A"
+        );
+
+        appendAdminRecentField(
+            card,
+            "Prediction",
+            item?.predicted_class
+                || "N/A"
+        );
+
+        const confidence =
+            Number(
+                item?.confidence
+            );
+
+        appendAdminRecentField(
+            card,
+            "Confidence",
+            Number.isFinite(
+                confidence
+            )
+                ? (
+                    confidence
+                    * 100
+                ).toFixed(2)
+                    + "%"
+                : "N/A"
+        );
+
+        appendAdminRecentField(
+            card,
+            "Created",
+            formatAdminDashboardDate(
+                item?.created_at
+            )
+        );
+
+        adminDashboardRecentAnalyses
+            .append(card);
+    }
+}
+
+
+function renderAdminDashboard(
+    dashboard
+) {
+    renderAdminDashboardOverview(
+        dashboard?.overview || {}
+    );
+
+    renderAdminPredictionDistribution(
+        dashboard
+            ?.prediction_distribution
+    );
+
+    renderAdminModelUsage(
+        dashboard?.model_usage
+    );
+
+    renderAdminRecentAnalyses(
+        dashboard?.recent_analyses
+    );
+}
+
+
+function getAdminDashboardRecentLimit() {
+    const value =
+        Number.parseInt(
+            adminDashboardRecentLimitInput
+                .value,
+            10
+        );
+
+    if (
+        !Number.isInteger(value)
+        || value < 1
+        || value > 50
+    ) {
+        throw new Error(
+            "Recent analyses limit "
+            + "must be between "
+            + "1 and 50."
+        );
+    }
+
+    return value;
+}
+
+
+function getAdminDashboardErrorMessage(
+    response,
+    data
+) {
+    if (
+        response.status === 401
+    ) {
+        return (
+            "Authentication required."
+        );
+    }
+
+    if (
+        response.status === 403
+    ) {
+        return (
+            "ADMIN permission required."
+        );
+    }
+
+    const detail =
+        typeof data?.detail === "string"
+            ? data.detail.trim()
+            : "";
+
+    if (detail) {
+        return detail;
+    }
+
+    return (
+        "Dashboard request failed "
+        + `with HTTP ${response.status}.`
+    );
+}
+
+
+async function loadAdminDashboard() {
+    const token =
+        getReportAccessToken();
+
+    if (!token) {
+        resetAdminDashboardView();
+
+        adminDashboardStatus
+            .textContent =
+            "An ADMIN access token "
+            + "is required.";
+
+        return;
+    }
+
+    const tokenRole =
+        getAdminDashboardTokenRole(
+            token
+        );
+
+    if (
+        tokenRole
+        && tokenRole !== "ADMIN"
+    ) {
+        resetAdminDashboardView();
+
+        adminDashboardStatus
+            .textContent =
+            "ADMIN permission required.";
+
+        return;
+    }
+
+    let recentLimit;
+
+    try {
+        recentLimit =
+            getAdminDashboardRecentLimit();
+
+    } catch (error) {
+        adminDashboardStatus
+            .textContent =
+            error.message;
+
+        return;
+    }
+
+    adminDashboardRefreshButton
+        .disabled = true;
+
+    adminDashboardRecentLimitInput
+        .disabled = true;
+
+    adminDashboardStatus
+        .textContent =
+        "Loading ADMIN dashboard...";
+
+    try {
+        const response =
+            await fetch(
+                "/api/v1/admin/dashboard"
+                + "?recent_limit="
+                + encodeURIComponent(
+                    recentLimit
+                ),
+                {
+                    method: "GET",
+                    headers: {
+                        Authorization:
+                            `Bearer ${token}`,
+                    },
+                }
+            );
+
+        const data =
+            await parseResponse(
+                response
+            );
+
+        if (!response.ok) {
+            throw new Error(
+                getAdminDashboardErrorMessage(
+                    response,
+                    data
+                )
+            );
+        }
+
+        renderAdminDashboard(
+            data
+        );
+
+        adminDashboardStatus
+            .textContent =
+            "ADMIN dashboard loaded.";
+
+    } catch (error) {
+        resetAdminDashboardView();
+
+        adminDashboardStatus
+            .textContent =
+            "ADMIN dashboard failed: "
+            + error.message;
+
+    } finally {
+        adminDashboardRefreshButton
+            .disabled = false;
+
+        adminDashboardRecentLimitInput
+            .disabled = false;
+    }
+}
+
+
+function initializeAdminDashboard() {
+    const token =
+        getReportAccessToken();
+
+    if (!token) {
+        return;
+    }
+
+    if (
+        getAdminDashboardTokenRole(
+            token
+        ) !== "ADMIN"
+    ) {
+        return;
+    }
+
+    loadAdminDashboard();
+}
+
+
 function getAdminSearchRequestValues() {
     const patientCode =
         adminPatientCodeInput
@@ -5905,6 +6679,22 @@ clearMedicalHistoryButton.addEventListener(
             "Medical history editor cleared.";
     }
 );
+
+adminDashboardRefreshButton.addEventListener(
+    "click",
+    loadAdminDashboard
+);
+
+adminDashboardRecentLimitInput.addEventListener(
+    "change",
+    () => {
+        adminDashboardStatus.textContent =
+            "Dashboard limit changed. "
+            + "Refresh to apply.";
+    }
+);
+
+initializeAdminDashboard();
 
 adminSearchButton.addEventListener(
     "click",

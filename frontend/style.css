@@ -1166,3 +1166,171 @@ input[type="text"] {
     }
 }
 
+/* M13.5 Admin Dashboard */
+
+.admin-dashboard-toolbar {
+    display: flex;
+    align-items: end;
+    gap: 16px;
+    margin-top: 18px;
+}
+
+.admin-dashboard-toolbar > div {
+    flex: 0 1 220px;
+}
+
+.admin-dashboard-toolbar input {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#admin-dashboard-status {
+    margin-top: 18px;
+}
+
+.admin-dashboard-heading {
+    margin-top: 24px;
+}
+
+.admin-dashboard-overview {
+    display: grid;
+    grid-template-columns:
+        repeat(
+            4,
+            minmax(0, 1fr)
+        );
+    gap: 14px;
+    margin-top: 14px;
+}
+
+.admin-dashboard-metric span {
+    display: block;
+    color: #475569;
+    font-size: 0.9rem;
+}
+
+.admin-dashboard-columns {
+    display: grid;
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+    gap: 18px;
+    margin-top: 24px;
+}
+
+.admin-dashboard-block {
+    margin-top: 24px;
+    padding: 18px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    background: #ffffff;
+}
+
+.admin-dashboard-columns
+.admin-dashboard-block {
+    margin-top: 0;
+}
+
+.admin-dashboard-block h3 {
+    margin-top: 0;
+}
+
+.admin-dashboard-bars {
+    display: grid;
+    gap: 14px;
+    margin-top: 14px;
+}
+
+.admin-dashboard-bar-item {
+    display: grid;
+    gap: 7px;
+}
+
+.admin-dashboard-bar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.admin-dashboard-bar-track {
+    overflow: hidden;
+    height: 10px;
+    border-radius: 999px;
+    background: #e2e8f0;
+}
+
+.admin-dashboard-bar-fill {
+    width: 0;
+    height: 100%;
+    border-radius: inherit;
+    background: #334155;
+    transition: width 180ms ease;
+}
+
+.admin-dashboard-recent {
+    display: grid;
+    gap: 12px;
+    margin-top: 14px;
+}
+
+.admin-dashboard-recent-card {
+    display: grid;
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+    gap: 10px 18px;
+    padding: 16px;
+    border: 1px solid #e5e7eb;
+    border-left: 5px solid #334155;
+    border-radius: 10px;
+    background: #f8fafc;
+}
+
+.admin-dashboard-recent-field {
+    display: flex;
+    gap: 8px;
+    min-width: 0;
+}
+
+.admin-dashboard-recent-field span {
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 900px) {
+    .admin-dashboard-overview {
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            );
+    }
+
+    .admin-dashboard-columns {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .admin-dashboard-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .admin-dashboard-toolbar > div {
+        flex-basis: auto;
+    }
+
+    .admin-dashboard-overview {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-dashboard-recent-card {
+        grid-template-columns: 1fr;
+    }
+}
+
