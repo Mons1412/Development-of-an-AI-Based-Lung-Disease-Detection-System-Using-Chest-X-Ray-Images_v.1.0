@@ -15,6 +15,9 @@ from lung_xray_api.api.dependencies.auth import (
 from lung_xray_api.application.services.analysis_service import (
     analysis_service,
 )
+from lung_xray_api.application.services.admin_dashboard_service import (
+    admin_dashboard_service,
+)
 from lung_xray_api.infrastructure.persistence.database import (
     get_db,
 )
@@ -26,6 +29,9 @@ from lung_xray_api.infrastructure.persistence.repositories.user_repository impor
 )
 from lung_xray_api.schemas.analysis import (
     AnalysisResponse,
+)
+from lung_xray_api.schemas.admin_dashboard import (
+    AdminDashboardResponse,
 )
 from lung_xray_api.schemas.auth import (
     UserResponse,
@@ -39,6 +45,38 @@ router = APIRouter(
 
 
 user_repository = UserRepository()
+
+
+@router.get(
+    "/dashboard",
+    response_model=AdminDashboardResponse,
+)
+def get_admin_dashboard(
+    recent_limit: Annotated[
+        int,
+        Query(
+            ge=1,
+            le=50,
+            description=(
+                "Maximum number of recent "
+                "analyses returned."
+            ),
+        ),
+    ] = 10,
+    db: Session = Depends(get_db),
+    current_admin: UserModel = Depends(
+        require_admin
+    ),
+):
+    del current_admin
+
+    return (
+        admin_dashboard_service
+        .get_dashboard(
+            db,
+            recent_limit=recent_limit,
+        )
+    )
 
 
 @router.get(
