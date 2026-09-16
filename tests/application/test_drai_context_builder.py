@@ -123,6 +123,7 @@ def make_analysis(
         )
 
     return SimpleNamespace(
+        patient_id=77,
         status=status,
         ai_model=model,
         prediction=prediction,

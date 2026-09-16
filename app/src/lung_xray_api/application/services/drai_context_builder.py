@@ -160,6 +160,11 @@ class DrAIContextBuilder:
         patient: PatientProfileModel,
     ) -> DrAIContext:
 
+        if analysis.patient_id != patient.id:
+            raise ValueError(
+                "Analysis does not belong to patient."
+            )
+
         if analysis.status != "COMPLETED":
             raise ValueError(
                 "Dr.AI context requires a "
