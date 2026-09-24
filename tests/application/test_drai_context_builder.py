@@ -290,3 +290,29 @@ def test_rejects_missing_probabilities():
             ),
             patient=make_patient(),
         )
+
+
+def test_includes_anthropometrics_and_new_clinical_history_fields():
+    from datetime import date
+    from dataclasses import asdict
+    patient = make_patient()
+    patient.date_of_birth = date(2004, 12, 31)
+    patient.weight_kg = Decimal("65.5")
+    patient.height_cm = Decimal("170.0")
+    history = make_history(1)
+    history.current_complaint_hpi = "Ho kéo dài"
+    history.allergy_history = "Vỏ tôm"
+    history.appetite = "Chán ăn"
+    history.sleep = "Khó ngủ"
+    context = DrAIContextBuilder(StubHistoryRepository([history])).build(
+        object(), analysis=make_analysis(), patient=patient)
+    today = date.today()
+    assert context.patient.age == today.year - 2004 - ((today.month, today.day) < (12, 31))
+    assert context.patient.weight_kg == 65.5
+    assert context.patient.height_cm == 170.0
+    latest = asdict(context.medical_histories[0])
+    assert latest["current_complaint_hpi"] == "Ho kéo dài"
+    assert latest["allergy_history"] == "Vỏ tôm"
+    assert latest["appetite"] == "Chán ăn"
+    assert latest["sleep"] == "Khó ngủ"
+    assert context.report_metadata.patient_code == "PXSECRET"

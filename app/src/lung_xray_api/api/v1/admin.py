@@ -11,7 +11,9 @@ from sqlalchemy.orm import Session
 
 from lung_xray_api.api.dependencies.auth import (
     require_admin,
+    get_current_user,
 )
+from lung_xray_api.api.v1.admin_patients import router as patient_router
 from lung_xray_api.application.services.analysis_service import (
     analysis_service,
 )
@@ -32,6 +34,7 @@ from lung_xray_api.schemas.analysis import (
 )
 from lung_xray_api.schemas.admin_dashboard import (
     AdminDashboardResponse,
+    DashboardSummaryResponse,
 )
 from lung_xray_api.schemas.auth import (
     UserResponse,
@@ -44,7 +47,19 @@ router = APIRouter(
 )
 
 
+router.include_router(patient_router)
+
 user_repository = UserRepository()
+
+
+@router.get("/dashboard/summary", response_model=DashboardSummaryResponse)
+def get_dashboard_summary(
+    db: Session = Depends(get_db),
+    current_user: UserModel = Depends(get_current_user),
+):
+    """Authenticated users may view aggregate statistics, without patient records."""
+    del current_user
+    return admin_dashboard_service.get_summary(db)
 
 
 @router.get(

@@ -80,6 +80,7 @@ class MedicalAdviceRepository:
                 MedicalAdviceModel.created_at.desc(),
                 MedicalAdviceModel.id.desc(),
             )
+            .limit(1)
         )
 
         return list(

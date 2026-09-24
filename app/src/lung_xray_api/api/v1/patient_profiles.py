@@ -19,6 +19,16 @@ from lung_xray_api.schemas.patient_profile import (
 )
 
 
+from lung_xray_api.application.services.patient_profile_history_service import (
+    patient_profile_history_service,
+)
+from lung_xray_api.schemas.patient_profile_history import (
+    PatientProfileHistoryResponse,
+    PatientProfileMeasurementUpdate,
+    PatientProfileMeasurementUpdateResponse,
+)
+
+
 router = APIRouter(
     prefix="/api/v1/patient-profile",
     tags=["Patient Profile"],
@@ -97,3 +107,75 @@ def update_my_patient_profile(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=str(exc),
         )
+
+
+@router.patch(
+    "/me/measurements",
+    response_model=(
+        PatientProfileMeasurementUpdateResponse
+    ),
+)
+def update_my_profile_measurements(
+    request: PatientProfileMeasurementUpdate,
+    db: Session = Depends(
+        get_db
+    ),
+    current_user: UserModel = Depends(
+        require_user
+    ),
+):
+    try:
+        return (
+            patient_profile_history_service
+            .update_measurements(
+                db,
+                current_user,
+                request,
+            )
+        )
+
+    except LookupError as exc:
+        raise HTTPException(
+            status_code=(
+                status.HTTP_404_NOT_FOUND
+            ),
+            detail=str(
+                exc
+            ),
+        ) from exc
+
+
+@router.get(
+    "/me/history",
+    response_model=(
+        list[
+            PatientProfileHistoryResponse
+        ]
+    ),
+)
+def get_my_profile_history(
+    db: Session = Depends(
+        get_db
+    ),
+    current_user: UserModel = Depends(
+        require_user
+    ),
+):
+    try:
+        return (
+            patient_profile_history_service
+            .list_history(
+                db,
+                current_user,
+            )
+        )
+
+    except LookupError as exc:
+        raise HTTPException(
+            status_code=(
+                status.HTTP_404_NOT_FOUND
+            ),
+            detail=str(
+                exc
+            ),
+        ) from exc

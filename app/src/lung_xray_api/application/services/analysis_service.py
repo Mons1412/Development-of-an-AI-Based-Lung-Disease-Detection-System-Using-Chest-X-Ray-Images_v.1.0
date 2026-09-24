@@ -1,4 +1,5 @@
-﻿from datetime import datetime, timezone
+from pathlib import Path
+from datetime import datetime, timezone
 from uuid import uuid4
 
 from lung_xray_api.infrastructure.imaging.semantic_chest_xray_validator import (
@@ -489,6 +490,60 @@ class AnalysisService:
             analysis,
             patient.patient_code,
         )
+
+
+    def resolve_my_analysis_image_path(
+        self,
+        db: Session,
+        current_user: UserModel,
+        analysis_id: int,
+    ) -> Path:
+
+        patient = self._get_patient(
+            db,
+            current_user,
+        )
+
+        analysis = (
+            self.analysis_repository
+            .get_by_id_for_patient(
+                db,
+                analysis_id=analysis_id,
+                patient_id=patient.id,
+            )
+        )
+
+        if analysis is None:
+            raise LookupError(
+                "Analysis not found."
+            )
+
+        file_path = Path(
+            analysis.stored_image_path
+        )
+
+        if not file_path.is_absolute():
+            file_path = (
+                Path.cwd()
+                / file_path
+            )
+
+        file_path = file_path.resolve()
+
+        if (
+            not file_path.is_file()
+            or file_path.suffix.lower()
+            not in {
+                ".jpg",
+                ".jpeg",
+                ".png",
+            }
+        ):
+            raise FileNotFoundError(
+                "Analysis image not found."
+            )
+
+        return file_path
 
 
 analysis_service = AnalysisService()

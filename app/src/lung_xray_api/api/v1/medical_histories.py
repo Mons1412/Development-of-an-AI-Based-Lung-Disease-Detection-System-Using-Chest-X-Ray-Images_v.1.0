@@ -19,6 +19,16 @@ from lung_xray_api.schemas.medical_history import (
 )
 
 
+from lung_xray_api.application.services.medical_history_intake_service import (
+    medical_history_intake_service,
+)
+from lung_xray_api.schemas.medical_history_intake import (
+    MedicalHistoryIntakeCreate,
+    MedicalHistoryIntakePage,
+    MedicalHistoryIntakeResponse,
+)
+
+
 router = APIRouter(
     prefix="/api/v1/medical-histories",
     tags=["Medical History"],
@@ -68,6 +78,99 @@ def list_my_medical_histories(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=str(exc),
         )
+
+
+@router.get(
+    "/intake",
+    response_model=(
+        MedicalHistoryIntakePage
+    ),
+)
+def list_my_medical_history_intake(
+    limit: int = 20,
+    offset: int = 0,
+    db: Session = Depends(
+        get_db
+    ),
+    current_user: UserModel = Depends(
+        require_user
+    ),
+):
+    if (
+        limit < 1
+        or limit > 100
+        or offset < 0
+    ):
+        raise HTTPException(
+            status_code=(
+                status.HTTP_422_UNPROCESSABLE_ENTITY
+            ),
+            detail=(
+                "limit must be between 1 and 100 "
+                "and offset must be >= 0."
+            ),
+        )
+
+
+    try:
+        return (
+            medical_history_intake_service
+            .list_page(
+                db,
+                current_user,
+                limit=limit,
+                offset=offset,
+            )
+        )
+
+    except LookupError as exc:
+        raise HTTPException(
+            status_code=(
+                status.HTTP_404_NOT_FOUND
+            ),
+            detail=str(
+                exc
+            ),
+        ) from exc
+
+
+@router.post(
+    "/intake",
+    response_model=(
+        MedicalHistoryIntakeResponse
+    ),
+    status_code=(
+        status.HTTP_201_CREATED
+    ),
+)
+def create_my_medical_history_intake(
+    request: MedicalHistoryIntakeCreate,
+    db: Session = Depends(
+        get_db
+    ),
+    current_user: UserModel = Depends(
+        require_user
+    ),
+):
+    try:
+        return (
+            medical_history_intake_service
+            .create_history(
+                db,
+                current_user,
+                request,
+            )
+        )
+
+    except LookupError as exc:
+        raise HTTPException(
+            status_code=(
+                status.HTTP_404_NOT_FOUND
+            ),
+            detail=str(
+                exc
+            ),
+        ) from exc
 
 
 @router.get(

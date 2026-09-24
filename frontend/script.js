@@ -125,24 +125,19 @@ const profileStatus =
         "profile-status"
     );
 
-const profilePatientCodeInput =
-    document.getElementById(
-        "profile-patient-code"
-    );
-
 const profileFullNameInput =
     document.getElementById(
         "profile-full-name"
     );
 
-const profileBirthYearInput =
+const profileDateOfBirthInput =
     document.getElementById(
-        "profile-birth-year"
+        "profile-date-of-birth"
     );
 
-const profileGenderInput =
+const profileSexInput =
     document.getElementById(
-        "profile-gender"
+        "profile-sex"
     );
 
 const profilePhoneInput =
@@ -150,9 +145,19 @@ const profilePhoneInput =
         "profile-phone"
     );
 
-const profileAddressInput =
+const profileEmailInput =
     document.getElementById(
-        "profile-address"
+        "profile-email"
+    );
+
+const profileHeightInput =
+    document.getElementById(
+        "profile-height"
+    );
+
+const profileWeightInput =
+    document.getElementById(
+        "profile-weight"
     );
 
 const loadProfileButton =
@@ -164,6 +169,8 @@ const saveProfileButton =
     document.getElementById(
         "save-profile-button"
     );
+
+
 const medicalHistoryStatus =
     document.getElementById(
         "medical-history-status"
@@ -194,44 +201,59 @@ const medicalHistoryEditorTitle =
         "medical-history-editor-title"
     );
 
-const medicalHistoryIdInput =
+const medicalHistoryCurrentComplaintInput =
     document.getElementById(
-        "medical-history-id"
+        "medical-history-current-complaint"
     );
 
-const medicalHistoryDiseasesInput =
+const medicalHistoryPastMedicalInput =
     document.getElementById(
-        "medical-history-diseases"
+        "medical-history-past-medical"
     );
 
-const medicalHistoryMedicationsInput =
+const medicalHistoryPastMedicationInput =
     document.getElementById(
-        "medical-history-medications"
+        "medical-history-past-medication"
     );
 
-const medicalHistoryAllergiesInput =
+const medicalHistoryAllergyInput =
     document.getElementById(
-        "medical-history-allergies"
+        "medical-history-allergy"
     );
 
-const medicalHistorySmokingStatusInput =
+const medicalHistoryDietInput =
     document.getElementById(
-        "medical-history-smoking-status"
+        "medical-history-diet"
     );
 
-const medicalHistoryAlcoholStatusInput =
+const medicalHistoryAppetiteInput =
     document.getElementById(
-        "medical-history-alcohol-status"
+        "medical-history-appetite"
     );
 
-const medicalHistoryOccupationalExposureInput =
+const medicalHistorySleepInput =
     document.getElementById(
-        "medical-history-occupational-exposure"
+        "medical-history-sleep"
     );
 
-const medicalHistoryNotesInput =
+const medicalHistoryExerciseInput =
     document.getElementById(
-        "medical-history-notes"
+        "medical-history-exercise"
+    );
+
+const medicalHistoryBowelBladderInput =
+    document.getElementById(
+        "medical-history-bowel-bladder"
+    );
+
+const medicalHistoryHabitsInput =
+    document.getElementById(
+        "medical-history-habits"
+    );
+
+const medicalHistoryFamilyInput =
+    document.getElementById(
+        "medical-history-family"
     );
 
 const saveMedicalHistoryButton =
@@ -244,90 +266,6 @@ const clearMedicalHistoryButton =
         "clear-medical-history-button"
     );
 
-const adminDashboardSection =
-    document.getElementById(
-        "admin-dashboard-section"
-    );
-
-const adminDashboardRecentLimitInput =
-    document.getElementById(
-        "admin-dashboard-recent-limit"
-    );
-
-const adminDashboardRefreshButton =
-    document.getElementById(
-        "admin-dashboard-refresh-button"
-    );
-
-const adminDashboardStatus =
-    document.getElementById(
-        "admin-dashboard-status"
-    );
-
-const adminDashboardOverview =
-    document.getElementById(
-        "admin-dashboard-overview"
-    );
-
-const adminDashboardPredictions =
-    document.getElementById(
-        "admin-dashboard-predictions"
-    );
-
-const adminDashboardModelUsage =
-    document.getElementById(
-        "admin-dashboard-model-usage"
-    );
-
-const adminDashboardRecentAnalyses =
-    document.getElementById(
-        "admin-dashboard-recent-analyses"
-    );
-
-const adminPatientCodeInput =
-    document.getElementById(
-        "admin-patient-code"
-    );
-
-const adminHistoryLimitInput =
-    document.getElementById(
-        "admin-history-limit"
-    );
-
-const adminHistoryOffsetInput =
-    document.getElementById(
-        "admin-history-offset"
-    );
-
-const adminSearchButton =
-    document.getElementById(
-        "admin-search-button"
-    );
-
-const adminHistoryPreviousButton =
-    document.getElementById(
-        "admin-history-previous-button"
-    );
-
-const adminHistoryNextButton =
-    document.getElementById(
-        "admin-history-next-button"
-    );
-
-const adminSearchStatus =
-    document.getElementById(
-        "admin-search-status"
-    );
-
-const adminSearchSummary =
-    document.getElementById(
-        "admin-search-summary"
-    );
-
-const adminSearchResults =
-    document.getElementById(
-        "admin-search-results"
-    );
 
 let activeResultFilter = "ALL";
 
@@ -1988,28 +1926,7 @@ function renderResultItem(
             "result-details";
 
 
-        addDetail(
-            details,
-            "Analysis code",
-            analysis.analysis_code
-        );
-
-        addDetail(
-            details,
-            "Patient code",
-            analysis.patient_code
-        );
-
-        addDetail(
-            details,
-            "Model",
-            (
-                `${analysis.model_key} `
-                + `${analysis.model_version}`
-            )
-        );
-
-        addDetail(
+                                addDetail(
             details,
             "Confidence",
             formatConfidence(
@@ -2115,7 +2032,8 @@ function renderResultItem(
 
     const drAIControls =
         createDrAIControls(
-            item
+            item,
+            {autoGenerate: true}
         );
 
     if (drAIControls !== null) {
@@ -2174,6 +2092,10 @@ function renderBatchResult(data) {
 );
 
     resultSection.hidden = false;
+
+    applyResultFilter(
+        activeResultFilter
+    );
 }
 
 
@@ -2334,12 +2256,14 @@ function createReportControls(
             analysisLike
         );
 
+
     if (
         analysisId === null
         || analysisStatus !== "COMPLETED"
     ) {
         return null;
     }
+
 
     const container =
         document.createElement(
@@ -2350,7 +2274,10 @@ function createReportControls(
         "report-actions";
 
     container.dataset.analysisId =
-        String(analysisId);
+        String(
+            analysisId
+        );
+
 
     const title =
         document.createElement(
@@ -2363,6 +2290,7 @@ function createReportControls(
     title.textContent =
         "PDF Report";
 
+
     const controls =
         document.createElement(
             "div"
@@ -2370,6 +2298,7 @@ function createReportControls(
 
     controls.className =
         "report-actions-row";
+
 
     const languageSelect =
         document.createElement(
@@ -2384,42 +2313,36 @@ function createReportControls(
         "Report language"
     );
 
+
     const viOption =
         document.createElement(
             "option"
         );
 
-    viOption.value = "vi";
+    viOption.value =
+        "vi";
+
     viOption.textContent =
         "Vietnamese";
+
 
     const enOption =
         document.createElement(
             "option"
         );
 
-    enOption.value = "en";
+    enOption.value =
+        "en";
+
     enOption.textContent =
         "English";
+
 
     languageSelect.append(
         viOption,
         enOption
     );
 
-    const generateButton =
-        document.createElement(
-            "button"
-        );
-
-    generateButton.type =
-        "button";
-
-    generateButton.className =
-        "report-generate-button";
-
-    generateButton.textContent =
-        "Generate PDF";
 
     const previewButton =
         document.createElement(
@@ -2430,13 +2353,11 @@ function createReportControls(
         "button";
 
     previewButton.className =
-        "secondary report-preview-button";
+        "report-preview-button";
 
     previewButton.textContent =
         "Preview";
 
-    previewButton.disabled =
-        true;
 
     const downloadButton =
         document.createElement(
@@ -2452,29 +2373,18 @@ function createReportControls(
     downloadButton.textContent =
         "Download";
 
-    downloadButton.disabled =
-        true;
 
-    const statusText =
+    const status =
         document.createElement(
             "div"
         );
 
-    statusText.className =
+    status.className =
         "report-action-status";
 
-    statusText.setAttribute(
-        "role",
-        "status"
-    );
+    status.textContent =
+        "Ready to preview or download.";
 
-    statusText.setAttribute(
-        "aria-live",
-        "polite"
-    );
-
-    statusText.textContent =
-        "No PDF generated yet.";
 
     let currentReportId =
         null;
@@ -2482,147 +2392,144 @@ function createReportControls(
     let currentReportCode =
         null;
 
-    generateButton.addEventListener(
-        "click",
-        async () => {
-            const token =
-                getReportAccessToken();
 
-            if (!token) {
-                statusText.textContent =
-                    "Access token is required.";
-                return;
-            }
+    async function ensureReport(
+        token
+    ) {
+        if (
+            currentReportId !== null
+        ) {
+            return;
+        }
 
-            generateButton.disabled =
-                true;
 
-            languageSelect.disabled =
-                true;
+        status.textContent =
+            "Generating PDF report...";
 
-            statusText.textContent =
-                "Generating PDF...";
 
-            try {
-                const response =
-                    await fetch(
-                        "/api/v1/reports",
-                        {
-                            method: "POST",
+        const response =
+            await fetch(
+                "/api/v1/reports",
+                {
+                    method:
+                        "POST",
 
-                            headers: {
-                                Authorization:
-                                    `Bearer ${token}`,
+                    headers: {
+                        Authorization:
+                            `Bearer ${token}`,
 
-                                "Content-Type":
-                                    "application/json",
-                            },
+                        "Content-Type":
+                            "application/json",
+                    },
 
-                            body:
-                                JSON.stringify(
-                                    {
-                                        analysis_id:
-                                            analysisId,
+                    body:
+                        JSON.stringify(
+                            {
+                                analysis_id:
+                                    analysisId,
 
-                                        language:
-                                            languageSelect.value,
-                                    }
-                                ),
-                        }
-                    );
-
-                const payload =
-                    await parseResponse(
-                        response
-                    );
-
-                if (!response.ok) {
-                    throw new Error(
-                        getReportErrorMessage(
-                            payload,
-                            (
-                                "Could not generate PDF "
-                                + `(${response.status}).`
-                            )
-                        )
-                    );
+                                language:
+                                    languageSelect.value,
+                            }
+                        ),
                 }
+            );
 
-                currentReportId =
-                    Number(
-                        payload.id
-                    );
 
-                currentReportCode =
-                    String(
-                        payload.report_code
-                        ?? (
-                            "report-"
-                            + currentReportId
-                        )
-                    );
+        const payload =
+            await parseResponse(
+                response
+            );
 
-                if (
-                    !Number.isInteger(
-                        currentReportId
-                    )
-                    || currentReportId <= 0
-                ) {
-                    throw new Error(
-                        "The report API returned an invalid report ID."
-                    );
-                }
 
-                previewButton.disabled =
-                    false;
+        if (!response.ok) {
+            throw new Error(
+                getReportErrorMessage(
+                    payload
+                )
+            );
+        }
 
-                downloadButton.disabled =
-                    false;
 
-                statusText.textContent =
-                    (
-                        "Generated "
-                        + currentReportCode
-                        + "."
-                    );
+        const reportId =
+            Number(
+                payload.id
+            );
 
-            } catch (error) {
-                statusText.textContent =
-                    (
-                        "PDF generation failed: "
-                        + (
-                            error?.message
-                            ?? String(error)
-                        )
-                    );
 
-            } finally {
-                generateButton.disabled =
-                    false;
+        if (
+            !Number.isInteger(
+                reportId
+            )
+            || reportId <= 0
+        ) {
+            throw new Error(
+                "The report API returned "
+                + "an invalid report ID."
+            );
+        }
 
-                languageSelect.disabled =
-                    false;
-            }
+
+        currentReportId =
+            reportId;
+
+        currentReportCode =
+            (
+                payload.report_code
+                || (
+                    "report-"
+                    + reportId
+                )
+            );
+    }
+
+
+    function setControlsDisabled(
+        disabled
+    ) {
+        languageSelect.disabled =
+            disabled;
+
+        previewButton.disabled =
+            disabled;
+
+        downloadButton.disabled =
+            disabled;
+    }
+
+
+    languageSelect.addEventListener(
+        "change",
+        () => {
+            currentReportId =
+                null;
+
+            currentReportCode =
+                null;
+
+            status.textContent =
+                (
+                    "Language changed. "
+                    + "A new report will "
+                    + "be generated."
+                );
         }
     );
+
 
     previewButton.addEventListener(
         "click",
         async () => {
-            if (
-                currentReportId === null
-            ) {
-                return;
-            }
-
             const token =
                 getReportAccessToken();
 
             if (!token) {
-                statusText.textContent =
-                    "Access token is required.";
+                status.textContent =
+                    "Please sign in first.";
+
                 return;
             }
+
 
             const previewWindow =
                 window.open(
@@ -2630,25 +2537,44 @@ function createReportControls(
                     "_blank"
                 );
 
+
             if (!previewWindow) {
-                statusText.textContent =
+                status.textContent =
                     (
-                        "Preview was blocked by the browser. "
-                        + "Allow pop-ups and try again."
+                        "Preview was blocked "
+                        + "by the browser. "
+                        + "Please allow pop-ups."
                     );
+
                 return;
             }
+
 
             previewWindow.opener =
                 null;
 
-            previewButton.disabled =
-                true;
+            previewWindow.document.title =
+                "PDF Preview";
 
-            statusText.textContent =
-                "Loading PDF preview...";
+            previewWindow.document.body.textContent =
+                "Preparing PDF preview...";
+
+
+            setControlsDisabled(
+                true
+            );
+
 
             try {
+                await ensureReport(
+                    token
+                );
+
+
+                status.textContent =
+                    "Loading PDF preview...";
+
+
                 const blob =
                     await fetchReportPdf(
                         currentReportId,
@@ -2656,13 +2582,17 @@ function createReportControls(
                         token
                     );
 
+
                 const objectUrl =
                     URL.createObjectURL(
                         blob
                     );
 
-                previewWindow.location.href =
-                    objectUrl;
+
+                previewWindow.location.replace(
+                    objectUrl
+                );
+
 
                 window.setTimeout(
                     () => {
@@ -2673,53 +2603,57 @@ function createReportControls(
                     60000
                 );
 
-                statusText.textContent =
+
+                status.textContent =
                     "PDF preview opened.";
 
             } catch (error) {
                 previewWindow.close();
 
-                statusText.textContent =
+                status.textContent =
                     (
                         "Preview failed: "
-                        + (
-                            error?.message
-                            ?? String(error)
-                        )
+                        + error.message
                     );
 
             } finally {
-                previewButton.disabled =
-                    false;
+                setControlsDisabled(
+                    false
+                );
             }
         }
     );
 
+
     downloadButton.addEventListener(
         "click",
         async () => {
-            if (
-                currentReportId === null
-            ) {
-                return;
-            }
-
             const token =
                 getReportAccessToken();
 
             if (!token) {
-                statusText.textContent =
-                    "Access token is required.";
+                status.textContent =
+                    "Please sign in first.";
+
                 return;
             }
 
-            downloadButton.disabled =
-                true;
 
-            statusText.textContent =
-                "Preparing PDF download...";
+            setControlsDisabled(
+                true
+            );
+
 
             try {
+                await ensureReport(
+                    token
+                );
+
+
+                status.textContent =
+                    "Preparing PDF download...";
+
+
                 const blob =
                     await fetchReportPdf(
                         currentReportId,
@@ -2727,10 +2661,12 @@ function createReportControls(
                         token
                     );
 
+
                 const objectUrl =
                     URL.createObjectURL(
                         blob
                     );
+
 
                 const link =
                     document.createElement(
@@ -2742,20 +2678,25 @@ function createReportControls(
 
                 link.download =
                     (
-                        currentReportCode
-                        ?? (
-                            "report-"
-                            + currentReportId
+                        (
+                            currentReportCode
+                            || (
+                                "report-"
+                                + currentReportId
+                            )
                         )
-                    )
-                    + ".pdf";
+                        + ".pdf"
+                    );
+
 
                 document.body.appendChild(
                     link
                 );
 
                 link.click();
+
                 link.remove();
+
 
                 window.setTimeout(
                     () => {
@@ -2766,41 +2707,43 @@ function createReportControls(
                     1000
                 );
 
-                statusText.textContent =
+
+                status.textContent =
                     "PDF download started.";
 
             } catch (error) {
-                statusText.textContent =
+                status.textContent =
                     (
                         "Download failed: "
-                        + (
-                            error?.message
-                            ?? String(error)
-                        )
+                        + error.message
                     );
 
             } finally {
-                downloadButton.disabled =
-                    false;
+                setControlsDisabled(
+                    false
+                );
             }
         }
     );
 
+
     controls.append(
         languageSelect,
-        generateButton,
         previewButton,
         downloadButton
     );
 
+
     container.append(
         title,
         controls,
-        statusText
+        status
     );
+
 
     return container;
 }
+
 
 function getDrAIErrorMessage(
     response,
@@ -2839,14 +2782,14 @@ function getDrAIErrorMessage(
 
     if (response.status === 502) {
         return (
-            "Dr.AI provider failed to "
+            detailText || "Dr.AI provider failed to "
             + "generate a response."
         );
     }
 
     if (response.status === 503) {
         return (
-            "Dr.AI is not configured "
+            detailText || "Dr.AI is not configured "
             + "on the server."
         );
     }
@@ -2905,29 +2848,43 @@ function createDrAIAdviceCard(
 
     meta.textContent =
         (
-            `${language} ? ${provider}`
-            + ` ? ${model}`
-            + ` ? ${createdAt}`
+            `${language} · ${provider}`
+            + ` · ${model}`
+            + ` · ${createdAt}`
         );
 
-    const text =
-        document.createElement(
-            "p"
-        );
-
-    text.className =
-        "drai-advice-text";
-
-    text.textContent =
-        String(
-            advice?.advice_text
-            || "No advice text returned."
-        );
-
-    card.append(
-        meta,
-        text
-    );
+    const summary = advice?.summary;
+    const riskLabels = {LOW: "🟢 Low Risk", MEDIUM: "🟡 Medium Risk", HIGH: "🔴 High Risk"};
+    if (summary && riskLabels[summary.risk_level]) {
+        const risk = document.createElement("div");
+        risk.className = `drai-risk drai-risk-${summary.risk_level.toLowerCase()}`;
+        risk.textContent = riskLabels[summary.risk_level];
+        const conclusion = document.createElement("p");
+        conclusion.textContent = summary.conclusion;
+        const recommendation = document.createElement("p");
+        recommendation.textContent = summary.recommendation;
+        card.append(risk, conclusion, recommendation);
+    } else {
+        const legacy = document.createElement("p");
+        legacy.textContent = advice?.language === "vi"
+            ? "Tư vấn trước đây chưa có mức cảnh báo. Xem nội dung đầy đủ bên dưới."
+            : "This previous advice has no warning level. View the full text below.";
+        card.appendChild(legacy);
+    }
+    const details = document.createElement("details");
+    const toggle = document.createElement("summary");
+    const vietnamese = advice?.language === "vi";
+    toggle.textContent = vietnamese ? "Hiển thị thêm" : "Show more";
+    details.addEventListener("toggle", () => {
+        toggle.textContent = vietnamese
+            ? (details.open ? "Thu gọn" : "Hiển thị thêm")
+            : (details.open ? "Show less" : "Show more");
+    });
+    const text = document.createElement("div");
+    text.className = "drai-advice-text";
+    text.textContent = String(advice?.advice_text || "No advice text returned.");
+    details.append(toggle, meta, text);
+    card.appendChild(details);
 
     return card;
 }
@@ -2967,7 +2924,9 @@ function renderDrAIAdviceHistory(
         return;
     }
 
-    for (const advice of advices) {
+    const advice = advices[0];
+
+    if (advice) {
         container.appendChild(
             createDrAIAdviceCard(
                 advice
@@ -3025,409 +2984,354 @@ async function fetchDrAIAdviceHistory(
 }
 
 
-function createDrAIControls(
-    analysisLike
-) {
-    const analysisId =
-        getReportAnalysisId(
-            analysisLike
-        );
+// Serialize automatic batch advice requests to avoid a burst of provider calls.
+let drAIInitialQueue = Promise.resolve();
 
-    const analysisStatus =
-        getReportAnalysisStatus(
-            analysisLike
-        );
-
-    if (
-        analysisId === null
-        || analysisStatus !== "COMPLETED"
-    ) {
+function createDrAIControls(analysisLike, {autoGenerate = false} = {}) {
+    const analysisId = getReportAnalysisId(analysisLike);
+    if (analysisId === null || getReportAnalysisStatus(analysisLike) !== "COMPLETED") {
         return null;
     }
+    const container = document.createElement("section");
+    container.className = "report-actions drai-actions";
+    container.dataset.analysisId = String(analysisId);
+    const title = document.createElement("strong");
+    title.className = "report-actions-title";
+    title.textContent = "Dr.AI";
+    const controls = document.createElement("div");
+    controls.className = "report-actions-row drai-actions-row";
+    const languageSelect = document.createElement("select");
+    languageSelect.className = "report-language-select drai-language-select";
+    languageSelect.setAttribute("aria-label", "Dr.AI language");
+    for (const [value, label] of [["vi", "Vietnamese"], ["en", "English"]]) {
+        const option = document.createElement("option");
+        option.value = value;
+        option.textContent = label;
+        languageSelect.appendChild(option);
+    }
+    languageSelect.value = "vi";
+    const previewButton = document.createElement("button");
+    previewButton.type = "button";
+    previewButton.className = "secondary drai-preview-button";
+    previewButton.textContent = "Preview PDF";
+    previewButton.title = "Preview the latest Dr.AI advice as PDF";
 
-    const container =
-        document.createElement(
-            "section"
-        );
-
-    container.className =
-        "report-actions drai-actions";
-
-    container.dataset.analysisId =
-        String(analysisId);
-
-    const title =
-        document.createElement(
-            "strong"
-        );
-
-    title.className =
-        "report-actions-title";
-
-    title.textContent =
-        "Dr.AI";
-
-    const controls =
-        document.createElement(
-            "div"
-        );
-
-    controls.className =
-        (
-            "report-actions-row "
-            + "drai-actions-row"
-        );
-
-    const languageSelect =
-        document.createElement(
-            "select"
-        );
-
-    languageSelect.className =
-        (
-            "report-language-select "
-            + "drai-language-select"
-        );
-
-    languageSelect.setAttribute(
-        "aria-label",
-        "Dr.AI response language"
-    );
-
-    const viOption =
-        document.createElement(
-            "option"
-        );
-
-    viOption.value = "vi";
-    viOption.textContent =
-        "Vietnamese";
-
-    const enOption =
-        document.createElement(
-            "option"
-        );
-
-    enOption.value = "en";
-    enOption.textContent =
-        "English";
-
-    languageSelect.append(
-        viOption,
-        enOption
-    );
-
-    const generateButton =
-        document.createElement(
-            "button"
-        );
-
-    generateButton.type =
-        "button";
-
-    generateButton.className =
-        "drai-generate-button";
-
-    generateButton.textContent =
-        "Generate Dr.AI";
-
-    const historyButton =
-        document.createElement(
-            "button"
-        );
-
-    historyButton.type =
-        "button";
-
-    historyButton.className =
-        (
-            "secondary "
-            + "drai-history-button"
-        );
-
-    historyButton.textContent =
-        "Load History";
-
+    const downloadButton = document.createElement("button");
+    downloadButton.type = "button";
+    downloadButton.className = "secondary drai-download-button";
+    downloadButton.textContent = "Download PDF";
+    downloadButton.title = "Download the latest Dr.AI advice as PDF";
+    const statusText = document.createElement("p");
+    statusText.className = "report-action-status drai-status";
+    statusText.setAttribute("aria-live", "polite");
+    const disclaimer = document.createElement("p");
+    disclaimer.className = "drai-disclaimer";
+    disclaimer.textContent = "AI-generated explanation only. It is not a confirmed medical diagnosis.";
+    const historyTitle = document.createElement("strong");
+    historyTitle.className = "drai-history-title";
+    historyTitle.textContent = "Previous Dr.AI advice";
+    const historyContainer = document.createElement("div");
+    historyContainer.className = "drai-history";
+    historyContainer.setAttribute("aria-live", "polite");
+    historyContainer.textContent = "Loading Dr.AI advice...";
     controls.append(
         languageSelect,
-        generateButton,
-        historyButton
+        previewButton,
+        downloadButton
     );
+    container.append(title, controls, statusText, disclaimer, historyTitle, historyContainer);
 
-    const statusText =
-        document.createElement(
-            "p"
-        );
-
-    statusText.className =
-        (
-            "report-action-status "
-            + "drai-status"
-        );
-
-    statusText.setAttribute(
-        "aria-live",
-        "polite"
-    );
-
-    statusText.textContent =
-        "Dr.AI is ready.";
-
-    const disclaimer =
-        document.createElement(
-            "p"
-        );
-
-    disclaimer.className =
-        "drai-disclaimer";
-
-    disclaimer.textContent =
-        (
-            "AI-generated explanation only. "
-            + "It is not a confirmed "
-            + "medical diagnosis."
-        );
-
-    const historyTitle =
-        document.createElement(
-            "strong"
-        );
-
-    historyTitle.className =
-        "drai-history-title";
-
-    historyTitle.textContent =
-        "Previous Dr.AI advice";
-
-    const historyContainer =
-        document.createElement(
-            "div"
-        );
-
-    historyContainer.className =
-        "drai-history";
-
-    historyContainer.setAttribute(
-        "aria-live",
-        "polite"
-    );
-
-    const initialMessage =
-        document.createElement(
-            "p"
-        );
-
-    initialMessage.className =
-        "drai-history-empty";
-
-    initialMessage.textContent =
-        "Advice history has not been loaded.";
-
-    historyContainer.appendChild(
-        initialMessage
-    );
-
-    function setBusy(
-        busy
-    ) {
-        languageSelect.disabled =
-            busy;
-
-        generateButton.disabled =
-            busy;
-
-        historyButton.disabled =
-            busy;
+    const ownerToken = getReportAccessToken();
+    let advices = [];
+    let busy = true;
+    function selectedAdvice() {
+        return advices.find(advice => advice.language === languageSelect.value && advice.advice_text);
     }
-
-    historyButton.addEventListener(
-        "click",
-        async () => {
-            const token =
-                getReportAccessToken();
-
-            if (!token) {
-                statusText.textContent =
-                    "Access token is required.";
-
-                return;
-            }
-
-            setBusy(true);
-
-            statusText.textContent =
-                "Loading Dr.AI history...";
-
-            try {
-                const advices =
-                    await fetchDrAIAdviceHistory(
-                        analysisId,
-                        token
-                    );
-
-                renderDrAIAdviceHistory(
-                    historyContainer,
-                    advices
-                );
-
-                statusText.textContent =
-                    (
-                        "Dr.AI history loaded: "
-                        + `${advices.length} `
-                        + "record(s)."
-                    );
-
-            } catch (error) {
-                statusText.textContent =
-                    (
-                        "Dr.AI history failed: "
-                        + error.message
-                    );
-
-            } finally {
-                setBusy(false);
-            }
+    function setBusy(value) {
+        busy = value;
+        languageSelect.disabled = value;
+        previewButton.disabled =
+            value || !selectedAdvice();
+        downloadButton.disabled =
+            value || !selectedAdvice();
+    }
+    function checkSession() {
+        if (!ownerToken || ownerToken !== getReportAccessToken()) {
+            advices = [];
+            historyContainer.textContent = "Please sign in and reload the analyses.";
+            previewButton.disabled = true;
+            downloadButton.disabled = true;
+            throw new Error("Session changed. Please reload the analyses.");
         }
-    );
+    }
+    function showAdvices(records) {
+        checkSession();
+        advices = records.filter(advice => Number(advice.analysis_id) === Number(analysisId))
+            .sort((a, b) => Number(b.id) - Number(a.id))
+            .slice(0, 1);
+        renderDrAIAdviceHistory(historyContainer, advices);
+        setBusy(busy);
+    }
+    async function generate() {
+        checkSession();
+        statusText.textContent = "Generating Dr.AI advice...";
+        const response = await fetch("/api/v1/medical-advices", {
+            method: "POST",
+            headers: {Authorization: `Bearer ${ownerToken}`, "Content-Type": "application/json"},
+            body: JSON.stringify({analysis_id: analysisId, language: languageSelect.value}),
+        });
+        const payload = await parseResponse(response);
+        checkSession();
+        if (!response.ok) throw new Error(getDrAIErrorMessage(response, payload));
+        if (!payload || !Number.isInteger(Number(payload.id)) ||
+            Number(payload.analysis_id) !== Number(analysisId) || !payload.advice_text) {
+            throw new Error("The Dr.AI API returned an invalid advice.");
+        }
+        showAdvices([payload, ...advices.filter(advice => advice.id !== payload.id)]);
+        statusText.textContent = "Dr.AI advice generated. Download is ready.";
+    }
+    languageSelect.addEventListener("change", () => {
+        setBusy(busy);
+        statusText.textContent = selectedAdvice()
+            ? "Download is ready for the selected language."
+            : "No Dr.AI advice is available for this analysis.";
+    });
+    previewButton.addEventListener("click", async () => {
+        if (busy) return;
 
-    generateButton.addEventListener(
-        "click",
-        async () => {
-            const token =
-                getReportAccessToken();
+        const advice = selectedAdvice();
+        if (!advice) return;
 
-            if (!token) {
-                statusText.textContent =
-                    "Access token is required.";
+        // Open immediately to avoid popup blocking
+        // after the asynchronous PDF request.
+        const previewWindow = window.open(
+            "",
+            "_blank"
+        );
 
-                return;
-            }
+        if (!previewWindow) {
+            statusText.textContent =
+                "Dr.AI PDF preview failed: "
+                + "the browser blocked the preview tab.";
+            return;
+        }
 
-            setBusy(true);
+        previewWindow.document.title =
+            "Dr.AI PDF Preview";
+
+        previewWindow.document.body.textContent =
+            "Loading Dr.AI PDF preview...";
+
+        setBusy(true);
+
+        try {
+            checkSession();
 
             statusText.textContent =
-                "Generating Dr.AI advice...";
+                "Preparing Dr.AI PDF preview...";
 
-            try {
-                const response =
-                    await fetch(
-                        "/api/v1/medical-advices",
-                        {
-                            method: "POST",
+            const response = await fetch(
+                `/api/v1/medical-advices/${advice.id}/download`,
+                {
+                    method: "GET",
+                    headers: {
+                        Authorization:
+                            `Bearer ${ownerToken}`,
+                    },
+                    cache: "no-store",
+                }
+            );
 
-                            headers: {
-                                Authorization:
-                                    `Bearer ${token}`,
+            checkSession();
 
-                                "Content-Type":
-                                    "application/json",
-                            },
-
-                            body:
-                                JSON.stringify(
-                                    {
-                                        analysis_id:
-                                            analysisId,
-
-                                        language:
-                                            languageSelect
-                                            .value,
-                                    }
-                                ),
-                        }
-                    );
-
+            if (!response.ok) {
                 const payload =
-                    await parseResponse(
-                        response
-                    );
+                    await parseResponse(response);
 
-                if (!response.ok) {
-                    throw new Error(
-                        getDrAIErrorMessage(
-                            response,
-                            payload
-                        )
-                    );
-                }
-
-                if (
-                    !payload
-                    || !Number.isInteger(
-                        Number(
-                            payload.id
-                        )
+                throw new Error(
+                    getDrAIErrorMessage(
+                        response,
+                        payload
                     )
-                ) {
-                    throw new Error(
-                        "The Dr.AI API returned "
-                        + "an invalid advice ID."
-                    );
-                }
-
-                try {
-                    const advices =
-                        await fetchDrAIAdviceHistory(
-                            analysisId,
-                            token
-                        );
-
-                    renderDrAIAdviceHistory(
-                        historyContainer,
-                        advices
-                    );
-
-                    statusText.textContent =
-                        (
-                            "Dr.AI advice generated "
-                            + "and history refreshed."
-                        );
-
-                } catch (
-                    refreshError
-                ) {
-                    renderDrAIAdviceHistory(
-                        historyContainer,
-                        [
-                            payload
-                        ]
-                    );
-
-                    statusText.textContent =
-                        (
-                            "Dr.AI advice generated, "
-                            + "but history refresh "
-                            + "failed: "
-                            + refreshError.message
-                        );
-                }
-
-            } catch (error) {
-                statusText.textContent =
-                    (
-                        "Dr.AI generation failed: "
-                        + error.message
-                    );
-
-            } finally {
-                setBusy(false);
+                );
             }
+
+            const contentType =
+                response.headers.get(
+                    "content-type"
+                ) || "";
+
+            if (
+                !contentType
+                    .toLowerCase()
+                    .startsWith(
+                        "application/pdf"
+                    )
+            ) {
+                throw new Error(
+                    "Dr.AI preview returned an unexpected file type."
+                );
+            }
+
+            const blob =
+                await response.blob();
+
+            const url =
+                URL.createObjectURL(blob);
+
+            previewWindow.location.href =
+                url;
+
+            setTimeout(
+                () => URL.revokeObjectURL(url),
+                60000
+            );
+
+            statusText.textContent =
+                "Dr.AI PDF preview opened.";
+
+        } catch (error) {
+            if (
+                previewWindow
+                && !previewWindow.closed
+            ) {
+                previewWindow.close();
+            }
+
+            statusText.textContent =
+                "Dr.AI PDF preview failed: "
+                + error.message;
+
+        } finally {
+            setBusy(false);
         }
-    );
+    });
 
-    container.append(
-        title,
-        controls,
-        statusText,
-        disclaimer,
-        historyTitle,
-        historyContainer
-    );
 
+    downloadButton.addEventListener("click", async () => {
+        if (busy) return;
+
+        const advice = selectedAdvice();
+        if (!advice) return;
+
+        setBusy(true);
+
+        try {
+            checkSession();
+
+            statusText.textContent =
+                "Downloading Dr.AI PDF...";
+
+            const response = await fetch(
+                `/api/v1/medical-advices/${advice.id}/download`,
+                {
+                    method: "GET",
+                    headers: {
+                        Authorization:
+                            `Bearer ${ownerToken}`,
+                    },
+                    cache: "no-store",
+                }
+            );
+
+            checkSession();
+
+            if (!response.ok) {
+                const payload =
+                    await parseResponse(response);
+
+                throw new Error(
+                    getDrAIErrorMessage(
+                        response,
+                        payload
+                    )
+                );
+            }
+
+            const contentType =
+                response.headers.get(
+                    "content-type"
+                ) || "";
+
+            if (
+                !contentType
+                    .toLowerCase()
+                    .startsWith(
+                        "application/pdf"
+                    )
+            ) {
+                throw new Error(
+                    "Dr.AI download returned an unexpected file type."
+                );
+            }
+
+            const blob =
+                await response.blob();
+
+            const url =
+                URL.createObjectURL(blob);
+
+            const link =
+                document.createElement("a");
+
+            link.href = url;
+
+            link.download =
+                `DrAI-analysis-${analysisId}-advice-${advice.id}-${advice.language}.pdf`;
+
+            document.body.appendChild(
+                link
+            );
+
+            link.click();
+            link.remove();
+
+            setTimeout(
+                () => URL.revokeObjectURL(url),
+                1000
+            );
+
+            statusText.textContent =
+                "Dr.AI report downloaded (.pdf).";
+
+        } catch (error) {
+            statusText.textContent =
+                "Dr.AI PDF download failed: "
+                + error.message;
+
+        } finally {
+            setBusy(false);
+        }
+    });
+    setBusy(true);
+    statusText.textContent = "Loading Dr.AI advice...";
+    drAIInitialQueue = drAIInitialQueue.then(async () => {
+        try {
+            checkSession();
+            showAdvices(await fetchDrAIAdviceHistory(analysisId, ownerToken));
+            if (autoGenerate && !advices.length) {
+                await generate();
+            } else {
+                statusText.textContent = advices.length
+                    ? "Dr.AI advice loaded."
+                    : "No Dr.AI advice is available.";
+            }
+        } catch (error) {
+            statusText.textContent = "Dr.AI failed: " + error.message;
+            if (!advices.length) {
+                historyContainer.textContent = "No Dr.AI advice is available. " + error.message;
+            }
+        } finally {
+            setBusy(false);
+        }
+    });
     return container;
 }
 
-async function parseResponse(response) {
+
+async function parseResponse(
+    response
+) {
     const text =
         await response.text();
 
@@ -3436,16 +3340,22 @@ async function parseResponse(response) {
     }
 
     try {
-        return JSON.parse(text);
+        return JSON.parse(
+            text
+        );
+
     } catch {
         return {
-            detail: text,
+            detail:
+                text,
         };
     }
 }
 
 
-function getErrorMessage(data) {
+function getErrorMessage(
+    data
+) {
     if (
         typeof data.detail
         === "string"
@@ -3459,17 +3369,23 @@ function getErrorMessage(data) {
         )
     ) {
         return data.detail
-            .map((item) => {
-                return (
-                    item.msg
-                    || "Validation error"
-                );
-            })
-            .join("; ");
+            .map(
+                (item) => {
+                    return (
+                        item.msg
+                        || "Validation error"
+                    );
+                }
+            )
+            .join(
+                "; "
+            );
     }
 
     return "Request failed.";
 }
+
+
 function formatHistoryDate(value) {
     if (!value) {
         return "—";
@@ -3756,6 +3672,418 @@ function createHistoryItem(
 }
 
 
+async function fetchHistoryImageBlob(
+    analysisId,
+    thumbnail
+) {
+    const token =
+        getReportAccessToken();
+
+    if (!token) {
+        throw new Error(
+            "Please sign in first."
+        );
+    }
+
+
+    const suffix =
+        (
+            thumbnail
+                ? "?thumbnail=true"
+                : ""
+        );
+
+
+    const response =
+        await fetch(
+            (
+                "/api/v1/analyses/"
+                + encodeURIComponent(
+                    analysisId
+                )
+                + "/image"
+                + suffix
+            ),
+            {
+                method:
+                    "GET",
+
+                headers: {
+                    Authorization:
+                        `Bearer ${token}`,
+                },
+            }
+        );
+
+
+    if (!response.ok) {
+        const payload =
+            await parseResponse(
+                response
+            );
+
+        throw new Error(
+            getErrorMessage(
+                payload
+            )
+        );
+    }
+
+
+    const contentType =
+        (
+            response.headers.get(
+                "content-type"
+            )
+            || ""
+        );
+
+
+    if (
+        !contentType.startsWith(
+            "image/"
+        )
+    ) {
+        throw new Error(
+            "The server did not return an image."
+        );
+    }
+
+
+    return response.blob();
+}
+
+
+function createHistoryImagePreview(
+    analysis
+) {
+    const wrapper =
+        document.createElement(
+            "div"
+        );
+
+    wrapper.className =
+        "history-image-preview";
+
+
+    const button =
+        document.createElement(
+            "button"
+        );
+
+    button.type =
+        "button";
+
+    button.className =
+        "history-image-preview-button";
+
+    button.setAttribute(
+        "aria-label",
+        (
+            "Preview X-ray "
+            + (
+                analysis.original_filename
+                || ""
+            )
+        ).trim()
+    );
+
+
+    const image =
+        document.createElement(
+            "img"
+        );
+
+    image.className =
+        "history-thumbnail";
+
+    image.alt =
+        (
+            "X-ray preview of "
+            + (
+                analysis.original_filename
+                || "analysis image"
+            )
+        );
+
+    image.hidden =
+        true;
+
+
+    const placeholder =
+        document.createElement(
+            "div"
+        );
+
+    placeholder.className =
+        "history-image-placeholder";
+
+    placeholder.textContent =
+        "Loading X-ray...";
+
+
+    const caption =
+        document.createElement(
+            "div"
+        );
+
+    caption.className =
+        "history-image-caption";
+
+    caption.textContent =
+        "Click image to Preview";
+
+
+    button.append(
+        image,
+        placeholder
+    );
+
+    wrapper.append(
+        button,
+        caption
+    );
+
+
+    async function loadThumbnail() {
+        if (
+            !Number.isInteger(
+                Number(
+                    analysis.id
+                )
+            )
+        ) {
+            placeholder.textContent =
+                "Preview unavailable";
+
+            button.disabled =
+                true;
+
+            return;
+        }
+
+
+        try {
+            const blob =
+                await fetchHistoryImageBlob(
+                    analysis.id,
+                    true
+                );
+
+
+            const objectUrl =
+                URL.createObjectURL(
+                    blob
+                );
+
+
+            image.onload =
+                () => {
+                    URL.revokeObjectURL(
+                        objectUrl
+                    );
+                };
+
+
+            image.src =
+                objectUrl;
+
+            image.hidden =
+                false;
+
+            placeholder.hidden =
+                true;
+
+        } catch (error) {
+            placeholder.textContent =
+                "Preview unavailable";
+
+            caption.textContent =
+                error.message;
+
+            button.disabled =
+                true;
+        }
+    }
+
+
+    button.addEventListener(
+        "click",
+        async () => {
+            const previewWindow =
+                window.open(
+                    "",
+                    "_blank"
+                );
+
+
+            if (!previewWindow) {
+                caption.textContent =
+                    (
+                        "Preview was blocked "
+                        + "by the browser."
+                    );
+
+                return;
+            }
+
+
+            previewWindow.opener =
+                null;
+
+            previewWindow.document.title =
+                (
+                    analysis.original_filename
+                    || "X-ray Preview"
+                );
+
+            previewWindow.document.body.textContent =
+                "Loading X-ray preview...";
+
+
+            button.disabled =
+                true;
+
+            caption.textContent =
+                "Opening Preview...";
+
+
+            try {
+                const blob =
+                    await fetchHistoryImageBlob(
+                        analysis.id,
+                        false
+                    );
+
+
+                const objectUrl =
+                    URL.createObjectURL(
+                        blob
+                    );
+
+
+                previewWindow.location.replace(
+                    objectUrl
+                );
+
+
+                window.setTimeout(
+                    () => {
+                        URL.revokeObjectURL(
+                            objectUrl
+                        );
+                    },
+                    60000
+                );
+
+
+                caption.textContent =
+                    "Click image to Preview";
+
+            } catch (error) {
+                previewWindow.close();
+
+                caption.textContent =
+                    (
+                        "Preview failed: "
+                        + error.message
+                    );
+
+            } finally {
+                button.disabled =
+                    false;
+            }
+        }
+    );
+
+
+    void loadThumbnail();
+
+
+    return wrapper;
+}
+
+
+function decorateHistoryCardWithImage(
+    card,
+    analysis
+) {
+    if (
+        card.querySelector(
+            ".history-record-body"
+        )
+    ) {
+        return;
+    }
+
+
+    const header =
+        card.querySelector(
+            ".history-item-header"
+        );
+
+
+    if (!header) {
+        return;
+    }
+
+
+    const body =
+        document.createElement(
+            "div"
+        );
+
+    body.className =
+        "history-record-body";
+
+
+    const content =
+        document.createElement(
+            "div"
+        );
+
+    content.className =
+        "history-record-content";
+
+
+    const children =
+        Array.from(
+            card.children
+        );
+
+
+    for (
+        const child
+        of children
+    ) {
+        if (
+            child !== header
+        ) {
+            content.appendChild(
+                child
+            );
+        }
+    }
+
+
+    const preview =
+        createHistoryImagePreview(
+            analysis
+        );
+
+
+    body.append(
+        preview,
+        content
+    );
+
+
+    card.appendChild(
+        body
+    );
+}
+
+
 function renderAnalysisHistory(
     analyses,
     limit,
@@ -3764,14 +4092,10 @@ function renderAnalysisHistory(
     historyResults.replaceChildren();
 
     historySummary.hidden =
-        false;
+        true;
 
     historySummary.textContent =
-        (
-            `Showing ${analyses.length} record(s). `
-            + `Offset: ${offset}. `
-            + `Limit: ${limit}.`
-        );
+        "";
 
 
     if (analyses.length === 0) {
@@ -3795,10 +4119,44 @@ function renderAnalysisHistory(
             const analysis
             of analyses
         ) {
-            historyResults.appendChild(
+            const historyCard =
                 createHistoryItem(
                     analysis
-                )
+                );
+
+
+            const historyDetails =
+                historyCard.querySelectorAll(
+                    ".result-details li"
+                );
+
+
+            for (
+                const detail
+                of historyDetails
+            ) {
+                const label =
+                    detail.querySelector(
+                        "strong"
+                    );
+
+                if (
+                    label
+                    && label.textContent.trim()
+                    === "Model:"
+                ) {
+                    detail.remove();
+                }
+            }
+
+
+            decorateHistoryCardWithImage(
+                historyCard,
+                analysis
+            );
+
+            historyResults.appendChild(
+                historyCard
             );
         }
     }
@@ -3878,22 +4236,6 @@ function resetHistoryPaginationForQueryChange() {
 }
 
 
-function resetAdminPaginationForQueryChange() {
-    adminHistoryOffsetInput.value =
-        "0";
-
-    adminHistoryPreviousButton.disabled =
-        true;
-
-    adminHistoryNextButton.disabled =
-        true;
-
-    adminSearchSummary.hidden =
-        true;
-
-    adminSearchResults.replaceChildren();
-}
-
 async function loadAnalysisHistory(
     options = {}
 ) {
@@ -3910,7 +4252,7 @@ async function loadAnalysisHistory(
 
     if (!token) {
         historyStatus.textContent =
-            "An access token is required.";
+            "Please sign in to continue.";
 
         tokenInput.focus();
 
@@ -4102,47 +4444,61 @@ async function loadAnalysisHistory(
     }
 }
 function clearPatientProfileForm() {
-    profilePatientCodeInput.value = "";
-    profileFullNameInput.value = "";
-    profileBirthYearInput.value = "";
-    profileGenderInput.value = "";
-    profilePhoneInput.value = "";
-    profileAddressInput.value = "";
+    profileFullNameInput.value =
+        "";
+
+    profileDateOfBirthInput.value =
+        "";
+
+    profileSexInput.value =
+        "";
+
+    profilePhoneInput.value =
+        "";
+
+    profileEmailInput.value =
+        "";
+
+    profileHeightInput.value =
+        "";
+
+    profileWeightInput.value =
+        "";
 }
 
 
 function populatePatientProfile(
     profile
 ) {
-    profilePatientCodeInput.value =
-        profile.patient_code ?? "";
-
     profileFullNameInput.value =
         profile.full_name ?? "";
 
-    profileBirthYearInput.value =
-        profile.birth_year ?? "";
+    profileDateOfBirthInput.value =
+        (
+            profile.date_of_birth
+                ? String(
+                    profile.date_of_birth
+                ).slice(
+                    0,
+                    10
+                )
+                : ""
+        );
 
-    profileGenderInput.value =
-        profile.gender ?? "";
+    profileSexInput.value =
+        profile.sex ?? "";
 
     profilePhoneInput.value =
         profile.phone ?? "";
 
-    profileAddressInput.value =
-        profile.address ?? "";
-}
+    profileEmailInput.value =
+        profile.email ?? "";
 
+    profileHeightInput.value =
+        profile.height_cm ?? "";
 
-function optionalTextValue(input) {
-    const value =
-        input.value.trim();
-
-    if (!value) {
-        return null;
-    }
-
-    return value;
+    profileWeightInput.value =
+        profile.weight_kg ?? "";
 }
 
 
@@ -4152,54 +4508,104 @@ function buildPatientProfilePayload() {
             .value
             .trim();
 
+    const dateOfBirth =
+        profileDateOfBirthInput
+            .value
+            .trim();
+
+    const sex =
+        profileSexInput.value;
+
+    const phone =
+        profilePhoneInput
+            .value
+            .trim();
+
+    const email =
+        profileEmailInput
+            .value
+            .trim();
+
+    const height =
+        Number.parseFloat(
+            profileHeightInput.value
+        );
+
+    const weight =
+        Number.parseFloat(
+            profileWeightInput.value
+        );
+
+
     if (!fullName) {
         throw new Error(
             "Full name is required."
         );
     }
 
+    if (!dateOfBirth) {
+        throw new Error(
+            "Date of birth is required."
+        );
+    }
 
-    const birthYearText =
-        profileBirthYearInput
-            .value
-            .trim();
+    if (!sex) {
+        throw new Error(
+            "Sex is required."
+        );
+    }
 
-    let birthYear = null;
+    if (!phone) {
+        throw new Error(
+            "Phone is required."
+        );
+    }
 
-    if (birthYearText) {
-        birthYear =
-            Number.parseInt(
-                birthYearText,
-                10
-            );
+    if (!email) {
+        throw new Error(
+            "Email is required."
+        );
+    }
 
-        if (
-            !Number.isInteger(
-                birthYear
-            )
-        ) {
-            throw new Error(
-                "Birth year must be an integer."
-            );
-        }
+    if (
+        !Number.isFinite(
+            height
+        )
+    ) {
+        throw new Error(
+            "Height is required."
+        );
+    }
+
+    if (
+        !Number.isFinite(
+            weight
+        )
+    ) {
+        throw new Error(
+            "Weight is required."
+        );
     }
 
 
     return {
-        full_name: fullName,
-        birth_year: birthYear,
-        gender:
-            optionalTextValue(
-                profileGenderInput
-            ),
-        phone:
-            optionalTextValue(
-                profilePhoneInput
-            ),
-        address:
-            optionalTextValue(
-                profileAddressInput
-            ),
+        full_name:
+            fullName,
+
+        date_of_birth:
+            dateOfBirth,
+
+        sex,
+
+        phone,
+
+        email,
+
+        height_cm:
+            height,
+
+        weight_kg:
+            weight,
     };
 }
 
@@ -4212,7 +4618,7 @@ async function loadPatientProfile() {
 
     if (!token) {
         profileStatus.textContent =
-            "An access token is required.";
+            "Please sign in to continue.";
 
         tokenInput.focus();
 
@@ -4312,7 +4718,7 @@ async function savePatientProfile() {
 
     if (!token) {
         profileStatus.textContent =
-            "An access token is required.";
+            "Please sign in to continue.";
 
         tokenInput.focus();
 
@@ -4430,54 +4836,7 @@ async function savePatientProfile() {
             false;
     }
 }
-function parseMedicalHistoryList(
-    value,
-    fieldName
-) {
-    const trimmed =
-        value.trim();
-
-    if (!trimmed) {
-        return null;
-    }
-
-    const items =
-        trimmed
-            .split(",")
-            .map(
-                (item) =>
-                    item.trim()
-            )
-            .filter(
-                (item) =>
-                    item.length > 0
-            );
-
-    if (items.length > 50) {
-        throw new Error(
-            (
-                `${fieldName} can contain `
-                + "at most 50 items."
-            )
-        );
-    }
-
-    return items;
-}
-
-
-function medicalHistoryListToText(
-    value
-) {
-    if (!Array.isArray(value)) {
-        return "";
-    }
-
-    return value.join(", ");
-}
-
-
-function optionalMedicalHistoryText(
+function requiredMedicalHistoryText(
     input,
     maxLength,
     fieldName
@@ -4486,15 +4845,21 @@ function optionalMedicalHistoryText(
         input.value.trim();
 
     if (!value) {
-        return null;
+        throw new Error(
+            fieldName
+            + " is required."
+        );
     }
 
-    if (value.length > maxLength) {
+    if (
+        value.length
+        > maxLength
+    ) {
         throw new Error(
-            (
-                `${fieldName} can contain `
-                + `at most ${maxLength} characters.`
-            )
+            fieldName
+            + " can contain at most "
+            + maxLength
+            + " characters."
         );
     }
 
@@ -4504,50 +4869,81 @@ function optionalMedicalHistoryText(
 
 function buildMedicalHistoryPayload() {
     return {
-        diseases:
-            parseMedicalHistoryList(
-                medicalHistoryDiseasesInput.value,
-                "Diseases"
-            ),
-
-        medications:
-            parseMedicalHistoryList(
-                medicalHistoryMedicationsInput.value,
-                "Medications"
-            ),
-
-        allergies:
-            parseMedicalHistoryList(
-                medicalHistoryAllergiesInput.value,
-                "Allergies"
-            ),
-
-        smoking_status:
-            optionalMedicalHistoryText(
-                medicalHistorySmokingStatusInput,
-                30,
-                "Smoking status"
-            ),
-
-        alcohol_status:
-            optionalMedicalHistoryText(
-                medicalHistoryAlcoholStatusInput,
-                30,
-                "Alcohol status"
-            ),
-
-        occupational_exposure:
-            optionalMedicalHistoryText(
-                medicalHistoryOccupationalExposureInput,
-                2000,
-                "Occupational exposure"
-            ),
-
-        notes:
-            optionalMedicalHistoryText(
-                medicalHistoryNotesInput,
+        current_complaint_hpi:
+            requiredMedicalHistoryText(
+                medicalHistoryCurrentComplaintInput,
                 5000,
-                "Notes"
+                "Current Complaint and HPI"
+            ),
+
+        past_medical_history:
+            requiredMedicalHistoryText(
+                medicalHistoryPastMedicalInput,
+                5000,
+                "Past Medical History"
+            ),
+
+        past_medication_history:
+            requiredMedicalHistoryText(
+                medicalHistoryPastMedicationInput,
+                5000,
+                "Past Medication History"
+            ),
+
+        allergy_history:
+            requiredMedicalHistoryText(
+                medicalHistoryAllergyInput,
+                5000,
+                "Allergy"
+            ),
+
+        diet:
+            requiredMedicalHistoryText(
+                medicalHistoryDietInput,
+                2000,
+                "Diet"
+            ),
+
+        appetite:
+            requiredMedicalHistoryText(
+                medicalHistoryAppetiteInput,
+                2000,
+                "Appetite"
+            ),
+
+        sleep:
+            requiredMedicalHistoryText(
+                medicalHistorySleepInput,
+                2000,
+                "Sleep"
+            ),
+
+        exercise:
+            requiredMedicalHistoryText(
+                medicalHistoryExerciseInput,
+                2000,
+                "Exercise"
+            ),
+
+        bowel_bladder:
+            requiredMedicalHistoryText(
+                medicalHistoryBowelBladderInput,
+                2000,
+                "Bowel and Bladder"
+            ),
+
+        habits:
+            requiredMedicalHistoryText(
+                medicalHistoryHabitsInput,
+                3000,
+                "Habits"
+            ),
+
+        family_history:
+            requiredMedicalHistoryText(
+                medicalHistoryFamilyInput,
+                5000,
+                "Family History"
             ),
     };
 }
@@ -4561,14 +4957,18 @@ function formatMedicalHistoryDate(
     }
 
     const date =
-        new Date(value);
+        new Date(
+            value
+        );
 
     if (
         Number.isNaN(
             date.getTime()
         )
     ) {
-        return String(value);
+        return String(
+            value
+        );
     }
 
     return date.toLocaleString();
@@ -4579,28 +4979,37 @@ function clearMedicalHistoryEditor() {
     selectedMedicalHistoryId =
         null;
 
-    medicalHistoryIdInput.value =
+    medicalHistoryCurrentComplaintInput.value =
         "";
 
-    medicalHistoryDiseasesInput.value =
+    medicalHistoryPastMedicalInput.value =
         "";
 
-    medicalHistoryMedicationsInput.value =
+    medicalHistoryPastMedicationInput.value =
         "";
 
-    medicalHistoryAllergiesInput.value =
+    medicalHistoryAllergyInput.value =
         "";
 
-    medicalHistorySmokingStatusInput.value =
+    medicalHistoryDietInput.value =
         "";
 
-    medicalHistoryAlcoholStatusInput.value =
+    medicalHistoryAppetiteInput.value =
         "";
 
-    medicalHistoryOccupationalExposureInput.value =
+    medicalHistorySleepInput.value =
         "";
 
-    medicalHistoryNotesInput.value =
+    medicalHistoryExerciseInput.value =
+        "";
+
+    medicalHistoryBowelBladderInput.value =
+        "";
+
+    medicalHistoryHabitsInput.value =
+        "";
+
+    medicalHistoryFamilyInput.value =
         "";
 
     medicalHistoryEditorTitle.textContent =
@@ -4617,37 +5026,49 @@ function populateMedicalHistoryEditor(
     selectedMedicalHistoryId =
         history.id;
 
-    medicalHistoryIdInput.value =
-        String(
-            history.id
-        );
+    medicalHistoryCurrentComplaintInput.value =
+        history.current_complaint_hpi
+        ?? "";
 
-    medicalHistoryDiseasesInput.value =
-        medicalHistoryListToText(
-            history.diseases
-        );
+    medicalHistoryPastMedicalInput.value =
+        history.past_medical_history
+        ?? "";
 
-    medicalHistoryMedicationsInput.value =
-        medicalHistoryListToText(
-            history.medications
-        );
+    medicalHistoryPastMedicationInput.value =
+        history.past_medication_history
+        ?? "";
 
-    medicalHistoryAllergiesInput.value =
-        medicalHistoryListToText(
-            history.allergies
-        );
+    medicalHistoryAllergyInput.value =
+        history.allergy_history
+        ?? "";
 
-    medicalHistorySmokingStatusInput.value =
-        history.smoking_status ?? "";
+    medicalHistoryDietInput.value =
+        history.diet
+        ?? "";
 
-    medicalHistoryAlcoholStatusInput.value =
-        history.alcohol_status ?? "";
+    medicalHistoryAppetiteInput.value =
+        history.appetite
+        ?? "";
 
-    medicalHistoryOccupationalExposureInput.value =
-        history.occupational_exposure ?? "";
+    medicalHistorySleepInput.value =
+        history.sleep
+        ?? "";
 
-    medicalHistoryNotesInput.value =
-        history.notes ?? "";
+    medicalHistoryExerciseInput.value =
+        history.exercise
+        ?? "";
+
+    medicalHistoryBowelBladderInput.value =
+        history.bowel_bladder
+        ?? "";
+
+    medicalHistoryHabitsInput.value =
+        history.habits
+        ?? "";
+
+    medicalHistoryFamilyInput.value =
+        history.family_history
+        ?? "";
 
     medicalHistoryEditorTitle.textContent =
         (
@@ -4656,7 +5077,7 @@ function populateMedicalHistoryEditor(
         );
 
     saveMedicalHistoryButton.textContent =
-        "Save Changes";
+        "Update History";
 }
 
 
@@ -4664,14 +5085,13 @@ function createMedicalHistoryDetail(
     label,
     value
 ) {
-    const item =
+    const row =
         document.createElement(
             "div"
         );
 
-    item.className =
+    row.className =
         "medical-history-detail";
-
 
     const strong =
         document.createElement(
@@ -4679,24 +5099,25 @@ function createMedicalHistoryDetail(
         );
 
     strong.textContent =
-        label;
+        label + ": ";
 
-
-    const content =
+    const text =
         document.createElement(
             "span"
         );
 
-    content.textContent =
-        value || "N/A";
+    text.textContent =
+        (
+            value
+            || "N/A"
+        );
 
-
-    item.append(
+    row.append(
         strong,
-        content
+        text
     );
 
-    return item;
+    return row;
 }
 
 
@@ -4723,7 +5144,7 @@ function createMedicalHistoryCard(
 
     const title =
         document.createElement(
-            "h3"
+            "h4"
         );
 
     title.textContent =
@@ -4759,64 +5180,68 @@ function createMedicalHistoryCard(
         "medical-history-details";
 
 
-    details.append(
-        createMedicalHistoryDetail(
-            "Diseases",
-            medicalHistoryListToText(
-                history.diseases
+    const rows = [
+        [
+            "Current Complaint and HPI",
+            history.current_complaint_hpi,
+        ],
+        [
+            "Past Medical History",
+            history.past_medical_history,
+        ],
+        [
+            "Past Medication History",
+            history.past_medication_history,
+        ],
+        [
+            "Allergy",
+            history.allergy_history,
+        ],
+        [
+            "Diet",
+            history.diet,
+        ],
+        [
+            "Appetite",
+            history.appetite,
+        ],
+        [
+            "Sleep",
+            history.sleep,
+        ],
+        [
+            "Exercise",
+            history.exercise,
+        ],
+        [
+            "Bowel and Bladder",
+            history.bowel_bladder,
+        ],
+        [
+            "Habits",
+            history.habits,
+        ],
+        [
+            "Family History",
+            history.family_history,
+        ],
+    ];
+
+
+    for (
+        const [
+            label,
+            value,
+        ]
+        of rows
+    ) {
+        details.append(
+            createMedicalHistoryDetail(
+                label,
+                value
             )
-        ),
-
-        createMedicalHistoryDetail(
-            "Medications",
-            medicalHistoryListToText(
-                history.medications
-            )
-        ),
-
-        createMedicalHistoryDetail(
-            "Allergies",
-            medicalHistoryListToText(
-                history.allergies
-            )
-        ),
-
-        createMedicalHistoryDetail(
-            "Smoking status",
-            history.smoking_status
-        ),
-
-        createMedicalHistoryDetail(
-            "Alcohol status",
-            history.alcohol_status
-        ),
-
-        createMedicalHistoryDetail(
-            "Occupational exposure",
-            history.occupational_exposure
-        ),
-
-        createMedicalHistoryDetail(
-            "Notes",
-            history.notes
-        ),
-
-        createMedicalHistoryDetail(
-            "Updated",
-            formatMedicalHistoryDate(
-                history.updated_at
-            )
-        )
-    );
-
-
-    const actions =
-        document.createElement(
-            "div"
         );
-
-    actions.className =
-        "actions";
+    }
 
 
     const editButton =
@@ -4831,7 +5256,7 @@ function createMedicalHistoryCard(
         "secondary";
 
     editButton.textContent =
-        "Edit Record";
+        "Edit";
 
     editButton.addEventListener(
         "click",
@@ -4843,15 +5268,10 @@ function createMedicalHistoryCard(
     );
 
 
-    actions.append(
-        editButton
-    );
-
-
     card.append(
         header,
         details,
-        actions
+        editButton
     );
 
     return card;
@@ -4864,7 +5284,6 @@ function renderMedicalHistories(
     medicalHistoryResults
         .replaceChildren();
 
-
     medicalHistorySummary.hidden =
         false;
 
@@ -4875,20 +5294,16 @@ function renderMedicalHistories(
         );
 
 
-    if (histories.length === 0) {
+    if (
+        histories.length === 0
+    ) {
         const empty =
             document.createElement(
                 "p"
             );
 
-        empty.className =
-            "help-text";
-
         empty.textContent =
-            (
-                "No medical history "
-                + "records were found."
-            );
+            "No medical history records.";
 
         medicalHistoryResults.append(
             empty
@@ -4927,12 +5342,10 @@ async function refreshMedicalHistories(
             }
         );
 
-
     const data =
         await parseResponse(
             response
         );
-
 
     if (!response.ok) {
         throw new Error(
@@ -4942,16 +5355,16 @@ async function refreshMedicalHistories(
         );
     }
 
-
-    if (!Array.isArray(data)) {
+    if (
+        !Array.isArray(
+            data
+        )
+    ) {
         throw new Error(
-            (
-                "Medical history response "
-                + "must be an array."
-            )
+            "Medical history response "
+            + "must be an array."
         );
     }
-
 
     renderMedicalHistories(
         data
@@ -4969,13 +5382,10 @@ async function loadMedicalHistories() {
 
     if (!token) {
         medicalHistoryStatus.textContent =
-            "An access token is required.";
-
-        tokenInput.focus();
+            "Please sign in first.";
 
         return;
     }
-
 
     loadMedicalHistoriesButton.disabled =
         true;
@@ -4986,7 +5396,6 @@ async function loadMedicalHistories() {
     medicalHistoryStatus.textContent =
         "Loading medical histories...";
 
-
     try {
         const histories =
             await refreshMedicalHistories(
@@ -4996,7 +5405,8 @@ async function loadMedicalHistories() {
         medicalHistoryStatus.textContent =
             (
                 "Medical histories loaded successfully. "
-                + `${histories.length} record(s) returned.`
+                + histories.length
+                + " record(s) returned."
             );
 
     } catch (error) {
@@ -5026,13 +5436,10 @@ async function loadMedicalHistoryById(
 
     if (!token) {
         medicalHistoryStatus.textContent =
-            "An access token is required.";
-
-        tokenInput.focus();
+            "Please sign in first.";
 
         return;
     }
-
 
     loadMedicalHistoriesButton.disabled =
         true;
@@ -5049,7 +5456,6 @@ async function loadMedicalHistoryById(
             + historyId
             + "..."
         );
-
 
     try {
         const response =
@@ -5070,12 +5476,10 @@ async function loadMedicalHistoryById(
                 }
             );
 
-
         const data =
             await parseResponse(
                 response
             );
-
 
         if (!response.ok) {
             throw new Error(
@@ -5084,7 +5488,6 @@ async function loadMedicalHistoryById(
                 )
             );
         }
-
 
         populateMedicalHistoryEditor(
             data
@@ -5125,9 +5528,7 @@ async function saveMedicalHistory() {
 
     if (!token) {
         medicalHistoryStatus.textContent =
-            "An access token is required.";
-
-        tokenInput.focus();
+            "Please sign in first.";
 
         return;
     }
@@ -5153,14 +5554,12 @@ async function saveMedicalHistory() {
             !== null
         );
 
-
     const method =
         (
             isUpdate
                 ? "PATCH"
                 : "POST"
         );
-
 
     const endpoint =
         (
@@ -5187,7 +5586,6 @@ async function saveMedicalHistory() {
     clearMedicalHistoryButton.disabled =
         true;
 
-
     medicalHistoryStatus.textContent =
         (
             isUpdate
@@ -5204,26 +5602,23 @@ async function saveMedicalHistory() {
                     method,
 
                     headers: {
-                        Authorization:
-                            `Bearer ${token}`,
-
                         "Content-Type":
                             "application/json",
+
+                        Authorization:
+                            `Bearer ${token}`,
                     },
 
-                    body:
-                        JSON.stringify(
-                            payload
-                        ),
+                    body: JSON.stringify(
+                        payload
+                    ),
                 }
             );
-
 
         const data =
             await parseResponse(
                 response
             );
-
 
         if (!response.ok) {
             throw new Error(
@@ -5233,28 +5628,19 @@ async function saveMedicalHistory() {
             );
         }
 
-
         populateMedicalHistoryEditor(
             data
         );
-
 
         await refreshMedicalHistories(
             token
         );
 
-
         medicalHistoryStatus.textContent =
             (
                 isUpdate
-                    ? (
-                        "Medical history updated "
-                        + "successfully."
-                    )
-                    : (
-                        "Medical history created "
-                        + "successfully."
-                    )
+                    ? "Medical history updated successfully."
+                    : "Medical history created successfully."
             );
 
     } catch (error) {
@@ -5278,1075 +5664,140 @@ async function saveMedicalHistory() {
             false;
     }
 }
-function getAdminDashboardTokenRole(
-    token
-) {
-    const normalizedToken =
-        String(token || "").trim();
 
-    if (!normalizedToken) {
-        return null;
+
+const adminDashboardSection = document.getElementById("admin-dashboard-section");
+const adminDashboardStatus = document.getElementById("admin-dashboard-status");
+const adminDashboardOverview = document.getElementById("admin-dashboard-overview");
+const adminDashboardPredictions = document.getElementById("admin-dashboard-predictions");
+const adminDashboardModelUsage = document.getElementById("admin-dashboard-model-usage");
+let adminDashboardRequest = null;
+
+function resetAdminDashboardView() {
+    for (const container of [adminDashboardOverview, adminDashboardPredictions,
+        adminDashboardModelUsage]) {
+        container.replaceChildren();
     }
+    adminDashboardStatus.textContent = "ADMIN dashboard has not been loaded.";
+}
 
-    const parts =
-        normalizedToken.split(".");
-
-    if (parts.length < 2) {
-        return null;
-    }
-
+function getAdminDashboardTokenRole() {
     try {
-        let payload = parts[1]
-            .replace(/-/g, "+")
-            .replace(/_/g, "/");
-
-        while (
-            payload.length % 4 !== 0
-        ) {
-            payload += "=";
-        }
-
-        const parsed =
-            JSON.parse(
-                atob(payload)
-            );
-
-        const role =
-            String(
-                parsed?.role || ""
-            )
-                .trim()
-                .toUpperCase();
-
-        return role || null;
-
+        const token = normalizeToken(tokenInput.value);
+        const part = token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+        const payload = JSON.parse(atob(part.padEnd(Math.ceil(part.length / 4) * 4, "=")));
+        if (payload.exp && payload.exp * 1000 <= Date.now()) return null;
+        return payload.role;
     } catch {
         return null;
     }
 }
 
-
-function resetAdminDashboardView() {
-    adminDashboardOverview
-        .replaceChildren();
-
-    adminDashboardPredictions
-        .replaceChildren();
-
-    adminDashboardModelUsage
-        .replaceChildren();
-
-    adminDashboardRecentAnalyses
-        .replaceChildren();
+function initializeAdminDashboard() {
+    if (adminDashboardRequest) adminDashboardRequest.abort();
+    adminDashboardRequest = null;
+    resetAdminDashboardView();
+    const tokenRole = getAdminDashboardTokenRole();
+    adminDashboardSection.hidden = !tokenRole;
+    if (tokenRole) return loadAdminDashboard();
 }
 
-
-function createAdminDashboardMetricCard(
-    label,
-    value
-) {
-    const card =
-        document.createElement("div");
-
-    card.className =
-        "summary-card "
-        + "admin-dashboard-metric";
-
-    const labelElement =
-        document.createElement("span");
-
-    labelElement.textContent =
-        String(label);
-
-    const valueElement =
-        document.createElement("strong");
-
-    valueElement.textContent =
-        String(value ?? 0);
-
-    card.append(
-        labelElement,
-        valueElement
-    );
-
-    return card;
+function appendAdminDashboardText(parent, tag, value, className = "") {
+    const element = document.createElement(tag);
+    element.className = className;
+    element.textContent = String(value ?? "—");
+    parent.appendChild(element);
+    return element;
 }
 
-
-function renderAdminDashboardOverview(
-    overview
-) {
-    adminDashboardOverview
-        .replaceChildren();
-
-    const metrics = [
-        [
-            "Total Users",
-            overview?.total_users,
-        ],
-        [
-            "Active Users",
-            overview?.active_users,
-        ],
-        [
-            "Patients",
-            overview?.total_patients,
-        ],
-        [
-            "Analyses",
-            overview?.total_analyses,
-        ],
-        [
-            "Completed",
-            overview?.completed_analyses,
-        ],
-        [
-            "Failed",
-            overview?.failed_analyses,
-        ],
-        [
-            "Dr.AI Advices",
-            overview
-                ?.total_medical_advices,
-        ],
-        [
-            "PDF Reports",
-            overview?.total_reports,
-        ],
-    ];
-
-    for (
-        const [label, value]
-        of metrics
-    ) {
-        adminDashboardOverview.append(
-            createAdminDashboardMetricCard(
-                label,
-                value
-            )
-        );
-    }
-}
-
-
-function createAdminDashboardBar(
-    label,
-    count,
-    maximum
-) {
-    const item =
-        document.createElement("div");
-
-    item.className =
-        "admin-dashboard-bar-item";
-
-    const header =
-        document.createElement("div");
-
-    header.className =
-        "admin-dashboard-bar-header";
-
-    const labelElement =
-        document.createElement("span");
-
-    labelElement.textContent =
-        String(label);
-
-    const countElement =
-        document.createElement("strong");
-
-    countElement.textContent =
-        String(count);
-
-    header.append(
-        labelElement,
-        countElement
-    );
-
-    const track =
-        document.createElement("div");
-
-    track.className =
-        "admin-dashboard-bar-track";
-
-    const fill =
-        document.createElement("div");
-
-    fill.className =
-        "admin-dashboard-bar-fill";
-
-    const numericMaximum =
-        Math.max(
-            Number(maximum) || 0,
-            1
-        );
-
-    const numericCount =
-        Math.max(
-            Number(count) || 0,
-            0
-        );
-
-    const percentage =
-        Math.min(
-            100,
-            (
-                numericCount
-                / numericMaximum
-            ) * 100
-        );
-
-    fill.style.width =
-        `${percentage}%`;
-
-    track.append(fill);
-
-    item.append(
-        header,
-        track
-    );
-
-    return item;
-}
-
-
-function renderAdminPredictionDistribution(
-    items
-) {
-    adminDashboardPredictions
-        .replaceChildren();
-
-    const rows =
-        Array.isArray(items)
-            ? items
-            : [];
-
-    if (rows.length === 0) {
-        const empty =
-            document.createElement("p");
-
-        empty.className =
-            "help-text";
-
-        empty.textContent =
-            "No prediction data.";
-
-        adminDashboardPredictions
-            .append(empty);
-
+function renderAdminDashboardBars(container, items, label, countKey) {
+    if (!items.length) {
+        appendAdminDashboardText(container, "p", "No data available.");
         return;
     }
-
-    const maximum =
-        Math.max(
-            ...rows.map(
-                (item) =>
-                    Number(
-                        item?.count
-                    ) || 0
-            ),
-            1
-        );
-
-    for (const item of rows) {
-        adminDashboardPredictions
-            .append(
-                createAdminDashboardBar(
-                    item?.class_name
-                        || "Unknown",
-                    item?.count
-                        ?? 0,
-                    maximum
-                )
-            );
+    const maximum = Math.max(1, ...items.map(item => Number(item[countKey]) || 0));
+    for (const item of items) {
+        const row = appendAdminDashboardText(container, "div", "", "admin-dashboard-bar-item");
+        const count = Number(item[countKey]) || 0;
+        appendAdminDashboardText(row, "div", `${label(item)}: ${count}`, "admin-dashboard-bar-header");
+        const track = appendAdminDashboardText(row, "div", "", "admin-dashboard-bar-track");
+        const fill = appendAdminDashboardText(track, "div", "", "admin-dashboard-bar-fill");
+        fill.style.width = `${Math.max(0, Math.min(100, count / maximum * 100))}%`;
     }
 }
 
-
-function renderAdminModelUsage(
-    items
-) {
-    adminDashboardModelUsage
-        .replaceChildren();
-
-    const rows =
-        Array.isArray(items)
-            ? items
-            : [];
-
-    if (rows.length === 0) {
-        const empty =
-            document.createElement("p");
-
-        empty.className =
-            "help-text";
-
-        empty.textContent =
-            "No model usage data.";
-
-        adminDashboardModelUsage
-            .append(empty);
-
-        return;
+function renderAdminDashboard(data) {
+    resetAdminDashboardView();
+    const labels = {
+        total_users: "Total users", active_users: "Active users",
+        total_patients: "Total patients", total_analyses: "Total analyses",
+    };
+    for (const [key, label] of Object.entries(labels)) {
+        const card = appendAdminDashboardText(adminDashboardOverview, "div", "", "admin-dashboard-metric");
+        appendAdminDashboardText(card, "span", label);
+        appendAdminDashboardText(card, "strong", data.overview[key]);
     }
-
-    const maximum =
-        Math.max(
-            ...rows.map(
-                (item) =>
-                    Number(
-                        item
-                            ?.analysis_count
-                    ) || 0
-            ),
-            1
-        );
-
-    for (const item of rows) {
-        const name =
-            String(
-                item?.display_name
-                || item?.model_key
-                || "Unknown model"
-            );
-
-        const version =
-            String(
-                item?.version || ""
-            );
-
-        const label =
-            version
-                ? `${name} ${version}`
-                : name;
-
-        adminDashboardModelUsage
-            .append(
-                createAdminDashboardBar(
-                    label,
-                    item
-                        ?.analysis_count
-                        ?? 0,
-                    maximum
-                )
-            );
-    }
+    renderAdminDashboardBars(adminDashboardPredictions, data.prediction_distribution,
+        item => item.class_name, "count");
+    renderAdminDashboardBars(adminDashboardModelUsage, data.model_usage,
+        item => `${item.display_name} (${item.version})`, "analysis_count");
 }
-
-
-function formatAdminDashboardDate(
-    value
-) {
-    if (!value) {
-        return "N/A";
-    }
-
-    const date =
-        new Date(value);
-
-    if (
-        Number.isNaN(
-            date.getTime()
-        )
-    ) {
-        return String(value);
-    }
-
-    return date.toLocaleString();
-}
-
-
-function appendAdminRecentField(
-    card,
-    label,
-    value
-) {
-    const row =
-        document.createElement("div");
-
-    row.className =
-        "admin-dashboard-recent-field";
-
-    const labelElement =
-        document.createElement("strong");
-
-    labelElement.textContent =
-        `${label}:`;
-
-    const valueElement =
-        document.createElement("span");
-
-    valueElement.textContent =
-        String(
-            value ?? "N/A"
-        );
-
-    row.append(
-        labelElement,
-        valueElement
-    );
-
-    card.append(row);
-}
-
-
-function renderAdminRecentAnalyses(
-    items
-) {
-    adminDashboardRecentAnalyses
-        .replaceChildren();
-
-    const rows =
-        Array.isArray(items)
-            ? items
-            : [];
-
-    if (rows.length === 0) {
-        const empty =
-            document.createElement("p");
-
-        empty.className =
-            "help-text";
-
-        empty.textContent =
-            "No analyses available.";
-
-        adminDashboardRecentAnalyses
-            .append(empty);
-
-        return;
-    }
-
-    for (const item of rows) {
-        const card =
-            document.createElement("article");
-
-        card.className =
-            "admin-dashboard-recent-card";
-
-        appendAdminRecentField(
-            card,
-            "Analysis",
-            item?.analysis_code
-        );
-
-        appendAdminRecentField(
-            card,
-            "Patient",
-            item?.patient_code
-        );
-
-        appendAdminRecentField(
-            card,
-            "Status",
-            item?.status
-        );
-
-        const modelText =
-            [
-                item?.model_key,
-                item?.model_version,
-            ]
-                .filter(Boolean)
-                .join(" ");
-
-        appendAdminRecentField(
-            card,
-            "Model",
-            modelText || "N/A"
-        );
-
-        appendAdminRecentField(
-            card,
-            "Prediction",
-            item?.predicted_class
-                || "N/A"
-        );
-
-        const confidence =
-            Number(
-                item?.confidence
-            );
-
-        appendAdminRecentField(
-            card,
-            "Confidence",
-            Number.isFinite(
-                confidence
-            )
-                ? (
-                    confidence
-                    * 100
-                ).toFixed(2)
-                    + "%"
-                : "N/A"
-        );
-
-        appendAdminRecentField(
-            card,
-            "Created",
-            formatAdminDashboardDate(
-                item?.created_at
-            )
-        );
-
-        adminDashboardRecentAnalyses
-            .append(card);
-    }
-}
-
-
-function renderAdminDashboard(
-    dashboard
-) {
-    renderAdminDashboardOverview(
-        dashboard?.overview || {}
-    );
-
-    renderAdminPredictionDistribution(
-        dashboard
-            ?.prediction_distribution
-    );
-
-    renderAdminModelUsage(
-        dashboard?.model_usage
-    );
-
-    renderAdminRecentAnalyses(
-        dashboard?.recent_analyses
-    );
-}
-
-
-function getAdminDashboardRecentLimit() {
-    const value =
-        Number.parseInt(
-            adminDashboardRecentLimitInput
-                .value,
-            10
-        );
-
-    if (
-        !Number.isInteger(value)
-        || value < 1
-        || value > 50
-    ) {
-        throw new Error(
-            "Recent analyses limit "
-            + "must be between "
-            + "1 and 50."
-        );
-    }
-
-    return value;
-}
-
-
-function getAdminDashboardErrorMessage(
-    response,
-    data
-) {
-    if (
-        response.status === 401
-    ) {
-        return (
-            "Authentication required."
-        );
-    }
-
-    if (
-        response.status === 403
-    ) {
-        return (
-            "ADMIN permission required."
-        );
-    }
-
-    const detail =
-        typeof data?.detail === "string"
-            ? data.detail.trim()
-            : "";
-
-    if (detail) {
-        return detail;
-    }
-
-    return (
-        "Dashboard request failed "
-        + `with HTTP ${response.status}.`
-    );
-}
-
 
 async function loadAdminDashboard() {
-    const token =
-        getReportAccessToken();
-
-    if (!token) {
+    if (adminDashboardRequest) return;
+    const token = normalizeToken(tokenInput.value);
+    const tokenRole = getAdminDashboardTokenRole();
+    if (!token || !tokenRole) {
         resetAdminDashboardView();
-
-        adminDashboardStatus
-            .textContent =
-            "An ADMIN access token "
-            + "is required.";
-
+        adminDashboardSection.hidden = true;
         return;
     }
-
-    const tokenRole =
-        getAdminDashboardTokenRole(
-            token
-        );
-
-    if (
-        tokenRole
-        && tokenRole !== "ADMIN"
-    ) {
-        resetAdminDashboardView();
-
-        adminDashboardStatus
-            .textContent =
-            "ADMIN permission required.";
-
-        return;
-    }
-
-    let recentLimit;
-
+    const request = new AbortController();
+    adminDashboardRequest = request;
+    adminDashboardStatus.textContent = "Loading ADMIN dashboard...";
     try {
-        recentLimit =
-            getAdminDashboardRecentLimit();
-
-    } catch (error) {
-        adminDashboardStatus
-            .textContent =
-            error.message;
-
-        return;
-    }
-
-    adminDashboardRefreshButton
-        .disabled = true;
-
-    adminDashboardRecentLimitInput
-        .disabled = true;
-
-    adminDashboardStatus
-        .textContent =
-        "Loading ADMIN dashboard...";
-
-    try {
-        const response =
-            await fetch(
-                "/api/v1/admin/dashboard"
-                + "?recent_limit="
-                + encodeURIComponent(
-                    recentLimit
-                ),
-                {
-                    method: "GET",
-                    headers: {
-                        Authorization:
-                            `Bearer ${token}`,
-                    },
-                }
-            );
-
-        const data =
-            await parseResponse(
-                response
-            );
-
+        const options = {
+            headers: { Authorization: `Bearer ${token}` }, signal: request.signal,
+            cache: "no-store",
+        };
+        let response = await fetch("/api/v1/admin/dashboard/summary", options);
+        // A running backend may predate the summary route. Only ADMIN may use
+        // the original dashboard endpoint, which also includes patient records.
+        if (response.status === 404 && tokenRole === "ADMIN"
+            && request === adminDashboardRequest
+            && normalizeToken(tokenInput.value) === token) {
+            response = await fetch("/api/v1/admin/dashboard?recent_limit=1", options);
+        }
+        const data = await parseResponse(response);
+        if (request !== adminDashboardRequest || normalizeToken(tokenInput.value) !== token) return;
         if (!response.ok) {
-            throw new Error(
-                getAdminDashboardErrorMessage(
-                    response,
-                    data
-                )
-            );
+            throw new Error(response.status === 404 ? "Dashboard API is unavailable. Please restart the backend to load the update."
+                : response.status === 401 ? "Session expired. Please sign in again."
+                : response.status === 403 ? "Access denied. Please sign in again." : getErrorMessage(data));
         }
-
-        renderAdminDashboard(
-            data
-        );
-
-        adminDashboardStatus
-            .textContent =
-            "ADMIN dashboard loaded.";
-
+        if (!data || !data.overview || !Array.isArray(data.prediction_distribution)
+            || !Array.isArray(data.model_usage)) {
+            throw new Error("Invalid dashboard response.");
+        }
+        renderAdminDashboard(data);
+        adminDashboardStatus.textContent = "ADMIN dashboard loaded successfully.";
     } catch (error) {
-        resetAdminDashboardView();
-
-        adminDashboardStatus
-            .textContent =
-            "ADMIN dashboard failed: "
-            + error.message;
-
+        if (request === adminDashboardRequest && error.name !== "AbortError") {
+            resetAdminDashboardView();
+            adminDashboardStatus.textContent = `Unable to load dashboard: ${error.message}`;
+        }
     } finally {
-        adminDashboardRefreshButton
-            .disabled = false;
-
-        adminDashboardRecentLimitInput
-            .disabled = false;
-    }
-}
-
-
-function initializeAdminDashboard() {
-    const token =
-        getReportAccessToken();
-
-    if (!token) {
-        return;
-    }
-
-    if (
-        getAdminDashboardTokenRole(
-            token
-        ) !== "ADMIN"
-    ) {
-        return;
-    }
-
-    loadAdminDashboard();
-}
-
-
-function getAdminSearchRequestValues() {
-    const patientCode =
-        adminPatientCodeInput
-            .value
-            .trim()
-            .toUpperCase();
-
-
-    if (!patientCode) {
-        throw new Error(
-            "Patient code is required."
-        );
-    }
-
-
-    const limit =
-        Number.parseInt(
-            adminHistoryLimitInput.value,
-            10
-        );
-
-
-    if (
-        !Number.isInteger(limit)
-        || limit < 1
-        || limit > 100
-    ) {
-        throw new Error(
-            "Limit must be between 1 and 100."
-        );
-    }
-
-
-    const offset =
-        Number.parseInt(
-            adminHistoryOffsetInput.value,
-            10
-        );
-
-
-    if (
-        !Number.isInteger(offset)
-        || offset < 0
-    ) {
-        throw new Error(
-            (
-                "Offset must be greater than "
-                + "or equal to 0."
-            )
-        );
-    }
-
-
-    return {
-        patientCode,
-        limit,
-        offset,
-    };
-}
-function renderAdminAnalysisHistory(
-    analyses,
-    patientCode,
-    limit,
-    offset
-) {
-    adminSearchResults
-        .replaceChildren();
-
-
-    adminSearchSummary.hidden =
-        false;
-
-    adminSearchSummary.textContent =
-        (
-            `Patient ${patientCode} | `
-            + `${analyses.length} record(s) | `
-            + `Offset ${offset} | `
-            + `Limit ${limit}`
-        );
-
-
-    if (analyses.length === 0) {
-        const emptyMessage =
-            document.createElement(
-                "p"
-            );
-
-        emptyMessage.className =
-            "help-text";
-
-        emptyMessage.textContent =
-            (
-                "No analysis records "
-                + "were found on this page."
-            );
-
-        adminSearchResults.append(
-            emptyMessage
-        );
-
-    } else {
-
-        for (
-            const analysis
-            of analyses
-        ) {
-            adminSearchResults.append(
-                createHistoryItem(
-                    analysis
-                )
-            );
+        if (request === adminDashboardRequest) {
+            adminDashboardRequest = null;
         }
     }
-
-
-    adminHistoryPreviousButton.disabled =
-        offset <= 0;
-
-
-    adminHistoryNextButton.disabled =
-        analyses.length < limit;
 }
-async function loadAdminAnalysisHistory(
-    options = {}
-) {
-    const recoverEmptyNextPage =
-        (
-            options.recoverEmptyNextPage
-            === true
-        );
 
-    const token =
-        normalizeToken(
-            tokenInput.value
-        );
+window.addEventListener("lungxray:auth-user", initializeAdminDashboard);
+window.addEventListener("lungxray:auth-guest", initializeAdminDashboard);
+tokenInput.addEventListener("input", initializeAdminDashboard);
+tokenInput.addEventListener("change", initializeAdminDashboard);
 
-
-    if (!token) {
-        adminSearchStatus.textContent =
-            "An access token is required.";
-
-        tokenInput.focus();
-
-        return;
-    }
-
-
-    let requestValues;
-
-    try {
-        requestValues =
-            getAdminSearchRequestValues();
-
-    } catch (error) {
-        adminSearchStatus.textContent =
-            error.message;
-
-        return;
-    }
-
-
-    const {
-        patientCode,
-        limit,
-        offset,
-    } = requestValues;
-
-
-    adminPatientCodeInput.value =
-        patientCode;
-
-    adminHistoryLimitInput.value =
-        String(limit);
-
-    adminHistoryOffsetInput.value =
-        String(offset);
-
-
-    const params =
-        new URLSearchParams();
-
-
-    params.set(
-        "patient_code",
-        patientCode
-    );
-
-    params.set(
-        "limit",
-        String(limit)
-    );
-
-    params.set(
-        "offset",
-        String(offset)
-    );
-
-
-    adminSearchButton.disabled =
-        true;
-
-    adminHistoryPreviousButton.disabled =
-        true;
-
-    adminHistoryNextButton.disabled =
-        true;
-
-
-    adminSearchStatus.textContent =
-        (
-            "Searching analysis history "
-            + `for ${patientCode}...`
-        );
-
-
-    try {
-        const response =
-            await fetch(
-                (
-                    "/api/v1/admin/analyses?"
-                    + params.toString()
-                ),
-                {
-                    method: "GET",
-
-                    headers: {
-                        Authorization:
-                            `Bearer ${token}`,
-                    },
-                }
-            );
-
-
-        const data =
-            await parseResponse(
-                response
-            );
-
-
-        if (!response.ok) {
-            throw new Error(
-                getErrorMessage(
-                    data
-                )
-            );
-        }
-
-
-        if (!Array.isArray(data)) {
-            throw new Error(
-                (
-                    "ADMIN analysis response "
-                    + "must be an array."
-                )
-            );
-        }
-
-        if (
-            recoverEmptyNextPage
-            && data.length === 0
-            && offset > 0
-        ) {
-            const previousOffset =
-                Math.max(
-                    0,
-                    offset - limit
-                );
-
-            adminHistoryOffsetInput.value =
-                String(
-                    previousOffset
-                );
-
-            adminSearchStatus.textContent =
-                (
-                    "No records on the next page. "
-                    + "Returning to the last "
-                    + "available page..."
-                );
-
-
-            await loadAdminAnalysisHistory();
-
-
-            adminHistoryNextButton.disabled =
-                true;
-
-            adminSearchStatus.textContent =
-                (
-                    "No more analysis records. "
-                    + "Returned to the last "
-                    + "available page."
-                );
-
-            return;
-        }
-
-        renderAdminAnalysisHistory(
-            data,
-            patientCode,
-            limit,
-            offset
-        );
-
-
-        adminSearchStatus.textContent =
-            (
-                "ADMIN patient search "
-                + "completed successfully. "
-                + `${data.length} record(s) returned.`
-            );
-
-    } catch (error) {
-        adminSearchResults.replaceChildren();
-
-        adminSearchSummary.hidden =
-            true;
-
-        adminHistoryPreviousButton.disabled =
-            true;
-
-        adminHistoryNextButton.disabled =
-            true;
-
-        adminSearchStatus.textContent =
-            (
-                "ADMIN search failed: "
-                + error.message
-            );
-
-    } finally {
-        adminSearchButton.disabled =
-            false;
-    }
-}
 async function analyzeBatch() {
     const validation =
         validateFiles(
@@ -6369,7 +5820,7 @@ async function analyzeBatch() {
 
     if (!token) {
         requestStatus.textContent =
-            "A USER access token is required.";
+            "Please sign in with a USER account.";
 
         tokenInput.focus();
 
@@ -6450,6 +5901,36 @@ async function analyzeBatch() {
             );
 
     } catch (error) {
+        console.error(
+            "Batch analysis failed:",
+            error
+        );
+
+        resultSection.hidden =
+            false;
+
+        batchSummary.replaceChildren();
+        results.replaceChildren();
+
+
+        const errorBox =
+            document.createElement(
+                "div"
+            );
+
+        errorBox.className =
+            "request-status";
+
+        errorBox.textContent =
+            (
+                "Batch analysis failed: "
+                + error.message
+            );
+
+        results.appendChild(
+            errorBox
+        );
+
         requestStatus.textContent =
             (
                 "Request failed: "
@@ -6459,6 +5940,41 @@ async function analyzeBatch() {
     } finally {
         setLoading(false);
     }
+}
+
+
+// M15 Result Filter Controls
+
+for (
+    const button
+    of filterButtons
+) {
+    button.addEventListener(
+        "click",
+        () => {
+            const filter =
+                button.dataset.filter;
+
+            const allowedFilters = [
+                "ALL",
+                "COMPLETED",
+                "REJECTED",
+                "FAILED",
+            ];
+
+            if (
+                !allowedFilters.includes(
+                    filter
+                )
+            ) {
+                return;
+            }
+
+            applyResultFilter(
+                filter
+            );
+        }
+    );
 }
 
 
@@ -6680,136 +6196,6 @@ clearMedicalHistoryButton.addEventListener(
     }
 );
 
-adminDashboardRefreshButton.addEventListener(
-    "click",
-    loadAdminDashboard
-);
-
-adminDashboardRecentLimitInput.addEventListener(
-    "change",
-    () => {
-        adminDashboardStatus.textContent =
-            "Dashboard limit changed. "
-            + "Refresh to apply.";
-    }
-);
-
 initializeAdminDashboard();
-
-adminSearchButton.addEventListener(
-    "click",
-    loadAdminAnalysisHistory
-);
-
-
-adminHistoryPreviousButton.addEventListener(
-    "click",
-    () => {
-        const limit =
-            Number.parseInt(
-                adminHistoryLimitInput.value,
-                10
-            );
-
-        const offset =
-            Number.parseInt(
-                adminHistoryOffsetInput.value,
-                10
-            );
-
-
-        if (
-            !Number.isInteger(limit)
-            || limit < 1
-            || limit > 100
-            || !Number.isInteger(offset)
-            || offset < 0
-        ) {
-            return;
-        }
-
-
-        adminHistoryOffsetInput.value =
-            String(
-                Math.max(
-                    0,
-                    offset - limit
-                )
-            );
-
-
-        loadAdminAnalysisHistory();
-    }
-);
-
-
-adminHistoryNextButton.addEventListener(
-    "click",
-    () => {
-        const limit =
-            Number.parseInt(
-                adminHistoryLimitInput.value,
-                10
-            );
-
-        const offset =
-            Number.parseInt(
-                adminHistoryOffsetInput.value,
-                10
-            );
-
-
-        if (
-            !Number.isInteger(limit)
-            || limit < 1
-            || limit > 100
-            || !Number.isInteger(offset)
-            || offset < 0
-        ) {
-            return;
-        }
-
-
-        adminHistoryOffsetInput.value =
-            String(
-                offset + limit
-            );
-
-
-                loadAdminAnalysisHistory(
-            {
-                recoverEmptyNextPage:
-                    true,
-            }
-        );
-    }
-);
-
-adminHistoryLimitInput.addEventListener(
-    "change",
-    () => {
-        resetAdminPaginationForQueryChange();
-
-        adminSearchStatus.textContent =
-            (
-                "Pagination settings changed. "
-                + "Click Search Patient to reload."
-            );
-    }
-);
-
-
-adminPatientCodeInput.addEventListener(
-    "input",
-    () => {
-        resetAdminPaginationForQueryChange();
-
-        adminSearchStatus.textContent =
-            (
-                "Patient code changed. "
-                + "Click Search Patient to reload."
-            );
-    }
-);
 
 renderSelectedFiles();

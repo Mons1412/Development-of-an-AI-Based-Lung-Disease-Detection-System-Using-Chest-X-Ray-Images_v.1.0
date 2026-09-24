@@ -53,16 +53,20 @@ def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db),
 ):
+    login_identifier = (
+        form_data.username
+    )
+
     user = auth_service.authenticate_user(
         db,
-        form_data.username,
+        login_identifier,
         form_data.password,
     )
 
     if user is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password.",
+            detail="Incorrect phone or password.",
             headers={"WWW-Authenticate": "Bearer"},
         )
 

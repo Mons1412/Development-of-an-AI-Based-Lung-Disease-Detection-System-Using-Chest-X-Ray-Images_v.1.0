@@ -224,6 +224,17 @@ class MedicalAdviceService:
                 "no prediction."
             )
 
+        existing_advices = (
+            self.advice_repository
+            .list_by_analysis_id(
+                db,
+                analysis.id,
+            )
+        )
+
+        if existing_advices:
+            return existing_advices[0]
+
         context = self.context_builder.build(
             db,
             analysis=analysis,

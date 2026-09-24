@@ -25,6 +25,13 @@ class UserModel(Base):
         index=True,
     )
 
+    phone: Mapped[str | None] = mapped_column(
+        String(20),
+        unique=True,
+        nullable=True,
+        index=True,
+    )
+
     password_hash: Mapped[str] = mapped_column(
         String(255),
         nullable=False,

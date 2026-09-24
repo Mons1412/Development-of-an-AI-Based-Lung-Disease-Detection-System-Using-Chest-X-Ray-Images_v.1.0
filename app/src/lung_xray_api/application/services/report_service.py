@@ -244,6 +244,43 @@ class ReportService:
             for row in prediction.probabilities
         }
 
+        xray_image_path = None
+
+        stored_image_path = getattr(
+            analysis,
+            "stored_image_path",
+            None,
+        )
+
+        if stored_image_path:
+            candidate = Path(
+                stored_image_path
+            )
+
+            if not candidate.is_absolute():
+                candidate = (
+                    PROJECT_ROOT
+                    / candidate
+                )
+
+            candidate = (
+                candidate.resolve()
+            )
+
+            if (
+                candidate.is_file()
+                and candidate.suffix.lower()
+                in {
+                    ".jpg",
+                    ".jpeg",
+                    ".png",
+                }
+            ):
+                xray_image_path = str(
+                    candidate
+                )
+
+
         return ReportPdfData(
             report_code=report_code,
             language=language,
@@ -252,6 +289,11 @@ class ReportService:
             patient_code=patient.patient_code,
             full_name=patient.full_name,
             birth_year=patient.birth_year,
+            date_of_birth=getattr(
+                patient,
+                "date_of_birth",
+                None,
+            ),
             gender=patient.gender,
             phone=patient.phone,
             address=patient.address,
@@ -260,8 +302,10 @@ class ReportService:
             original_filename=analysis.original_filename,
             input_source=analysis.input_source,
             model_key=analysis.ai_model.model_key,
+            model_display_name=analysis.ai_model.display_name,
             model_version=analysis.ai_model.version,
             analysis_created_at=analysis.created_at,
+            xray_image_path=xray_image_path,
 
             predicted_class=prediction.predicted_class,
             confidence=float(
@@ -301,6 +345,70 @@ class ReportService:
             ),
             notes=(
                 history.notes
+                if history is not None
+                else None
+            ),
+
+            current_complaint_hpi=(
+                getattr(
+                    history,
+                    "current_complaint_hpi",
+                    None,
+                )
+                if history is not None
+                else None
+            ),
+            allergy_history=(
+                getattr(
+                    history,
+                    "allergy_history",
+                    None,
+                )
+                if history is not None
+                else None
+            ),
+            diet=(
+                getattr(
+                    history,
+                    "diet",
+                    None,
+                )
+                if history is not None
+                else None
+            ),
+            appetite=(
+                getattr(
+                    history,
+                    "appetite",
+                    None,
+                )
+                if history is not None
+                else None
+            ),
+            sleep=(
+                getattr(
+                    history,
+                    "sleep",
+                    None,
+                )
+                if history is not None
+                else None
+            ),
+            exercise=(
+                getattr(
+                    history,
+                    "exercise",
+                    None,
+                )
+                if history is not None
+                else None
+            ),
+            habits=(
+                getattr(
+                    history,
+                    "habits",
+                    None,
+                )
                 if history is not None
                 else None
             ),
@@ -362,8 +470,7 @@ class ReportService:
         pdf_data = self._build_pdf_data(
             analysis=analysis,
             patient=patient,
-            history=history,
-            report_code=report_code,
+            history=history,            report_code=report_code,
             language=normalized_language,
             generated_at=generated_at,
         )

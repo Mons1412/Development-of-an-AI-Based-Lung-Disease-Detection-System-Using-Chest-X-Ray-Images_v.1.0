@@ -1,6 +1,7 @@
-from datetime import datetime
+from datetime import date, datetime
+from decimal import Decimal
 
-from sqlalchemy import DateTime, ForeignKey, Integer, String, func
+from sqlalchemy import Date, DateTime, ForeignKey, Integer, Numeric, String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from lung_xray_api.infrastructure.persistence.orm.base import Base
@@ -32,6 +33,21 @@ class PatientProfileModel(Base):
 
     birth_year: Mapped[int | None] = mapped_column(
         Integer,
+        nullable=True,
+    )
+
+    date_of_birth: Mapped[date | None] = mapped_column(
+        Date,
+        nullable=True,
+    )
+
+    height_cm: Mapped[Decimal | None] = mapped_column(
+        Numeric(5, 2),
+        nullable=True,
+    )
+
+    weight_kg: Mapped[Decimal | None] = mapped_column(
+        Numeric(6, 2),
         nullable=True,
     )
 

@@ -5,6 +5,7 @@ from lung_xray_api.infrastructure.persistence.repositories.admin_dashboard_repos
 )
 from lung_xray_api.schemas.admin_dashboard import (
     AdminDashboardResponse,
+    DashboardSummaryResponse,
 )
 
 
@@ -21,6 +22,13 @@ class AdminDashboardService:
             repository
             or AdminDashboardRepository()
         )
+
+    def get_summary(self, db: Session) -> DashboardSummaryResponse:
+        return DashboardSummaryResponse.model_validate({
+            "overview": self.repository.get_overview(db),
+            "prediction_distribution": self.repository.get_prediction_distribution(db),
+            "model_usage": self.repository.get_model_usage(db),
+        })
 
     def get_dashboard(
         self,

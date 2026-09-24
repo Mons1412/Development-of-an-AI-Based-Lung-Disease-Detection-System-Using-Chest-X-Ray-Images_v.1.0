@@ -1,3 +1,8 @@
+from io import BytesIO
+import mimetypes
+
+from PIL import Image
+from fastapi.responses import Response
 from typing import Annotated
 
 from fastapi import (
@@ -316,6 +321,118 @@ def list_my_analyses(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=str(exc),
         )
+
+@router.get(
+    "/{analysis_id}/image",
+)
+def get_my_analysis_image(
+    analysis_id: int,
+    thumbnail: bool = False,
+    db: Session = Depends(get_db),
+    current_user: UserModel = Depends(
+        require_user
+    ),
+):
+    try:
+        file_path = (
+            analysis_service
+            .resolve_my_analysis_image_path(
+                db,
+                current_user,
+                analysis_id,
+            )
+        )
+
+    except LookupError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(exc),
+        ) from exc
+
+    except FileNotFoundError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(exc),
+        ) from exc
+
+
+    if thumbnail:
+        try:
+            with Image.open(
+                file_path
+            ) as source_image:
+                image = source_image.convert(
+                    "RGB"
+                )
+
+                image.thumbnail(
+                    (256, 256),
+                    Image.Resampling.LANCZOS,
+                )
+
+                output = BytesIO()
+
+                image.save(
+                    output,
+                    format="JPEG",
+                    quality=82,
+                    optimize=True,
+                )
+
+        except OSError as exc:
+            raise HTTPException(
+                status_code=(
+                    status.HTTP_422_UNPROCESSABLE_ENTITY
+                ),
+                detail=(
+                    "Stored analysis image "
+                    "could not be decoded."
+                ),
+            ) from exc
+
+
+        return Response(
+            content=output.getvalue(),
+            media_type="image/jpeg",
+            headers={
+                "Cache-Control":
+                    "private, max-age=300",
+            },
+        )
+
+
+    media_type = (
+        mimetypes.guess_type(
+            file_path.name
+        )[0]
+        or "application/octet-stream"
+    )
+
+
+    try:
+        image_bytes = (
+            file_path.read_bytes()
+        )
+
+    except OSError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Analysis image not found.",
+        ) from exc
+
+
+    return Response(
+        content=image_bytes,
+        media_type=media_type,
+        headers={
+            "Content-Disposition":
+                "inline",
+
+            "Cache-Control":
+                "private, max-age=300",
+        },
+    )
+
 
 @router.get(
     "/{analysis_id}",

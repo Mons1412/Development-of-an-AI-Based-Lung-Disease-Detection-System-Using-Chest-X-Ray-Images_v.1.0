@@ -34,6 +34,21 @@ class UserRepository:
 
         return db.scalar(statement)
 
+    def get_by_phone(
+        self,
+        db: Session,
+        phone: str,
+    ) -> UserModel | None:
+        statement = select(
+            UserModel
+        ).where(
+            UserModel.phone == phone
+        )
+
+        return db.scalar(
+            statement
+        )
+
     def get_by_email(
         self,
         db: Session,

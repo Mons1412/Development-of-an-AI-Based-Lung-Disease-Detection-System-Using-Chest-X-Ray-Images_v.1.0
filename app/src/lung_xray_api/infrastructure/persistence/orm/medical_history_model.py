@@ -23,6 +23,61 @@ class MedicalHistoryModel(Base):
         server_default=func.now(),
     )
 
+    current_complaint_hpi: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True,
+    )
+
+    past_medical_history: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True,
+    )
+
+    past_medication_history: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True,
+    )
+
+    allergy_history: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True,
+    )
+
+    diet: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True,
+    )
+
+    appetite: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True,
+    )
+
+    sleep: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True,
+    )
+
+    exercise: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True,
+    )
+
+    bowel_bladder: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True,
+    )
+
+    habits: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True,
+    )
+
+    family_history: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True,
+    )
+
     diseases: Mapped[list | None] = mapped_column(
         JSON,
         nullable=True,

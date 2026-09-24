@@ -17,6 +17,12 @@ from lung_xray_api.infrastructure.persistence.orm.medical_advice_model import (
 from lung_xray_api.infrastructure.persistence.orm.report_model import ReportModel
 
 
+from lung_xray_api.infrastructure.persistence.orm.patient_profile_history_model import (
+    PatientProfileHistoryModel,
+)
+
+from lung_xray_api.infrastructure.persistence.orm.visitor_session_model import VisitorSessionModel
+
 __all__ = [
     "UserModel",
     "PatientProfileModel",
@@ -27,4 +33,6 @@ __all__ = [
     "PredictionProbabilityModel",
     "MedicalAdviceModel",
     "ReportModel",
+    "PatientProfileHistoryModel",
+    "VisitorSessionModel",
 ]

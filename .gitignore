@@ -41,3 +41,6 @@ Thumbs.db
 
 # Application runtime data
 /app/var/
+
+# Isolated backend test environment
+.venv_admin_tests/

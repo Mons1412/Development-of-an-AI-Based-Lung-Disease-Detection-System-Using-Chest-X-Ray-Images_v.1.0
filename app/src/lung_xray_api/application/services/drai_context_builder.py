@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import date, datetime
+from uuid import uuid4
 from decimal import Decimal
 
 from sqlalchemy.orm import Session
@@ -23,6 +24,9 @@ MAX_MEDICAL_HISTORY_RECORDS = 10
 class DrAIPatientContext:
     birth_year: int | None
     gender: str | None
+    age: int | None = None
+    height_cm: float | None = None
+    weight_kg: float | None = None
 
 
 @dataclass(
@@ -38,6 +42,17 @@ class DrAIMedicalHistoryContext:
     alcohol_status: str | None
     occupational_exposure: str | None
     notes: str | None
+    current_complaint_hpi: str | None = None
+    past_medical_history: str | None = None
+    past_medication_history: str | None = None
+    allergy_history: str | None = None
+    diet: str | None = None
+    appetite: str | None = None
+    sleep: str | None = None
+    exercise: str | None = None
+    bowel_bladder: str | None = None
+    habits: str | None = None
+    family_history: str | None = None
 
 
 @dataclass(
@@ -73,6 +88,19 @@ class DrAIPredictionContext:
     ]
 
 
+@dataclass(frozen=True, slots=True)
+class DrAIReportMetadata:
+    full_name: str | None = None
+    phone: str | None = None
+    patient_code: str | None = None
+    analysis_code: str | None = None
+    original_filename: str | None = None
+    input_source: str | None = None
+    analyzed_at: datetime | None = None
+    report_code: str | None = None
+    generated_on: date | None = None
+
+
 @dataclass(
     frozen=True,
     slots=True,
@@ -85,6 +113,7 @@ class DrAIContext:
     ]
     model: DrAIModelContext
     prediction: DrAIPredictionContext
+    report_metadata: DrAIReportMetadata | None = None
 
 
 class DrAIContextBuilder:
@@ -215,6 +244,18 @@ class DrAIContextBuilder:
         history_contexts = tuple(
             DrAIMedicalHistoryContext(
                 recorded_at=history.recorded_at,
+                current_complaint_hpi=self._clean_text(getattr(history, "current_complaint_hpi", None)),
+                past_medical_history=self._clean_text(getattr(history, "past_medical_history", None)),
+                past_medication_history=self._clean_text(getattr(history, "past_medication_history", None)),
+                allergy_history=self._clean_text(getattr(history, "allergy_history", None)),
+                diet=self._clean_text(getattr(history, "diet", None)),
+                appetite=self._clean_text(getattr(history, "appetite", None)),
+                sleep=self._clean_text(getattr(history, "sleep", None)),
+                exercise=self._clean_text(getattr(history, "exercise", None)),
+                bowel_bladder=self._clean_text(getattr(history, "bowel_bladder", None)),
+                habits=self._clean_text(getattr(history, "habits", None)),
+                family_history=self._clean_text(getattr(history, "family_history", None)),
+
                 diseases=self._normalize_list(
                     history.diseases
                 ),
@@ -255,9 +296,27 @@ class DrAIContextBuilder:
             for item in probability_rows
         )
 
+        today = date.today()
+        birthday = getattr(patient, "date_of_birth", None)
+        age = None
+        if birthday is not None and birthday <= today:
+            age = today.year - birthday.year - ((today.month, today.day) < (birthday.month, birthday.day))
         return DrAIContext(
+            report_metadata=DrAIReportMetadata(
+                full_name=self._clean_text(getattr(patient, "full_name", None)),
+                phone=self._clean_text(getattr(patient, "phone", None)),
+                patient_code=self._clean_text(getattr(patient, "patient_code", None)),
+                analysis_code=self._clean_text(getattr(analysis, "analysis_code", None)),
+                original_filename=self._clean_text(getattr(analysis, "original_filename", None)),
+                input_source=self._clean_text(getattr(analysis, "input_source", None)),
+                analyzed_at=getattr(analysis, "created_at", None),
+                report_code="DA" + uuid4().hex[:16].upper(), generated_on=today,
+            ),
             patient=DrAIPatientContext(
-                birth_year=patient.birth_year,
+                birth_year=birthday.year if birthday else patient.birth_year,
+                age=age,
+                height_cm=float(patient.height_cm) if getattr(patient, "height_cm", None) is not None else None,
+                weight_kg=float(patient.weight_kg) if getattr(patient, "weight_kg", None) is not None else None,
                 gender=self._clean_text(
                     patient.gender
                 ),

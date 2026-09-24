@@ -396,16 +396,13 @@ def test_owner_user_can_generate_for_own_analysis(
         == OWNER_ANALYSIS.id
     )
 
+    # An existing Dr.AI advice is reused.
+    # The provider must not create a second advice.
     assert (
         authorization_stack
         .provider
         .calls
-        == [
-            (
-                OWNER_ANALYSIS.id,
-                "vi",
-            )
-        ]
+        == []
     )
 
 

@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, computed_field
 
 
 class MedicalAdviceCreate(BaseModel):
@@ -27,3 +27,9 @@ class MedicalAdviceResponse(BaseModel):
     model_name: str | None
     advice_text: str
     created_at: datetime
+
+    @computed_field
+    @property
+    def summary(self) -> dict[str, str] | None:
+        from lung_xray_api.application.services.drai_report import extract_advice_summary
+        return extract_advice_summary(self.advice_text)

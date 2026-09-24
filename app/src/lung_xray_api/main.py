@@ -34,6 +34,9 @@ from lung_xray_api.api.v1.users import (
     router as users_router,
 )
 from lung_xray_api.api.v1.reports import router as reports_router
+from lung_xray_api.api.v1.visitor_stats import (
+    router as visitor_stats_router,
+)
 
 
 PROJECT_ROOT = (
@@ -63,6 +66,10 @@ app = FastAPI(
 
 app.include_router(
     health_router
+)
+
+app.include_router(
+    visitor_stats_router
 )
 
 app.include_router(

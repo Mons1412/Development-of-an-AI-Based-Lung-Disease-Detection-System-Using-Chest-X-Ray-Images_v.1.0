@@ -236,7 +236,7 @@ def test_get_by_id_returns_none_for_unknown_id(
     )
 
 
-def test_list_by_analysis_id_returns_newest_first(
+def test_list_by_analysis_id_returns_latest_only(
     database,
 ):
     db, seed = database
@@ -276,7 +276,6 @@ def test_list_by_analysis_id_returns_newest_first(
         for row in rows
     ] == [
         second.id,
-        first.id,
     ]
 
 

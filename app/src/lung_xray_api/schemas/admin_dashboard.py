@@ -14,6 +14,13 @@ class AdminDashboardOverview(BaseModel):
     total_reports: int
 
 
+class DashboardSummaryOverview(BaseModel):
+    total_users: int
+    active_users: int
+    total_patients: int
+    total_analyses: int
+
+
 class AdminPredictionDistributionItem(BaseModel):
     class_name: str
     count: int
@@ -36,6 +43,12 @@ class AdminRecentAnalysisItem(BaseModel):
     predicted_class: str | None = None
     confidence: float | None = None
     created_at: datetime
+
+
+class DashboardSummaryResponse(BaseModel):
+    overview: DashboardSummaryOverview
+    prediction_distribution: list[AdminPredictionDistributionItem]
+    model_usage: list[AdminModelUsageItem]
 
 
 class AdminDashboardResponse(BaseModel):

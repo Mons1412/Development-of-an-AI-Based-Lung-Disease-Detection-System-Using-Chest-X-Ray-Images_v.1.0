@@ -40,13 +40,10 @@ def test_admin_dashboard_html_exists_before_search():
     assert dashboard_index < search_index
 
     for element_id in [
-        "admin-dashboard-recent-limit",
-        "admin-dashboard-refresh-button",
         "admin-dashboard-status",
         "admin-dashboard-overview",
         "admin-dashboard-predictions",
         "admin-dashboard-model-usage",
-        "admin-dashboard-recent-analyses",
     ]:
         assert (
             f'id="{element_id}"'
@@ -61,14 +58,13 @@ def test_admin_dashboard_fetch_contract_exists():
     )
 
     assert (
-        '"/api/v1/admin/dashboard"'
+        '"/api/v1/admin/dashboard/summary"'
         in SCRIPT
     )
 
-    assert (
-        '"?recent_limit="'
-        in SCRIPT
-    )
+    for removed_id in ["admin-dashboard-recent-limit", "admin-dashboard-refresh-button",
+                       "admin-dashboard-recent-analyses"]:
+        assert f'id="{removed_id}"' not in INDEX
 
     assert (
         "Authorization:"
@@ -87,7 +83,7 @@ def test_admin_dashboard_rendering_is_plain_text():
     )
 
     end = SCRIPT.index(
-        "function getAdminSearchRequestValues()"
+        "async function analyzeBatch()"
     )
 
     block = SCRIPT[
@@ -120,7 +116,7 @@ def test_admin_dashboard_has_user_role_gate():
     )
 
     assert (
-        'tokenRole !== "ADMIN"'
+        "if (tokenRole) return loadAdminDashboard();"
         in SCRIPT
     )
 
@@ -151,6 +147,6 @@ def test_admin_dashboard_css_and_old_search_remain():
     )
 
     assert (
-        "function loadAdminAnalysisHistory("
-        in SCRIPT
+        'id="admin-patient-query"'
+        in INDEX
     )
