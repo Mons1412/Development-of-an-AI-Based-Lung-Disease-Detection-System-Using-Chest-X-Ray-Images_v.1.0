@@ -36,10 +36,9 @@ def summary_app(monkeypatch):
     return app
 
 
-@pytest.mark.parametrize('role', ['USER', 'ADMIN'])
-def test_summary_contains_only_aggregate_data(summary_app, role):
+def test_admin_can_read_summary_aggregate_data(summary_app):
     summary_app.dependency_overrides[get_current_user] = lambda: SimpleNamespace(
-        id=1, role=role, is_active=True)
+        id=1, role='ADMIN', is_active=True)
     with TestClient(summary_app) as client:
         response = client.get('/api/v1/admin/dashboard/summary')
     assert response.status_code == 200
@@ -47,6 +46,14 @@ def test_summary_contains_only_aggregate_data(summary_app, role):
         'overview': dict(total_users=5, active_users=4, total_patients=3, total_analyses=2),
         'prediction_distribution': [], 'model_usage': [],
     }
+
+
+def test_user_cannot_read_admin_summary(summary_app):
+    summary_app.dependency_overrides[get_current_user] = lambda: SimpleNamespace(
+        id=1, role='USER', is_active=True)
+    with TestClient(summary_app) as client:
+        response = client.get('/api/v1/admin/dashboard/summary')
+    assert response.status_code == 403
 
 
 def test_guest_cannot_read_summary(summary_app):

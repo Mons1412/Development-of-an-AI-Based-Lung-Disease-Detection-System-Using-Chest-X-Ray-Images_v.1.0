@@ -109,14 +109,29 @@ def test_admin_dashboard_rendering_is_plain_text():
         )
 
 
-def test_admin_dashboard_has_user_role_gate():
+def test_admin_dashboard_has_admin_only_role_gate():
     assert (
         "function getAdminDashboardTokenRole("
         in SCRIPT
     )
 
     assert (
-        "if (tokenRole) return loadAdminDashboard();"
+        'const isAdmin = tokenRole === "ADMIN";'
+        in SCRIPT
+    )
+
+    assert (
+        'tokenRole !== "ADMIN"'
+        in SCRIPT
+    )
+
+    assert (
+        "if (isAdmin) {"
+        in SCRIPT
+    )
+
+    assert (
+        "return loadAdminDashboard();"
         in SCRIPT
     )
 

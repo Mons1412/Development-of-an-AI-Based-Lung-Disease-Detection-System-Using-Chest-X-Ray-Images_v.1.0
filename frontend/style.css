@@ -3058,3 +3058,310 @@ button.danger { background: #b91c1c; color: white; }
             38%;
     }
 }
+
+
+/* ROLE BASED APP VISIBILITY v1 */
+
+body[data-app-role="GUEST"] .role-user-only,
+body[data-app-role="GUEST"] .role-admin-only,
+body[data-app-role="USER"] .role-guest-only,
+body[data-app-role="USER"] .role-admin-only,
+body[data-app-role="ADMIN"] .role-guest-only,
+body[data-app-role="ADMIN"] .role-user-only {
+    display:
+        none !important;
+}
+
+
+.project-overview {
+    display:
+        grid;
+
+    gap:
+        18px;
+}
+
+
+.project-overview-header {
+    padding-bottom:
+        4px;
+}
+
+
+.project-overview-header h2 {
+    margin-bottom:
+        8px;
+}
+
+
+.project-overview-lead {
+    margin:
+        0;
+
+    color:
+        var(--muted, #64748b);
+
+    line-height:
+        1.65;
+}
+
+
+.project-overview-block {
+    padding:
+        18px 20px;
+
+    border:
+        1px solid #dbe4ee;
+
+    border-radius:
+        12px;
+
+    background:
+        #ffffff;
+}
+
+
+.project-overview-block h3 {
+    margin:
+        0 0 10px;
+
+    font-size:
+        1.02rem;
+}
+
+
+.project-overview-block p {
+    margin:
+        8px 0;
+
+    line-height:
+        1.68;
+}
+
+
+.project-overview-block ul {
+    margin:
+        10px 0 0;
+
+    padding-left:
+        22px;
+}
+
+
+.project-overview-block li {
+    margin:
+        6px 0;
+
+    line-height:
+        1.55;
+}
+
+
+.project-overview-disclaimer {
+    padding:
+        12px 14px;
+
+    border-left:
+        4px solid #2563eb;
+
+    border-radius:
+        8px;
+
+    background:
+        #eff6ff;
+
+    font-weight:
+        600;
+}
+
+
+@media (max-width: 640px) {
+
+    .project-overview-block {
+        padding:
+            15px;
+    }
+}
+
+
+/* ADMIN PATIENT SEARCH INPUT v1 */
+
+#admin-patient-query {
+    width: 100%;
+    min-height: 46px;
+    padding: 11px 14px;
+
+    box-sizing: border-box;
+
+    border:
+        1px solid #cbd5e1;
+
+    border-radius:
+        10px;
+
+    background:
+        #ffffff;
+
+    color:
+        #111827;
+
+    font:
+        inherit;
+
+    font-size:
+        1rem;
+
+    line-height:
+        1.4;
+
+    outline:
+        none;
+
+    transition:
+        border-color 160ms ease,
+        box-shadow 160ms ease,
+        background-color 160ms ease;
+}
+
+
+#admin-patient-query::placeholder {
+    color:
+        #94a3b8;
+}
+
+
+#admin-patient-query:hover {
+    border-color:
+        #94a3b8;
+}
+
+
+#admin-patient-query:focus {
+    border-color:
+        #2563eb;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(37, 99, 235, 0.12);
+
+    background:
+        #ffffff;
+}
+
+
+/* LANGUAGE SWITCHER v1 */
+
+.header-auth {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+
+.language-switcher {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 38px;
+    padding: 3px 5px;
+
+    flex: 0 0 auto;
+
+    border: 1px solid #dbe3ec;
+    border-radius: 10px;
+
+    background: #f8fafc;
+}
+
+
+.language-option {
+    min-width: 36px;
+    min-height: 30px;
+
+    padding: 4px 8px;
+
+    border: 0;
+    border-radius: 7px;
+
+    background: transparent;
+    color: #64748b;
+
+    cursor: pointer;
+
+    font-size: 0.82rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+
+.language-option:hover {
+    background: #e2e8f0;
+    color: #0f172a;
+}
+
+
+.language-option.is-active {
+    background: #111827;
+    color: #ffffff;
+
+    box-shadow:
+        0 1px 3px
+        rgba(15, 23, 42, 0.18);
+}
+
+
+.language-option:focus-visible {
+    outline:
+        3px solid
+        rgba(37, 99, 235, 0.18);
+
+    outline-offset: 2px;
+}
+
+
+.language-divider {
+    padding: 0 2px;
+
+    color: #94a3b8;
+
+    font-size: 0.8rem;
+    font-weight: 700;
+
+    user-select: none;
+}
+
+
+@media (max-width: 720px) {
+
+    .header-auth {
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+    }
+
+
+    .header-auth-actions {
+        width: auto;
+        flex: 1 1 auto;
+    }
+
+
+    .header-user {
+        flex: 1 1 auto;
+    }
+
+
+    .language-switcher {
+        flex: 0 0 auto;
+    }
+}
+
+
+/* PROJECT OVERVIEW LANGUAGE VISIBILITY v1 */
+
+.project-overview[hidden] {
+    display: none !important;
+}
+

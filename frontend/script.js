@@ -5697,9 +5697,15 @@ function initializeAdminDashboard() {
     if (adminDashboardRequest) adminDashboardRequest.abort();
     adminDashboardRequest = null;
     resetAdminDashboardView();
+    /* ADMIN ROLE GATE v1 */
     const tokenRole = getAdminDashboardTokenRole();
-    adminDashboardSection.hidden = !tokenRole;
-    if (tokenRole) return loadAdminDashboard();
+    const isAdmin = tokenRole === "ADMIN";
+
+    adminDashboardSection.hidden = !isAdmin;
+
+    if (isAdmin) {
+        return loadAdminDashboard();
+    }
 }
 
 function appendAdminDashboardText(parent, tag, value, className = "") {
@@ -5747,7 +5753,10 @@ async function loadAdminDashboard() {
     if (adminDashboardRequest) return;
     const token = normalizeToken(tokenInput.value);
     const tokenRole = getAdminDashboardTokenRole();
-    if (!token || !tokenRole) {
+    if (
+        !token
+        || tokenRole !== "ADMIN"
+    ) {
         resetAdminDashboardView();
         adminDashboardSection.hidden = true;
         return;
