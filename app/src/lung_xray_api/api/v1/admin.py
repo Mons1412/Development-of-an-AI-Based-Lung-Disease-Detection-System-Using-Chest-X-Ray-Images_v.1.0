@@ -55,11 +55,16 @@ user_repository = UserRepository()
 @router.get("/dashboard/summary", response_model=DashboardSummaryResponse)
 def get_dashboard_summary(
     db: Session = Depends(get_db),
-    current_user: UserModel = Depends(get_current_user),
+    current_admin: UserModel = Depends(
+        require_admin
+    ),
 ):
-    """Authenticated users may view aggregate statistics, without patient records."""
-    del current_user
-    return admin_dashboard_service.get_summary(db)
+    """ADMIN-only aggregate dashboard statistics."""
+    del current_admin
+
+    return admin_dashboard_service.get_summary(
+        db
+    )
 
 
 @router.get(

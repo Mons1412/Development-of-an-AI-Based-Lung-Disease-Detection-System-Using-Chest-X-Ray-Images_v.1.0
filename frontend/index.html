@@ -12,11 +12,11 @@
 
     <link
         rel="stylesheet"
-        href="/frontend/style.css?v=m1537"
+        href="/frontend/style.css?v=m1543"
     >
 </head>
 
-<body>
+<body data-app-role="GUEST">
     <main class="container">
 
         <header class="page-header">
@@ -33,7 +33,7 @@
                     </p>
 
                     <h1>
-                        Batch Chest X-ray Analysis
+                        Development of an AI-Based Lung Disease Detection System Using Chest X-Ray Images
                     </h1>
 
                     <p class="subtitle">
@@ -44,6 +44,41 @@
             </div>
 
             <div class="header-auth">
+
+
+                <div
+                    id="ui-language-switcher"
+                    class="language-switcher"
+                    role="group"
+                    aria-label="Interface language"
+                >
+                    <button
+                        type="button"
+                        class="language-option"
+                        data-ui-language="en"
+                        aria-pressed="true"
+                        title="English"
+                    >
+                        EN
+                    </button>
+
+                    <span
+                        class="language-divider"
+                        aria-hidden="true"
+                    >
+                        /
+                    </span>
+
+                    <button
+                        type="button"
+                        class="language-option"
+                        data-ui-language="vi"
+                        aria-pressed="false"
+                        title="Vietnamese"
+                    >
+                        VI
+                    </button>
+                </div>
 
                 <div
                     id="auth-header-guest"
@@ -718,7 +753,361 @@
         >
 
 
-<section class="panel">
+
+        <!-- PROJECT OVERVIEW ROLE VIEW v1 -->
+        <section
+            id="project-overview"
+            class="panel role-guest-only project-overview"
+            data-overview-language="en"
+            aria-labelledby="project-overview-title"
+        >
+            <div class="project-overview-header">
+                <p class="eyebrow">
+                    LungXrayAI 2.0
+                </p>
+
+                <h2 id="project-overview-title">
+                    PROJECT OVERVIEW
+                </h2>
+
+                <p class="project-overview-lead">
+                    AI-assisted chest X-ray classification
+                    and patient information support system.
+                </p>
+            </div>
+
+            <article class="project-overview-block">
+                <h3>
+                    1. Project Title and Field
+                </h3>
+
+                <p>
+                    <strong>Project Title:</strong>
+                    Development of an AI-Based Lung Disease
+                    Detection System Using Chest X-Ray Images
+                </p>
+
+                <p>
+                    <strong>Field:</strong>
+                    Artificial Intelligence, Deep Learning,
+                    Computer Vision, and Medical Image Processing.
+                    The system uses MobileNetV2 to classify
+                    chest X-ray images into Normal Lungs,
+                    Pneumonia, and Tuberculosis.
+                </p>
+
+                <p>
+                    The Web application supports image uploading,
+                    result viewing, information management,
+                    and PDF report exportation.
+                </p>
+            </article>
+
+            <article class="project-overview-block">
+                <h3>
+                    2. Problem Statement and Motivation
+                </h3>
+
+                <p>
+                    Chest X-ray imaging is commonly used to support
+                    the detection of pulmonary abnormalities.
+                    Image interpretation requires professional
+                    expertise, while patients may have difficulty
+                    understanding or remembering information
+                    exchanged during examinations.
+                </p>
+
+                <p>
+                    Deep Learning can automatically learn features
+                    from medical images and support image
+                    classification. This project therefore aims
+                    to provide rapid X-ray analysis, intuitive
+                    result presentation, and information storage
+                    to support doctors and patients when
+                    referencing examination results.
+                </p>
+
+                <p class="project-overview-disclaimer">
+                    The system serves solely as a support tool
+                    and does not replace medical diagnosis
+                    by a physician.
+                </p>
+            </article>
+
+            <article class="project-overview-block">
+                <h3>
+                    3. Project Objectives
+                </h3>
+
+                <p>
+                    <strong>General Objective:</strong>
+                    Build an AI-integrated Web application that
+                    assists in classifying lung X-ray images into
+                    Normal, Pneumonia, and Tuberculosis while
+                    providing a simple interface for viewing,
+                    storing, and exporting analysis results.
+                </p>
+
+                <p>
+                    <strong>Specific Objectives:</strong>
+                </p>
+
+                <ul>
+                    <li>
+                        Collect, preprocess, and organize X-ray data.
+                    </li>
+
+                    <li>
+                        Train and evaluate the MobileNetV2 model.
+                    </li>
+
+                    <li>
+                        Classify images into Normal, Pneumonia,
+                        and Tuberculosis.
+                    </li>
+
+                    <li>
+                        Develop Backend APIs and the Web interface.
+                    </li>
+
+                    <li>
+                        Display model output results and probabilities.
+                    </li>
+
+                    <li>
+                        Manage user accounts, patient records,
+                        and analysis history.
+                    </li>
+
+                    <li>
+                        Export analysis results as PDF reports.
+                    </li>
+
+                    <li>
+                        Build a user-friendly and scalable system.
+                    </li>
+                </ul>
+            </article>
+
+            <article class="project-overview-block">
+                <h3>
+                    4. Scope and Limitations
+                </h3>
+
+                <p>
+                    <strong>Scope:</strong>
+                    The project focuses on Image Classification
+                    for chest X-ray images and is developed as
+                    a Web application for research, testing,
+                    and reference support purposes.
+                </p>
+
+                <p>
+                    <strong>Limitations:</strong>
+                    The current system classifies only Normal Lungs,
+                    Pneumonia, and Tuberculosis. Object Detection
+                    for lesion localization and Medical Image
+                    Segmentation are outside the current scope.
+                </p>
+
+                <p class="project-overview-disclaimer">
+                    Results depend on training data and input image
+                    quality. Displayed probabilities are model
+                    classification outputs and are not the actual
+                    probability that a patient has a disease.
+                    The system must not be used as the sole basis
+                    for diagnosis or treatment.
+                </p>
+            </article>
+
+            <article class="project-overview-block">
+                <h3>
+                    5. Technologies and Implementation Methods
+                </h3>
+
+                <p>
+                    <strong>Key Technologies:</strong>
+                    Python, TensorFlow/Keras, MobileNetV2,
+                    Google Colab, FastAPI, HTML, CSS,
+                    JavaScript, MySQL, Git, and GitHub.
+                </p>
+
+                <p>
+                    <strong>AI Workflow:</strong>
+                    Data Collection -&gt; Preprocessing -&gt;
+                    Data Splitting -&gt; MobileNetV2 Training -&gt;
+                    Model Evaluation -&gt; System Integration.
+                </p>
+
+                <p>
+                    <strong>Software Development:</strong>
+                    The AI model, Backend APIs, database,
+                    and Web interface are developed in stages
+                    and then tested and integrated into
+                    the complete system.
+                </p>
+            </article>
+        </section>
+
+
+                <section
+            id="project-overview-vi"
+            class="panel role-guest-only project-overview"
+            data-overview-language="vi"
+            aria-labelledby="project-overview-title-vi"
+            hidden
+        >
+            <div class="project-overview-header">
+                <p class="eyebrow">
+                    LungXrayAI 2.0
+                </p>
+
+                <h2 id="project-overview-title-vi">
+                    TỔNG QUAN DỰ ÁN
+                </h2>
+            </div>
+
+            <article class="project-overview-block">
+                <h3>
+                    1. Tên đề tài và lĩnh vực
+                </h3>
+
+                <p>
+                    <strong>Tên đề tài:</strong>
+                </p>
+
+                <p>
+                    HỆ THỐNG XÁC ĐỊNH BỆNH PHỔI THÔNG QUA ẢNH X-RAY
+                </p>
+
+                <p>
+                    Đề tài thuộc lĩnh vực Trí tuệ nhân tạo, Deep Learning,
+                    Computer Vision và xử lý ảnh y khoa. Hệ thống sử dụng
+                    mô hình MobileNetV2 để phân loại ảnh X-quang ngực thành
+                    ba nhóm: Phổi bình thường, Viêm phổi và Lao phổi.
+                    Ngoài mô hình AI, đề tài xây dựng ứng dụng Web hỗ trợ
+                    tải ảnh, xem kết quả, quản lý thông tin và xuất báo cáo PDF.
+                </p>
+            </article>
+
+            <article class="project-overview-block">
+                <h3>
+                    2. Đặt vấn đề và lý do chọn đề tài
+                </h3>
+
+                <p>
+                    Ảnh X-quang ngực là phương pháp phổ biến trong việc hỗ trợ
+                    phát hiện các bất thường liên quan đến phổi. Tuy nhiên,
+                    quá trình đọc ảnh yêu cầu kiến thức chuyên môn, trong khi
+                    bệnh nhân có thể gặp khó khăn trong việc hiểu hoặc ghi nhớ
+                    các thông tin được trao đổi trong quá trình khám.
+                </p>
+
+                <p>
+                    Sự phát triển của Deep Learning cho phép xây dựng các mô hình
+                    có khả năng tự động học đặc trưng từ hình ảnh y khoa và hỗ trợ
+                    phân loại ảnh. Vì vậy, đề tài hướng đến việc xây dựng một hệ thống
+                    giúp phân tích ảnh X-quang nhanh, trình bày kết quả trực quan và
+                    hỗ trợ lưu trữ thông tin, góp phần hỗ trợ bác sĩ và bệnh nhân
+                    trong quá trình tham khảo kết quả.
+                </p>
+
+                <p class="project-overview-disclaimer">
+                    Hệ thống chỉ đóng vai trò công cụ hỗ trợ, không thay thế
+                    chẩn đoán của bác sĩ.
+                </p>
+            </article>
+
+            <article class="project-overview-block">
+                <h3>
+                    3. Mục tiêu của đồ án
+                </h3>
+
+                <p>
+                    <strong>Mục tiêu tổng quát</strong>
+                </p>
+
+                <p>
+                    Xây dựng một hệ thống Web ứng dụng trí tuệ nhân tạo để hỗ trợ
+                    phân loại ảnh X-quang phổi thành ba nhóm: Normal, Pneumonia
+                    và Tuberculosis, đồng thời cung cấp giao diện đơn giản để
+                    người dùng xem, lưu trữ và xuất kết quả phân tích.
+                </p>
+
+                <p>
+                    <strong>Mục tiêu cụ thể</strong>
+                </p>
+
+                <ul>
+                    <li>Thu thập, xử lý và tổ chức dữ liệu ảnh X-quang.</li>
+                    <li>Huấn luyện và đánh giá mô hình MobileNetV2.</li>
+                    <li>Phân loại ảnh thành ba lớp Normal, Pneumonia và Tuberculosis.</li>
+                    <li>Xây dựng Backend API và giao diện Web.</li>
+                    <li>Hiển thị kết quả và xác suất đầu ra của mô hình.</li>
+                    <li>Quản lý tài khoản, hồ sơ bệnh nhân và lịch sử phân tích.</li>
+                    <li>Hỗ trợ xuất kết quả thành báo cáo PDF.</li>
+                    <li>Xây dựng hệ thống dễ sử dụng và có khả năng mở rộng.</li>
+                </ul>
+            </article>
+
+            <article class="project-overview-block">
+                <h3>
+                    4. Phạm vi nghiên cứu và giới hạn
+                </h3>
+
+                <p>
+                    Đề tài tập trung vào bài toán Image Classification đối với
+                    ảnh X-quang ngực và được phát triển dưới dạng ứng dụng Web
+                    phục vụ mục đích nghiên cứu, thử nghiệm và hỗ trợ tham khảo.
+                </p>
+
+                <p>
+                    Hệ thống hiện chỉ phân loại ba nhóm Phổi bình thường,
+                    Viêm phổi và Lao phổi. Đề tài chưa thực hiện các bài toán
+                    như Object Detection để xác định vị trí tổn thương hoặc
+                    Medical Image Segmentation để phân đoạn vùng bệnh.
+                </p>
+
+                <p class="project-overview-disclaimer">
+                    Kết quả của hệ thống phụ thuộc vào dữ liệu huấn luyện và
+                    chất lượng ảnh đầu vào. Các giá trị xác suất hiển thị là
+                    đầu ra của mô hình phân loại, không được xem là xác suất
+                    thực tế bệnh nhân mắc bệnh. Hệ thống không thay thế bác sĩ
+                    và không được sử dụng làm căn cứ duy nhất cho chẩn đoán
+                    hoặc điều trị.
+                </p>
+            </article>
+
+            <article class="project-overview-block">
+                <h3>
+                    5. Công nghệ và phương pháp thực hiện
+                </h3>
+
+                <p>
+                    Các công nghệ chính được sử dụng gồm Python, TensorFlow/Keras,
+                    MobileNetV2, Google Colab, FastAPI, HTML, CSS, JavaScript,
+                    MySQL, Git và GitHub.
+                </p>
+
+                <p>
+                    <strong>Quy trình AI được thực hiện theo các bước:</strong>
+                </p>
+
+                <p>
+                    Thu thập dữ liệu → Tiền xử lý → Chia dữ liệu →
+                    Huấn luyện MobileNetV2 → Đánh giá mô hình →
+                    Tích hợp vào hệ thống.
+                </p>
+
+                <p>
+                    Phần mềm được phát triển theo từng giai đoạn gồm mô hình AI,
+                    Backend API, cơ sở dữ liệu và giao diện Web, sau đó tiến hành
+                    kiểm thử và tích hợp các thành phần thành hệ thống hoàn chỉnh.
+                </p>
+            </article>
+        </section>
+
+<section class="panel role-user-only" id="select-images-section">
             <h2>3. Select Images</h2>
 
             <div class="picker-grid">
@@ -807,7 +1196,7 @@
 
         <section
             id="result-section"
-            class="panel"
+            class="panel role-user-only"
             hidden
         >
             <h2>4. Batch Results</h2>
@@ -870,7 +1259,7 @@
         </section>
         <section
             id="history-section"
-            class="panel"
+            class="panel role-user-only"
         >
             <h2>
                 5. Analysis History
@@ -967,7 +1356,7 @@
         </section>
                     <section
             id="patient-profile-section"
-            class="panel"
+            class="panel role-user-only"
         >
             <h2>
                 6. Patient Profile
@@ -1190,7 +1579,7 @@
         </section>
                 <section
             id="medical-history-section"
-            class="panel"
+            class="panel role-user-only"
         >
             <h2>
                 7. New Medical History
@@ -1645,7 +2034,7 @@
         </section>
         <section
             id="admin-dashboard-section"
-            class="panel"
+            class="panel role-admin-only"
             hidden
         >
             <h2>
@@ -1701,7 +2090,7 @@
 
         <section
             id="admin-search-section"
-            class="panel"
+            class="panel role-admin-only"
             hidden
         >
             <h2>
@@ -2156,8 +2545,10 @@
         </div>
     </section>
 
+    <script src="/frontend/language.js?v=m1543"></script>
+    <script src="/frontend/role_visibility.js?v=m1538"></script>
     <script src="/frontend/auth.js?v=m1531"></script>
-    <script src="/frontend/script.js?v=m1520"></script>
+    <script src="/frontend/script.js?v=m1538"></script>
     <script src="/frontend/admin_patients.js?v=m1526"></script>
     <script src="/frontend/profile_ui.js?v=m1513"></script>
     <script src="/frontend/medical_history_ui.js?v=m1526"></script>
