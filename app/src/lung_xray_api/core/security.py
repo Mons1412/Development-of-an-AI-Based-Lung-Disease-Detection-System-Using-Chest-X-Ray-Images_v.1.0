@@ -1,22 +1,52 @@
-"""Security helpers cho API key local.
+from datetime import datetime, timedelta, timezone
 
-API key chỉ kiểm soát truy cập local, không liên quan chất lượng AI. Khi bật,
-so sánh dùng `secrets.compare_digest` để tránh timing leak đơn giản và không
-log giá trị key.
-"""
+import jwt
+from pwdlib import PasswordHash
 
-from __future__ import annotations
-
-import secrets
-
-from lung_xray_api.core.config import Settings
+from lung_xray_api.core.config import settings
 
 
-def is_authorized(settings: Settings, provided_key: str | None) -> bool:
-    if not settings.api_key_enabled:
-        return True
-    if not settings.api_key:
-        return False
-    if provided_key is None:
-        return False
-    return secrets.compare_digest(provided_key, settings.api_key)
+password_hash = PasswordHash.recommended()
+
+
+def hash_password(password: str) -> str:
+    return password_hash.hash(password)
+
+
+def verify_password(
+    plain_password: str,
+    hashed_password: str,
+) -> bool:
+    return password_hash.verify(
+        plain_password,
+        hashed_password,
+    )
+
+
+def create_access_token(
+    subject: str,
+    role: str,
+) -> str:
+    expires_at = datetime.now(timezone.utc) + timedelta(
+        minutes=settings.access_token_expire_minutes
+    )
+
+    payload = {
+        "sub": subject,
+        "role": role,
+        "exp": expires_at,
+    }
+
+    return jwt.encode(
+        payload,
+        settings.jwt_secret,
+        algorithm=settings.jwt_algorithm,
+    )
+
+
+def decode_access_token(token: str) -> dict:
+    return jwt.decode(
+        token,
+        settings.jwt_secret,
+        algorithms=[settings.jwt_algorithm],
+    )

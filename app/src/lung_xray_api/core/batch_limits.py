@@ -1,0 +1,7 @@
+MAX_BATCH_FILES = 50
+
+MAX_BATCH_TOTAL_BYTES = (
+    200
+    * 1024
+    * 1024
+)

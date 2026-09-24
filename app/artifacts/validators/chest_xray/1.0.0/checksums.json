@@ -1,0 +1,9 @@
+{
+  "chest_xray_validator.keras": "44cc3f45f960385d75cff377928085269ec8be50aae4cd581c2785d06b1451b5",
+  "class_indices.json": "58b230b07bc0801c83449c23a1c49e69f438a37d544efd82f5241cf76a7ea390",
+  "inference_contract.json": "8a08412b73e7c16086362841f09591514eedd1417a232a75d166746eae4342e2",
+  "threshold_config.json": "25e5325c1aa6a62bdd3a1c8ec272c168dc3f2bb72fccb8d91810b8bfd84bbd21",
+  "test_metrics_thresholded.json": "2eb3401ad7c68548fa62f4829b51725fb7bcdc57dd8abecd04aa6b49adf3fb8a",
+  "training_summary.json": "617562de150cc45867e1db8a74b0cbe44b327bfc5ebff9a35279372b20532da7",
+  "model_runtime_requirements.txt": "427c8e9a7bde86a9bdde90fc9efea094511865e7e264cc47020d62c67e729242"
+}

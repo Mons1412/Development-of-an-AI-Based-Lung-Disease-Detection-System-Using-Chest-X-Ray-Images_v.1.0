@@ -1,23 +1,36 @@
 services:
-  lung-xray-api:
-    build:
-      context: .
-      dockerfile: Dockerfile
-
-    container_name: lung-xray-api
-
-    ports:
-      - "8000:8000"
-
-    env_file:
-      - .env
+  mysql:
+    image: mysql:8.4.11
+    container_name: lungxray2-mysql
 
     environment:
-      HOST: 0.0.0.0
-      PORT: 8000
-      PYTHONUTF8: "1"
-      PYTHONIOENCODING: utf-8
-      PYTHONPATH: /app/src
-      ARTIFACT_DIR: /app/artifacts/lung_classifier/1.1.0
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+
+    ports:
+      - "127.0.0.1:3306:3306"
+
+    volumes:
+      - lungxray2_mysql_data:/var/lib/mysql
+
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "127.0.0.1",
+          "--silent"
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
 
     restart: unless-stopped
+
+volumes:
+  lungxray2_mysql_data:

@@ -1,0 +1,2166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>LungXrayAI 2.0</title>
+
+    <link
+        rel="stylesheet"
+        href="/frontend/style.css?v=m1537"
+    >
+</head>
+
+<body>
+    <main class="container">
+
+        <header class="page-header">
+            <div class="header-brand">
+                <img
+                    src="/frontend/assets/nttu-header-logo.png"
+                    alt="Nguyen Tat Thanh University"
+                    class="header-school-logo"
+                >
+
+                <div class="header-brand-copy">
+                    <p class="eyebrow">
+                        LungXrayAI 2.0
+                    </p>
+
+                    <h1>
+                        Batch Chest X-ray Analysis
+                    </h1>
+
+                    <p class="subtitle">
+                        Analyze multiple chest X-ray images
+                        using the LungXrayAI backend.
+                    </p>
+                </div>
+            </div>
+
+            <div class="header-auth">
+
+                <div
+                    id="auth-header-guest"
+                    class="header-auth-actions"
+                >
+                    <button
+                        id="open-login-button"
+                        type="button"
+                        class="header-auth-button secondary"
+                        aria-haspopup="dialog"
+                    >
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                            class="auth-icon"
+                        >
+                            <path
+                                d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"
+                            ></path>
+                            <path
+                                d="M10 17l5-5-5-5"
+                            ></path>
+                            <path
+                                d="M15 12H3"
+                            ></path>
+                        </svg>
+
+                        <span>Sign In</span>
+                    </button>
+
+
+                    <button
+                        id="open-register-button"
+                        type="button"
+                        class="header-auth-button"
+                        aria-haspopup="dialog"
+                    >
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                            class="auth-icon"
+                        >
+                            <path
+                                d="M15 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"
+                            ></path>
+                            <circle
+                                cx="8.5"
+                                cy="7"
+                                r="4"
+                            ></circle>
+                            <path
+                                d="M19 8v6"
+                            ></path>
+                            <path
+                                d="M22 11h-6"
+                            ></path>
+                        </svg>
+
+                        <span>Create Account</span>
+                    </button>
+                </div>
+
+
+                <div
+                    id="auth-header-user"
+                    class="header-user"
+                    hidden
+                >
+                    <div class="header-user-identity">
+                        <span
+                            class="header-user-avatar"
+                            aria-hidden="true"
+                        >
+                            <svg
+                                viewBox="0 0 24 24"
+                                class="auth-icon"
+                            >
+                                <circle
+                                    cx="12"
+                                    cy="8"
+                                    r="4"
+                                ></circle>
+                                <path
+                                    d="M4 21a8 8 0 0 1 16 0"
+                                ></path>
+                            </svg>
+                        </span>
+
+                        <div>
+                            <strong
+                                id="header-user-name"
+                            >
+                                User
+                            </strong>
+
+                            <span
+                                id="header-user-role"
+                                class="header-user-role"
+                            ></span>
+                        </div>
+                    </div>
+
+                    <button
+                        id="logout-button"
+                        type="button"
+                        class="header-logout-button"
+                        title="Sign Out"
+                        aria-label="Sign Out"
+                    >
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                            class="auth-icon"
+                        >
+                            <path
+                                d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"
+                            ></path>
+                            <path
+                                d="M16 17l5-5-5-5"
+                            ></path>
+                            <path
+                                d="M21 12H9"
+                            ></path>
+                        </svg>
+                    </button>
+                </div>
+
+            </div>
+        </header>
+
+
+        <div
+            id="auth-section"
+            class="auth-modal-backdrop"
+            hidden
+        >
+            <section
+                class="auth-modal"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="auth-dialog-title"
+            >
+                <div class="auth-modal-header">
+                    <div>
+                        <p class="eyebrow">
+                            LungXrayAI Account
+                        </p>
+
+                        <h2
+                            id="auth-dialog-title"
+                        >
+                            Sign In
+                        </h2>
+                    </div>
+
+                    <button
+                        id="close-auth-button"
+                        type="button"
+                        class="auth-modal-close"
+                        aria-label="Close"
+                    >
+                        ?
+                    </button>
+                </div>
+
+
+                <form
+                    id="login-form"
+                    class="auth-form"
+                >
+                    <label for="login-phone">
+                        Phone
+                    </label>
+
+                    <input
+                        id="login-phone"
+                        name="phone"
+                        type="tel"
+                        inputmode="tel"
+                        autocomplete="tel"
+                        maxlength="20"
+                        placeholder="0901234567"
+                        required
+                    >
+
+                    <label for="login-password">
+                        Password
+                    </label>
+
+                    <input
+                        id="login-password"
+                        name="password"
+                        type="password"
+                        autocomplete="current-password"
+                        minlength="8"
+                        maxlength="128"
+                        required
+                    >
+
+                    <button
+                        id="login-submit-button"
+                        type="submit"
+                    >
+                        Sign In
+                    </button>
+                </form>
+
+
+                <form
+                    id="register-form"
+                    class="auth-form auth-registration-form"
+                    hidden
+                >
+                    <section class="auth-form-section">
+                        <h3>
+                            Personal Information
+                        </h3>
+
+                        <div class="auth-form-grid">
+                            <div class="auth-field auth-field-full">
+                                <label for="register-full-name">
+                                    Họ và tên (Full Name)
+                                </label>
+
+                                <input
+                                    id="register-full-name"
+                                    name="full_name"
+                                    type="text"
+                                    autocomplete="name"
+                                    minlength="2"
+                                    maxlength="150"
+                                    placeholder="Nhap ho va ten"
+                                    required
+                                >
+                            </div>
+
+                            <div class="auth-field">
+                                <label for="register-date-of-birth">
+                                    Ngày sinh (Date of Birth)
+                                </label>
+
+                                <input
+                                    id="register-date-of-birth"
+                                    name="date_of_birth"
+                                    type="date"
+                                    autocomplete="bday"
+                                    required
+                                >
+                            </div>
+
+                            <div class="auth-field">
+                                <label for="register-sex">
+                                    Giới tính (Sex)
+                                </label>
+
+                                <select
+                                    id="register-sex"
+                                    name="sex"
+                                    required
+                                >
+                                    <option
+                                        value=""
+                                        selected
+                                        disabled
+                                    >
+                                        Chọn giới tính
+                                    </option>
+
+                                    <option value="MALE">
+                                        Nam (Male)
+                                    </option>
+
+                                    <option value="FEMALE">
+                                        Nữ (Female)
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="auth-field">
+                                <label for="register-phone">
+                                    Số điện thoại (Phone)
+                                </label>
+
+                                <input
+                                    id="register-phone"
+                                    name="phone"
+                                    type="tel"
+                                    inputmode="tel"
+                                    autocomplete="tel"
+                                    minlength="8"
+                                    maxlength="20"
+                                    placeholder="0901234567"
+                                    required
+                                >
+                            </div>
+
+                            <div class="auth-field">
+                                <label for="register-email">
+                                    Email
+                                </label>
+
+                                <input
+                                    id="register-email"
+                                    name="email"
+                                    type="email"
+                                    autocomplete="email"
+                                    required
+                                >
+                            </div>
+
+                            <div class="auth-field">
+                                <label for="register-height">
+                                    Chiều cao (Height)
+                                </label>
+
+                                <input
+                                    id="register-height"
+                                    name="height_cm"
+                                    type="number"
+                                    inputmode="decimal"
+                                    min="30"
+                                    max="300"
+                                    step="0.01"
+                                    placeholder="cm"
+                                    required
+                                >
+                            </div>
+
+                            <div class="auth-field">
+                                <label for="register-weight">
+                                    Cân nặng (Weight)
+                                </label>
+
+                                <input
+                                    id="register-weight"
+                                    name="weight_kg"
+                                    type="number"
+                                    inputmode="decimal"
+                                    min="2"
+                                    max="500"
+                                    step="0.01"
+                                    placeholder="kg"
+                                    required
+                                >
+                            </div>
+                        </div>
+                    </section>
+
+
+                    <section class="auth-form-section">
+                        <h3>
+                            Medical History
+                        </h3>
+
+                        <div class="auth-form-grid">
+                            <div class="auth-field auth-field-full">
+                                <label for="register-current-complaint">
+                                    Triệu chứng hiện tại về bệnh lý
+                                    (Current Complaint and HPI)
+                                </label>
+
+                                <textarea
+                                    id="register-current-complaint"
+                                    name="current_complaint_hpi"
+                                    maxlength="5000"
+                                    placeholder="Điền thông tin"
+                                    required
+                                ></textarea>
+                            </div>
+
+                            <div class="auth-field auth-field-full">
+                                <label for="register-past-medical">
+                                    Tiền sử bệnh lý
+                                    (Past Medical History)
+                                </label>
+
+                                <textarea
+                                    id="register-past-medical"
+                                    name="past_medical_history"
+                                    maxlength="5000"
+                                    placeholder="Điền thông tin"
+                                    required
+                                ></textarea>
+                            </div>
+
+                            <div class="auth-field auth-field-full">
+                                <label for="register-past-medication">
+                                    Tiền sử sử dụng thuốc
+                                    (Past Medication History)
+                                </label>
+
+                                <textarea
+                                    id="register-past-medication"
+                                    name="past_medication_history"
+                                    maxlength="5000"
+                                    placeholder="Điền thông tin"
+                                    required
+                                ></textarea>
+                            </div>
+
+                            <div class="auth-field auth-field-full">
+                                <label for="register-allergy">
+                                    Dị ứng (Allergy)
+                                </label>
+
+                                <textarea
+                                    id="register-allergy"
+                                    name="allergy_history"
+                                    maxlength="5000"
+                                    placeholder="Điền thông tin"
+                                    required
+                                ></textarea>
+                            </div>
+
+                            <div class="auth-field auth-field-full">
+                                <label for="register-diseases">
+                                    Diseases
+                                </label>
+
+                                <textarea
+                                    id="register-diseases"
+                                    name="diseases"
+                                    maxlength="3000"
+                                    placeholder="Example: Asthma, Hypertension"
+                                ></textarea>
+
+                                <p class="help-text">
+                                    Separate multiple diseases with commas.
+                                </p>
+                            </div>
+
+                            <div class="auth-field auth-field-full">
+                                <label for="register-family-history">
+                                    Tiền sử gia đình
+                                    (Family History)
+                                </label>
+
+                                <textarea
+                                    id="register-family-history"
+                                    name="family_history"
+                                    maxlength="5000"
+                                    placeholder="Điền thông tin"
+                                    required
+                                ></textarea>
+                            </div>
+                        </div>
+                    </section>
+
+
+                    <section class="auth-form-section">
+                        <h3>
+                            Social History
+                        </h3>
+
+                        <div class="auth-form-grid">
+                            <div class="auth-field">
+                                <label for="register-smoking-status">
+                                    Smoking
+                                </label>
+
+                                <input
+                                    id="register-smoking-status"
+                                    name="smoking_status"
+                                    type="text"
+                                    maxlength="30"
+                                    placeholder="Never / Former / Current"
+                                >
+                            </div>
+
+                            <div class="auth-field">
+                                <label for="register-alcohol-status">
+                                    Alcohol
+                                </label>
+
+                                <input
+                                    id="register-alcohol-status"
+                                    name="alcohol_status"
+                                    type="text"
+                                    maxlength="30"
+                                    placeholder="None / Occasional / Regular"
+                                >
+                            </div>
+
+                            <div class="auth-field auth-field-full">
+                                <label for="register-occupational-exposure">
+                                    Occupational Exposure
+                                </label>
+
+                                <textarea
+                                    id="register-occupational-exposure"
+                                    name="occupational_exposure"
+                                    maxlength="5000"
+                                    placeholder="Dust, chemicals, silica, smoke, workplace exposure..."
+                                ></textarea>
+                            </div>
+
+                            <div class="auth-field">
+                                <label for="register-diet">
+                                    Diet
+                                </label>
+
+                                <textarea
+                                    id="register-diet"
+                                    name="diet"
+                                    maxlength="2000"
+                                    placeholder="Chế độ ăn uống"
+                                    required
+                                ></textarea>
+                            </div>
+
+                            <div class="auth-field">
+                                <label for="register-appetite">
+                                    Appetite
+                                </label>
+
+                                <textarea
+                                    id="register-appetite"
+                                    name="appetite"
+                                    maxlength="2000"
+                                    placeholder="Tình trạng ăn uống"
+                                    required
+                                ></textarea>
+                            </div>
+
+                            <div class="auth-field">
+                                <label for="register-sleep">
+                                    Sleep
+                                </label>
+
+                                <textarea
+                                    id="register-sleep"
+                                    name="sleep"
+                                    maxlength="2000"
+                                    placeholder="Giấc ngủ"
+                                    required
+                                ></textarea>
+                            </div>
+
+                            <div class="auth-field">
+                                <label for="register-exercise">
+                                    Exercise
+                                </label>
+
+                                <textarea
+                                    id="register-exercise"
+                                    name="exercise"
+                                    maxlength="2000"
+                                    placeholder="Vận động / tập thể dục"
+                                    required
+                                ></textarea>
+                            </div>
+
+                            <div class="auth-field">
+                                <label for="register-bowel-bladder">
+                                    Bowel and Bladder
+                                </label>
+
+                                <textarea
+                                    id="register-bowel-bladder"
+                                    name="bowel_bladder"
+                                    maxlength="2000"
+                                    placeholder="Tiểu tiện và đại tiện"
+                                    required
+                                ></textarea>
+                            </div>
+
+                            <div class="auth-field">
+                                <label for="register-habits">
+                                    Habits
+                                </label>
+
+                                <textarea
+                                    id="register-habits"
+                                    name="habits"
+                                    maxlength="3000"
+                                    placeholder="Thuốc lá, rượu, cà phê, chất kích thích..."
+                                    required
+                                ></textarea>
+                            </div>
+                        </div>
+                    </section>
+
+
+                    <section class="auth-form-section">
+                        <h3>
+                            Security
+                        </h3>
+
+                        <div class="auth-form-grid">
+                            <div class="auth-field">
+                                <label for="register-password">
+                                    Mật khẩu (Password)
+                                </label>
+
+                                <input
+                                    id="register-password"
+                                    name="password"
+                                    type="password"
+                                    autocomplete="new-password"
+                                    minlength="8"
+                                    maxlength="128"
+                                    required
+                                >
+                            </div>
+
+                            <div class="auth-field">
+                                <label for="register-confirm-password">
+                                    Xác nhận mật khẩu
+                                    (Confirm Password)
+                                </label>
+
+                                <input
+                                    id="register-confirm-password"
+                                    name="confirm_password"
+                                    type="password"
+                                    autocomplete="new-password"
+                                    minlength="8"
+                                    maxlength="128"
+                                    required
+                                >
+                            </div>
+                        </div>
+                    </section>
+
+                    <button
+                        id="register-submit-button"
+                        type="submit"
+                    >
+                        Create Account
+                    </button>
+                </form>
+
+
+                <div class="auth-mode-switch">
+                    <button
+                        id="switch-login-button"
+                        type="button"
+                        class="secondary"
+                    >
+                        Sign In
+                    </button>
+
+                    <button
+                        id="switch-register-button"
+                        type="button"
+                        class="secondary"
+                    >
+                        Create Account
+                    </button>
+                </div>
+
+
+                <div
+                    id="auth-status"
+                    class="request-status"
+                >
+                    Please sign in or create an account.
+                </div>
+
+
+                <input
+                    id="token-input"
+                    type="hidden"
+                >
+            </section>
+        </div>
+
+        <input
+            id="model-id"
+            type="hidden"
+            value="1"
+        >
+
+
+<section class="panel">
+            <h2>3. Select Images</h2>
+
+            <div class="picker-grid">
+
+                <div class="upload-area">
+                    <h3>Select individual images</h3>
+
+                    <input
+                        id="batch-files"
+                        type="file"
+                        accept="image/*"
+                        multiple
+                    >
+
+                    <p class="help-text">
+                        Select one or multiple image files.
+                    </p>
+                </div>
+
+
+                <div class="upload-area">
+                    <h3>Select a folder</h3>
+
+                    <input
+                        id="batch-folder"
+                        type="file"
+                        webkitdirectory
+                        directory
+                        multiple
+                    >
+
+                    <p class="help-text">
+                        Select an entire folder.
+                        Non-image files will be ignored.
+                    </p>
+                </div>
+
+            </div>
+
+            <div
+                id="file-summary"
+                class="file-summary"
+            >
+                No images selected.
+            </div>
+
+            <div
+                id="validation-message"
+                class="validation-message"
+                hidden
+            ></div>
+
+            <ul
+                id="file-list"
+                class="file-list"
+            ></ul>
+
+            <div class="actions">
+                <button
+                    id="analyze-button"
+                    type="button"
+                    disabled
+                >
+                    Analyze Batch
+                </button>
+
+                <button
+                    id="clear-button"
+                    type="button"
+                    class="secondary"
+                >
+                    Clear
+                </button>
+            </div>
+        </section>
+
+
+                <div
+            id="request-status"
+            hidden
+            aria-hidden="true"
+        >
+            Waiting for images.
+        </div>
+
+
+        <section
+            id="result-section"
+            class="panel"
+            hidden
+        >
+            <h2>4. Batch Results</h2>
+
+            <div
+    id="batch-summary"
+    class="batch-summary"
+        ></div>
+
+
+        <div class="result-toolbar">
+            <span class="filter-label">
+                Filter results:
+            </span>
+
+            <div class="filter-buttons">
+                <button
+                    id="filter-all"
+                    type="button"
+                    class="filter-button active"
+                    data-filter="ALL"
+                >
+                    All
+                </button>
+
+                <button
+                    id="filter-completed"
+                    type="button"
+                    class="filter-button"
+                    data-filter="COMPLETED"
+                >
+                    Completed
+                </button>
+
+                <button
+                    id="filter-rejected"
+                    type="button"
+                    class="filter-button"
+                    data-filter="REJECTED"
+                >
+                    Rejected
+                </button>
+
+                <button
+                    id="filter-failed"
+                    type="button"
+                    class="filter-button"
+                    data-filter="FAILED"
+                >
+                    Failed
+                </button>
+            </div>
+        </div>
+
+
+        <div
+            id="results"
+            class="results"
+        ></div>
+        </section>
+        <section
+            id="history-section"
+            class="panel"
+        >
+            <h2>
+                5. Analysis History
+            </h2>
+
+            <p class="help-text">
+                Load analysis history for the
+                authenticated USER.
+            </p>
+
+            <div class="history-controls">
+
+                <input
+                    id="history-patient-code"
+                    type="hidden"
+                    value=""
+                >
+
+
+                <div>
+                    <label for="history-limit">
+                        Limit
+                    </label>
+
+                    <input
+                        id="history-limit"
+                        type="number"
+                        min="1"
+                        max="100"
+                        value="20"
+                    >
+                </div>
+
+
+                <input
+                    id="history-offset"
+                    type="hidden"
+                    value="0"
+                >
+
+            </div>
+
+
+            <div class="actions">
+
+                <button
+                    id="load-history-button"
+                    type="button"
+                >
+                    Load History
+                </button>
+
+                <button
+                    id="history-previous-button"
+                    type="button"
+                    class="secondary"
+                    disabled
+                >
+                    Previous
+                </button>
+
+                <button
+                    id="history-next-button"
+                    type="button"
+                    class="secondary"
+                    disabled
+                >
+                    Next
+                </button>
+
+            </div>
+
+
+            <div
+                id="history-status"
+                class="request-status history-status"
+            >
+                History has not been loaded.
+            </div>
+
+
+            <div
+                id="history-summary"
+                class="history-summary"
+                hidden
+            ></div>
+
+
+            <div
+                id="history-results"
+                class="history-results"
+            ></div>
+
+        </section>
+                    <section
+            id="patient-profile-section"
+            class="panel"
+        >
+            <h2>
+                6. Patient Profile
+            </h2>
+
+            <p class="help-text">
+                Your profile is loaded automatically
+                after you sign in.
+                Only Height and Weight can be edited.
+            </p>
+
+            <div class="profile-grid">
+
+                <div>
+                    <label for="profile-full-name">
+                        Full Name
+                    </label>
+
+                    <input
+                        id="profile-full-name"
+                        type="text"
+                        readonly
+                    >
+                </div>
+
+                <div>
+                    <label for="profile-date-of-birth">
+                        Date of Birth
+                    </label>
+
+                    <input
+                        id="profile-date-of-birth"
+                        type="date"
+                        readonly
+                    >
+                </div>
+
+                <div>
+                    <label for="profile-sex">
+                        Sex
+                    </label>
+
+                    <select
+                        id="profile-sex"
+                        disabled
+                    >
+                        <option value="">
+                            ?
+                        </option>
+
+                        <option value="MALE">
+                            Male
+                        </option>
+
+                        <option value="FEMALE">
+                            Female
+                        </option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="profile-phone">
+                        Phone
+                    </label>
+
+                    <input
+                        id="profile-phone"
+                        type="text"
+                        readonly
+                    >
+                </div>
+
+                <div>
+                    <label for="profile-email">
+                        Email
+                    </label>
+
+                    <input
+                        id="profile-email"
+                        type="email"
+                        readonly
+                    >
+                </div>
+
+                <div>
+                    <label for="profile-height">
+                        Height (cm)
+                    </label>
+
+                    <input
+                        id="profile-height"
+                        type="number"
+                        min="1"
+                        max="300"
+                        step="0.01"
+                        inputmode="decimal"
+                        readonly
+                    >
+                </div>
+
+                <div>
+                    <label for="profile-weight">
+                        Weight (kg)
+                    </label>
+
+                    <input
+                        id="profile-weight"
+                        type="number"
+                        min="1"
+                        max="500"
+                        step="0.01"
+                        inputmode="decimal"
+                        readonly
+                    >
+                </div>
+
+            </div>
+
+            <div class="actions profile-actions">
+
+                <button
+                    id="profile-edit-button"
+                    type="button"
+                    disabled
+                >
+                    Edit
+                </button>
+
+                <button
+                    id="profile-save-measurements-button"
+                    type="button"
+                    disabled
+                >
+                    Save Profile
+                </button>
+
+                <button
+                    id="profile-history-button"
+                    type="button"
+                    class="secondary"
+                    disabled
+                >
+                    Patient History
+                </button>
+
+                <!--
+                    Compatibility elements for existing script.js.
+                    They stay hidden from the UI.
+                -->
+                <button
+                    id="load-profile-button"
+                    type="button"
+                    hidden
+                    aria-hidden="true"
+                    tabindex="-1"
+                >
+                    Load Profile
+                </button>
+
+                <button
+                    id="save-profile-button"
+                    type="button"
+                    hidden
+                    aria-hidden="true"
+                    tabindex="-1"
+                >
+                    Legacy Save Profile
+                </button>
+
+            </div>
+
+            <div
+                id="profile-status"
+                class="request-status"
+            >
+                Sign in to load your profile.
+            </div>
+
+            <div
+                id="profile-history-panel"
+                class="profile-history-panel"
+                hidden
+            >
+                <h3>
+                    Patient History
+                </h3>
+
+                <div
+                    id="profile-history-results"
+                    class="profile-history-results"
+                ></div>
+            </div>
+
+            <!--
+                Legacy hidden fields are preserved for older script.js
+                references during M15 migration.
+            -->
+            <div hidden>
+                <input
+                    id="profile-patient-code"
+                    type="hidden"
+                >
+
+                <input
+                    id="profile-birth-year"
+                    type="hidden"
+                >
+
+                <input
+                    id="profile-gender"
+                    type="hidden"
+                >
+
+                <input
+                    id="profile-address"
+                    type="hidden"
+                >
+            </div>
+
+        </section>
+                <section
+            id="medical-history-section"
+            class="panel"
+        >
+            <h2>
+                7. New Medical History
+            </h2>
+
+            <p class="help-text">
+                View, create, and update your
+                medical history records.
+            </p>
+
+            <div
+                id="mhi-editor-source"
+                class="medical-history-editor-source"
+            >
+                Sign in to load your latest
+                Medical History.
+            </div>
+
+            <div class="medical-history-grid mhi-grid">
+
+                <div class="medical-history-full-width">
+                    <label for="mhi-current-complaint">
+                        Current Complaint / HPI
+                    </label>
+
+                    <textarea
+                        id="mhi-current-complaint"
+                        rows="4"
+                        maxlength="5000"
+                        readonly
+                    ></textarea>
+                </div>
+
+                <div class="medical-history-full-width">
+                    <label for="mhi-past-medical-history">
+                        Past Medical History
+                    </label>
+
+                    <textarea
+                        id="mhi-past-medical-history"
+                        rows="4"
+                        maxlength="5000"
+                        readonly
+                    ></textarea>
+                </div>
+
+                <div class="medical-history-full-width">
+                    <label for="mhi-past-medication-history">
+                        Past Medication History
+                    </label>
+
+                    <textarea
+                        id="mhi-past-medication-history"
+                        rows="4"
+                        maxlength="5000"
+                        readonly
+                    ></textarea>
+                </div>
+
+                <div class="medical-history-full-width">
+                    <label for="mhi-allergy-history">
+                        Allergy History
+                    </label>
+
+                    <textarea
+                        id="mhi-allergy-history"
+                        rows="4"
+                        maxlength="5000"
+                        readonly
+                    ></textarea>
+                </div>
+
+                <div class="medical-history-full-width">
+                    <label for="mhi-diseases">
+                        Diseases
+                    </label>
+
+                    <textarea
+                        id="mhi-diseases"
+                        rows="2"
+                        maxlength="3000"
+                        placeholder="Asthma, Hypertension"
+                        readonly
+                    ></textarea>
+                </div>
+
+                <div>
+                    <label for="mhi-smoking-status">
+                        Smoking
+                    </label>
+
+                    <textarea
+                        id="mhi-smoking-status"
+                        rows="3"
+                        maxlength="30"
+                        placeholder="Never / Former / Current"
+                        readonly
+                    ></textarea>
+                </div>
+
+                <div>
+                    <label for="mhi-alcohol-status">
+                        Alcohol
+                    </label>
+
+                    <textarea
+                        id="mhi-alcohol-status"
+                        rows="3"
+                        maxlength="30"
+                        placeholder="None / Occasional / Regular"
+                        readonly
+                    ></textarea>
+                </div>
+
+                <div class="medical-history-full-width">
+                    <label for="mhi-occupational-exposure">
+                        Occupational Exposure
+                    </label>
+
+                    <textarea
+                        id="mhi-occupational-exposure"
+                        rows="3"
+                        maxlength="5000"
+                        placeholder="Dust, chemicals, silica, smoke, workplace exposure..."
+                        readonly
+                    ></textarea>
+                </div>
+
+                <div>
+                    <label for="mhi-diet">
+                        Diet
+                    </label>
+
+                    <textarea
+                        id="mhi-diet"
+                        rows="3"
+                        maxlength="5000"
+                        readonly
+                    ></textarea>
+                </div>
+
+                <div>
+                    <label for="mhi-appetite">
+                        Appetite
+                    </label>
+
+                    <textarea
+                        id="mhi-appetite"
+                        rows="3"
+                        maxlength="5000"
+                        readonly
+                    ></textarea>
+                </div>
+
+                <div>
+                    <label for="mhi-sleep">
+                        Sleep
+                    </label>
+
+                    <textarea
+                        id="mhi-sleep"
+                        rows="3"
+                        maxlength="5000"
+                        readonly
+                    ></textarea>
+                </div>
+
+                <div>
+                    <label for="mhi-exercise">
+                        Exercise
+                    </label>
+
+                    <textarea
+                        id="mhi-exercise"
+                        rows="3"
+                        maxlength="5000"
+                        readonly
+                    ></textarea>
+                </div>
+
+                <div>
+                    <label for="mhi-bowel-bladder">
+                        Bowel / Bladder
+                    </label>
+
+                    <textarea
+                        id="mhi-bowel-bladder"
+                        rows="3"
+                        maxlength="5000"
+                        readonly
+                    ></textarea>
+                </div>
+
+                <div>
+                    <label for="mhi-habits">
+                        Habits
+                    </label>
+
+                    <textarea
+                        id="mhi-habits"
+                        rows="3"
+                        maxlength="5000"
+                        readonly
+                    ></textarea>
+                </div>
+
+                <div class="medical-history-full-width">
+                    <label for="mhi-family-history">
+                        Family History
+                    </label>
+
+                    <textarea
+                        id="mhi-family-history"
+                        rows="4"
+                        maxlength="5000"
+                        readonly
+                    ></textarea>
+                </div>
+
+            </div>
+
+            <div class="actions">
+
+                <button
+                    id="mhi-update-button"
+                    type="button"
+                    disabled
+                >
+                    Update
+                </button>
+
+                <button
+                    id="mhi-create-button"
+                    type="button"
+                    disabled
+                >
+                    Create History
+                </button>
+
+                <button
+                    id="mhi-clear-button"
+                    type="button"
+                    class="secondary"
+                    disabled
+                >
+                    Clear
+                </button>
+
+            </div>
+
+            <div
+                id="mhi-editor-status"
+                class="request-status"
+            >
+                Sign in to load your latest
+                medical information.
+            </div>
+
+            <hr class="medical-history-divider">
+
+            <h3>
+                Medical History
+            </h3>
+
+            <div class="medical-history-pagination-controls">
+
+                <div>
+                    <label for="mhi-limit">
+                        Limit
+                    </label>
+
+                    <input
+                        id="mhi-limit"
+                        type="number"
+                        min="1"
+                        max="100"
+                        value="20"
+                    >
+                </div>
+
+            </div>
+
+            <div class="actions">
+
+                <button
+                    id="mhi-load-button"
+                    type="button"
+                    disabled
+                >
+                    Load Medical History
+                </button>
+
+                <button
+                    id="mhi-previous-button"
+                    type="button"
+                    class="secondary"
+                    disabled
+                >
+                    Previous
+                </button>
+
+                <button
+                    id="mhi-next-button"
+                    type="button"
+                    class="secondary"
+                    disabled
+                >
+                    Next
+                </button>
+
+            </div>
+
+            <div
+                id="mhi-history-status"
+                class="request-status"
+            >
+                Medical histories have not been loaded.
+            </div>
+
+            <div
+                id="mhi-results"
+                class="medical-history-results"
+            ></div>
+
+
+            <!-- Compatibility DOM for legacy script.js -->
+            <div hidden>
+
+                <div id="medical-history-status"></div>
+
+                <button
+                    id="load-medical-histories-button"
+                    type="button"
+                ></button>
+
+                <button
+                    id="new-medical-history-button"
+                    type="button"
+                ></button>
+
+                <div
+                    id="medical-history-summary"
+                ></div>
+
+                <div
+                    id="medical-history-results"
+                ></div>
+
+                <h3
+                    id="medical-history-editor-title"
+                ></h3>
+
+                <input
+                    id="medical-history-id"
+                    type="hidden"
+                >
+
+                <textarea
+                    id="medical-history-diseases"
+                ></textarea>
+
+                <textarea
+                    id="medical-history-medications"
+                ></textarea>
+
+                <textarea
+                    id="medical-history-allergies"
+                ></textarea>
+
+                <input
+                    id="medical-history-smoking-status"
+                    type="hidden"
+                >
+
+                <input
+                    id="medical-history-alcohol-status"
+                    type="hidden"
+                >
+
+                <textarea
+                    id="medical-history-occupational-exposure"
+                ></textarea>
+
+                <textarea
+                    id="medical-history-notes"
+                ></textarea>
+
+
+
+                <!--
+                    M15.4C compatibility fields retained
+                    for legacy frontend/script.js.
+                    Parent container is hidden.
+                -->
+
+                <textarea
+                    id="medical-history-current-complaint"
+                ></textarea>
+
+                <textarea
+                    id="medical-history-past-medical"
+                ></textarea>
+
+                <textarea
+                    id="medical-history-past-medication"
+                ></textarea>
+
+                <textarea
+                    id="medical-history-allergy"
+                ></textarea>
+
+                <textarea
+                    id="medical-history-diet"
+                ></textarea>
+
+                <textarea
+                    id="medical-history-appetite"
+                ></textarea>
+
+                <textarea
+                    id="medical-history-sleep"
+                ></textarea>
+
+                <textarea
+                    id="medical-history-exercise"
+                ></textarea>
+
+                <textarea
+                    id="medical-history-bowel-bladder"
+                ></textarea>
+
+                <textarea
+                    id="medical-history-habits"
+                ></textarea>
+
+                <textarea
+                    id="medical-history-family"
+                ></textarea>
+
+<button
+                    id="save-medical-history-button"
+                    type="button"
+                ></button>
+
+                <button
+                    id="clear-medical-history-button"
+                    type="button"
+                ></button>
+
+            </div>
+
+        </section>
+        <section
+            id="admin-dashboard-section"
+            class="panel"
+            hidden
+        >
+            <h2>
+                9. ADMIN Dashboard
+            </h2>
+
+            <p class="help-text">
+                System overview, prediction distribution, and model usage.
+                Statistics load automatically after you sign in.
+            </p>
+
+            <div
+                id="admin-dashboard-status"
+                class="request-status"
+            >
+                ADMIN dashboard has not been loaded.
+            </div>
+
+            <h3 class="admin-dashboard-heading">
+                Overview
+            </h3>
+
+            <div
+                id="admin-dashboard-overview"
+                class="admin-dashboard-overview"
+            ></div>
+
+            <div class="admin-dashboard-columns">
+                <div class="admin-dashboard-block">
+                    <h3>
+                        Prediction Distribution
+                    </h3>
+
+                    <div
+                        id="admin-dashboard-predictions"
+                        class="admin-dashboard-bars"
+                    ></div>
+                </div>
+
+                <div class="admin-dashboard-block">
+                    <h3>
+                        Model Usage
+                    </h3>
+
+                    <div
+                        id="admin-dashboard-model-usage"
+                        class="admin-dashboard-bars"
+                    ></div>
+                </div>
+            </div>
+
+        </section>
+
+        <section
+            id="admin-search-section"
+            class="panel"
+            hidden
+        >
+            <h2>
+                10. ADMIN Patient Search
+            </h2>
+
+            <p class="help-text">Search patient USER accounts by name, phone number, or address. Leave blank to list all patients.</p>
+            <form id="admin-patient-search-form" class="admin-search-grid">
+                <div>
+                    <label for="admin-patient-query">Patient Search</label>
+                    <input id="admin-patient-query" type="search" maxlength="500"
+                        placeholder="Full name, phone number, or address">
+                </div>
+                <div>
+                    <label for="admin-patient-limit">Limit</label>
+                    <input id="admin-patient-limit" type="number" min="1" max="100" value="20">
+                </div>
+                <button id="admin-search-button" type="submit">Search Patient</button>
+            </form>
+            <div id="admin-search-status" class="request-status" role="status" aria-live="polite">Enter a name, phone number, or address to search.</div>
+            <div id="admin-search-results" class="admin-patient-table-wrap"></div>
+            <div class="actions">
+                <button id="admin-patient-previous" type="button" class="secondary" disabled>Previous</button>
+                <span id="admin-patient-page" aria-live="polite"></span>
+                <button id="admin-patient-next" type="button" class="secondary" disabled>Next</button>
+            </div>
+
+            <dialog
+                id="admin-patient-viewer"
+                aria-labelledby="admin-patient-viewer-title"
+            >
+                <h3 id="admin-patient-viewer-title">
+                    Patient Record Viewer
+                </h3>
+
+                <p id="admin-patient-view-identity"></p>
+
+                <p
+                    id="admin-patient-view-status"
+                    class="request-status"
+                    role="status"
+                    aria-live="polite"
+                ></p>
+
+                <section
+                    class="
+                        admin-patient-detail-section
+                        admin-detail-panel
+                        admin-detail-panel--patient
+                    "
+                >
+                    <h4>
+                        Patient Details
+                    </h4>
+
+                    <div
+                        id="admin-patient-view-profile"
+                    ></div>
+                </section>
+
+
+                <section
+                    class="
+                        admin-patient-detail-section
+                        admin-detail-panel
+                        admin-detail-panel--medical
+                    "
+                >
+                    <h4>
+                        Medical History
+                    </h4>
+
+                    <div
+                        id="admin-patient-view-medical"
+                    ></div>
+                </section>
+
+                <section
+                    class="
+                        admin-patient-detail-section
+                        admin-detail-panel
+                        admin-detail-panel--analysis
+                    "
+                >
+                    <h4>
+                        Analysis History
+                    </h4>
+
+                    <div
+                        id="admin-patient-view-analyses"
+                    ></div>
+                </section>
+
+                <div class="actions">
+                    <button
+                        id="admin-patient-view-close"
+                        type="button"
+                        class="secondary"
+                    >
+                        Close
+                    </button>
+                </div>
+            </dialog>
+
+            <dialog id="admin-patient-editor" aria-labelledby="admin-patient-editor-title">
+                <form id="admin-patient-edit-form">
+                    <h3 id="admin-patient-editor-title">Edit Patient</h3>
+                    <p id="admin-patient-edit-identity"></p>
+
+                    <section
+                        class="
+                            admin-edit-panel
+                            admin-edit-panel--patient
+                        "
+                    >
+                        <h4>
+                            <span>01</span>
+                            Patient Details
+                        </h4>
+
+<fieldset id="admin-patient-edit-fields">
+                        <label for="admin-edit-name">Full name</label>
+                        <input id="admin-edit-name" name="full_name" required minlength="2" maxlength="150">
+                        <label for="admin-edit-phone">Phone</label>
+                        <input id="admin-edit-phone" name="phone" type="tel" required maxlength="30">
+                        <label for="admin-edit-email">Email</label>
+                        <input id="admin-edit-email" name="email" type="email" required maxlength="255">
+                        <label for="admin-edit-address">Address</label>
+                        <input id="admin-edit-address" name="address" maxlength="500">
+                        <label for="admin-edit-birth">Date of birth</label>
+                        <input id="admin-edit-birth" name="date_of_birth" type="date">
+                        <label for="admin-edit-sex">Sex</label>
+                        <select id="admin-edit-sex" name="sex"><option value="">Not specified</option><option value="MALE">Male</option><option value="FEMALE">Female</option></select>
+                        <label><input id="admin-edit-active" name="is_active" type="checkbox"> Active account</label>
+                    </fieldset>
+                    </section>
+
+                    <section
+                        class="
+                            admin-edit-panel
+                            admin-edit-panel--medical
+                        "
+                    >
+                        <h4>
+                            <span>02</span>
+                            Latest Medical History
+                        </h4>
+
+                        <p
+                            id="admin-edit-medical-meta"
+                            class="admin-edit-medical-meta"
+                        >
+                            Loading latest medical history...
+                        </p>
+
+                        <p
+                            id="admin-edit-medical-empty"
+                            class="admin-edit-medical-empty"
+                            hidden
+                        >
+                            No medical history available.
+                            Patient Details can still be edited.
+                        </p>
+
+                        <fieldset
+                            id="admin-patient-edit-medical-fields"
+                            disabled
+                        >
+                            <input
+                                id="admin-edit-medical-id"
+                                type="hidden"
+                            >
+
+                            <label for="admin-edit-current-complaint">
+                                Current complaint / HPI
+                            </label>
+                            <textarea
+                                id="admin-edit-current-complaint"
+                                maxlength="5000"
+                                rows="3"
+                            ></textarea>
+
+                            <label for="admin-edit-past-medical">
+                                Past medical history
+                            </label>
+                            <textarea
+                                id="admin-edit-past-medical"
+                                maxlength="5000"
+                                rows="3"
+                            ></textarea>
+
+                            <label for="admin-edit-past-medication">
+                                Past medication history
+                            </label>
+                            <textarea
+                                id="admin-edit-past-medication"
+                                maxlength="5000"
+                                rows="3"
+                            ></textarea>
+
+                            <label for="admin-edit-allergy-history">
+                                Allergy history
+                            </label>
+                            <textarea
+                                id="admin-edit-allergy-history"
+                                maxlength="5000"
+                                rows="3"
+                            ></textarea>
+
+                            <label for="admin-edit-diseases">
+                                Diseases
+                            </label>
+                            <input
+                                id="admin-edit-diseases"
+                                placeholder="Asthma, Hypertension"
+                            >
+
+                            <label for="admin-edit-medications">
+                                Medications
+                            </label>
+                            <input
+                                id="admin-edit-medications"
+                                placeholder="Medication A, Medication B"
+                            >
+
+
+
+                            <label for="admin-edit-smoking">
+                                Smoking
+                            </label>
+                            <input
+                                id="admin-edit-smoking"
+                                maxlength="30"
+                            >
+
+                            <label for="admin-edit-alcohol">
+                                Alcohol
+                            </label>
+                            <input
+                                id="admin-edit-alcohol"
+                                maxlength="30"
+                            >
+
+                            <label for="admin-edit-exposure">
+                                Occupational exposure
+                            </label>
+                            <textarea
+                                id="admin-edit-exposure"
+                                maxlength="5000"
+                                rows="2"
+                            ></textarea>
+
+                            <label for="admin-edit-diet">
+                                Diet
+                            </label>
+                            <textarea
+                                id="admin-edit-diet"
+                                maxlength="2000"
+                                rows="2"
+                            ></textarea>
+
+                            <label for="admin-edit-appetite">
+                                Appetite
+                            </label>
+                            <textarea
+                                id="admin-edit-appetite"
+                                maxlength="2000"
+                                rows="2"
+                            ></textarea>
+
+                            <label for="admin-edit-sleep">
+                                Sleep
+                            </label>
+                            <textarea
+                                id="admin-edit-sleep"
+                                maxlength="2000"
+                                rows="2"
+                            ></textarea>
+
+                            <label for="admin-edit-exercise">
+                                Exercise
+                            </label>
+                            <textarea
+                                id="admin-edit-exercise"
+                                maxlength="2000"
+                                rows="2"
+                            ></textarea>
+
+                            <label for="admin-edit-bowel">
+                                Bowel / bladder
+                            </label>
+                            <textarea
+                                id="admin-edit-bowel"
+                                maxlength="2000"
+                                rows="2"
+                            ></textarea>
+
+                            <label for="admin-edit-habits">
+                                Habits
+                            </label>
+                            <textarea
+                                id="admin-edit-habits"
+                                maxlength="3000"
+                                rows="2"
+                            ></textarea>
+
+                            <label for="admin-edit-family-history">
+                                Family history
+                            </label>
+                            <textarea
+                                id="admin-edit-family-history"
+                                maxlength="5000"
+                                rows="3"
+                            ></textarea>
+
+                            <label for="admin-edit-medical-notes">
+                                Notes
+                            </label>
+                            <textarea
+                                id="admin-edit-medical-notes"
+                                maxlength="5000"
+                                rows="3"
+                            ></textarea>
+                        </fieldset>
+                    </section>
+
+                    <p id="admin-patient-edit-status" role="status" aria-live="polite"></p>
+                    <div class="actions">
+                        <button id="admin-patient-save" type="submit">Save changes</button>
+                        <button id="admin-patient-cancel" type="button" class="secondary">Cancel</button>
+                    </div>
+                </form>
+            </dialog>
+        </section>
+    </main>
+
+    <footer
+        class="site-footer"
+        aria-label="Website footer"
+    >
+        <div class="site-footer-inner">
+            <strong>
+                LungXrayAI 2.0
+            </strong>
+
+            <span>
+                AI-assisted chest X-ray analysis
+            </span>
+        </div>
+
+        <div class="project-team-footer">
+            <table
+                class="project-team-table"
+                aria-label="Project team members"
+            >
+                <thead>
+                    <tr>
+                        <th colspan="2">
+                            CÁC THÀNH VIÊN THỰC HIỆN
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <th scope="row">
+                            Võ Nhật Nguyên
+                        </th>
+                        <td>
+                            2200004486
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row">
+                            Vô Văn Nghĩa
+                        </th>
+                        <td>
+                            2200000318
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row">
+                            Lê Đoàn Anh Tuấn
+                        </th>
+                        <td>
+                            2200010939
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </footer>
+
+    <section
+        class="visitor-stats-footer"
+        aria-label="Website access statistics"
+    >
+        <div class="visitor-stats-inner">
+            <table
+                class="visitor-stats-table"
+                aria-label="Website access statistics"
+            >
+                <thead>
+                    <tr>
+                        <th scope="col">
+                            Đang online:
+                        </th>
+
+                        <th scope="col">
+                            Lượng Online hôm nay:
+                        </th>
+
+                        <th scope="col">
+                            Tổng truy cập:
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>
+                            <span
+                                id="visitor-online-now"
+                                class="
+                                    visitor-stat-value
+                                    visitor-stat-value-online
+                                "
+                                aria-live="polite"
+                            >--</span>
+                        </td>
+
+                        <td>
+                            <span
+                                id="visitor-online-today"
+                                class="visitor-stat-value"
+                                aria-live="polite"
+                            >--</span>
+                        </td>
+
+                        <td>
+                            <span
+                                id="visitor-total-visits"
+                                class="visitor-stat-value"
+                                aria-live="polite"
+                            >--</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <script src="/frontend/auth.js?v=m1531"></script>
+    <script src="/frontend/script.js?v=m1520"></script>
+    <script src="/frontend/admin_patients.js?v=m1526"></script>
+    <script src="/frontend/profile_ui.js?v=m1513"></script>
+    <script src="/frontend/medical_history_ui.js?v=m1526"></script>
+    <script src="/frontend/visitor_stats.js?v=m1532"></script>
+</body>
+</html>

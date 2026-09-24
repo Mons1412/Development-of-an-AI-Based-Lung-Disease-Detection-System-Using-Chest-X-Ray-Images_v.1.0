@@ -1,6 +1,0 @@
-.result-panel { min-height: 600px; }
-.upload-panel { overflow: hidden; }
-
-@media (max-width: 1080px) {
-  .result-panel { min-height: 0; }
-}

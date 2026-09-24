@@ -1,74 +1,46 @@
-﻿# ========================================
-# Secrets & Environment
-# ========================================
-/.env
-/.env.*
-!.env.example
-
-# ========================================
 # Python
-# ========================================
 __pycache__/
 *.py[cod]
-*.pyo
-*.pyd
 
-# Virtual environments
+# Virtual environment
 .venv/
 venv/
-env/
-ENV/
 
-# ========================================
-# Local Python Runtime
-# ========================================
-/runtime/*
-!/runtime/Dockerfile
+# Environment / secrets
+.env
 
-# ========================================
-# Runtime Data
-# ========================================
-var/
-**/var/
-*.db
-*.sqlite
-*.sqlite3
+# Training datasets
+/data/
 
-# ========================================
 # IDE
-# ========================================
 .vscode/
 .idea/
 
-# ========================================
-# OS
-# ========================================
-.DS_Store
-Thumbs.db
-desktop.ini
-
-# ========================================
-# Logs
-# ========================================
-*.log
-
-# ========================================
-# Test / Coverage
-# ========================================
+# Test / coverage
 .pytest_cache/
 .coverage
 htmlcov/
 
-# ========================================
-# Build / Distribution
-# ========================================
-build/
-dist/
-*.egg-info/
+# Logs
+*.log
 
-# ========================================
-# Temporary files
-# ========================================
-*.tmp
-*.temp
-*.bak
+# Runtime files
+var/uploads/
+var/reports/
+var/thumbnails/
+var/logs/
+
+# Legacy/local databases
+*.db
+*.sqlite
+*.sqlite3
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Application runtime data
+/app/var/
+
+# Isolated backend test environment
+.venv_admin_tests/

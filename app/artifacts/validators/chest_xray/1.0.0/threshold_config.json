@@ -1,0 +1,18 @@
+{
+  "threshold": 0.36000000000000004,
+  "positive_class": "CHEST_XRAY",
+  "negative_class": "NOT_CHEST_XRAY",
+  "selected_on": "validation",
+  "target_specificity": 0.98,
+  "validation_metrics": {
+    "threshold": 0.36000000000000004,
+    "tp": 1982,
+    "tn": 2401,
+    "fp": 3,
+    "fn": 1,
+    "sensitivity": 0.9994957135653051,
+    "specificity": 0.9987520798668885,
+    "precision": 0.9984886649874055,
+    "accuracy": 0.9990882151812173
+  }
+}

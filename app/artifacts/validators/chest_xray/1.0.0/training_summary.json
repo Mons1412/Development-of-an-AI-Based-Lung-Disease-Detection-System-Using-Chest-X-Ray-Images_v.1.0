@@ -1,0 +1,31 @@
+{
+  "version": "1.0.0",
+  "architecture": "MobileNetV2",
+  "task": "binary_chest_xray_validation",
+  "class_order": [
+    "NOT_CHEST_XRAY",
+    "CHEST_XRAY"
+  ],
+  "champion_phase": "phase1_frozen",
+  "validation_metrics": {
+    "roc_auc": 0.9999823793425481,
+    "pr_auc": 0.9999793324409906
+  },
+  "phase1_validation": {
+    "roc_auc": 0.9999823793425481,
+    "pr_auc": 0.9999793324409906
+  },
+  "phase2_validation": {
+    "roc_auc": 0.9999538506590545,
+    "pr_auc": 0.9999496400292179
+  },
+  "image_size": [
+    224,
+    224
+  ],
+  "external_normalization": false,
+  "embedded_rescaling": {
+    "scale": 0.00784313725490196,
+    "offset": -1.0
+  }
+}

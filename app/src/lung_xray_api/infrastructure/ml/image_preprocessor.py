@@ -1,32 +1,66 @@
-"""Preprocess ảnh theo đúng inference contract của model.
-
-Pipeline deterministic: decode, convert RGB, resize bilinear, cast float32 và
-thêm batch dimension. Không normalize về [-1, 1] ở đây vì model đã chứa layer
-`Rescaling(scale=1/127.5, offset=-1)`.
-"""
-
-from __future__ import annotations
-
 from io import BytesIO
 
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageOps
 
-from lung_xray_api.infrastructure.ml.artifact_bundle import ArtifactBundle
-from lung_xray_api.infrastructure.ml.image_validator import ValidatedImage
+
+TARGET_WIDTH = 224
+TARGET_HEIGHT = 224
 
 
 class ImagePreprocessor:
-    def __init__(self, bundle: ArtifactBundle) -> None:
-        self.input_height, self.input_width = bundle.input_size
 
-    def preprocess(self, image: ValidatedImage) -> np.ndarray:
-        with Image.open(BytesIO(image.content)) as opened:
-            rgb = opened.convert("RGB")
-            resized = rgb.resize((self.input_width, self.input_height), Image.Resampling.BILINEAR)
-            array = np.asarray(resized, dtype=np.float32)
+    def preprocess(
+        self,
+        image_bytes: bytes,
+    ) -> np.ndarray:
 
-        if array.shape != (self.input_height, self.input_width, 3):
-            raise ValueError(f"Shape ảnh sau preprocess không hợp lệ: {array.shape}")
+        if not image_bytes:
+            raise ValueError(
+                "Image data is empty."
+            )
 
-        return np.expand_dims(array, axis=0)
+        with Image.open(
+            BytesIO(image_bytes)
+        ) as image:
+
+            image = ImageOps.exif_transpose(
+                image
+            )
+
+            image = image.convert("RGB")
+
+            image = image.resize(
+                (
+                    TARGET_WIDTH,
+                    TARGET_HEIGHT,
+                ),
+                Image.Resampling.BILINEAR,
+            )
+
+            array = np.asarray(
+                image,
+                dtype=np.float32,
+            )
+
+        expected_shape = (
+            TARGET_HEIGHT,
+            TARGET_WIDTH,
+            3,
+        )
+
+        if array.shape != expected_shape:
+            raise ValueError(
+                "Unexpected image shape: "
+                f"{array.shape}"
+            )
+
+        batch = np.expand_dims(
+            array,
+            axis=0,
+        )
+
+        return batch
+
+
+image_preprocessor = ImagePreprocessor()
